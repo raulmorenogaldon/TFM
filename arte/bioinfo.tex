@@ -2,7 +2,7 @@
 
 En los últimos años se han producido avances en las tecnologías de secuenciación que han aumentado la productividad a una escala sin precedentes, con lo que la bioinformática ha encontrado dificultades para almacenar y analizar esas grandes cantidades de datos. Se habla de que la biología ha entrado en la era del \textit{``big data''}, enfrentándose a nuevos retos como son el almacenamiento, análisis, búsqueda, difusión y visualización de los datos que requieren nuevas soluciones.\\
 
-En esta sección se verán algunas de las herramientas y lenguajes de programación más utilizado para abordar los problemas de análisis genómico y cuales son sus características más relevantes. Señalar que no son las únicas y que existen más tanto de propósito especifico (la mayoría) como general.\\
+En esta sección se verán algunas de las herramientas y lenguajes de programación más utilizados para abordar los problemas de análisis genómico y cuales son sus características más relevantes. Señalar que no son las únicas y que existen más, tanto de propósito especifico (la mayoría) como general.\\
 
 \subsection{Bioconductor}
 
@@ -18,7 +18,7 @@ Los paquetes están bien documentados, incluso con ejemplos de uso. Ofrece además
 
 \textit{Genome Analysis Toolkit}\cite{gatkframework, gatkweb} (\textit{GATK}) es el estandard de facto para el análisis y descubrimiento de variantes de genoma. Es un conjunto de herramientas genérico que pueden ser aplicadas a cualquier tipo de conjunto de datos y problemas de análisis de genoma, ya que se puede usar tanto para descubrimiento como para validación.\\
 
-Soporta datos provenientes de una amplia variedad de tecnologías de secuenciación y aunque inicialmente se desarrolló para genética humana, actualmente puede manejar el genoma de cualquier organismo. \textit{GATK} está formado por un engine que se ocupa de correr las distintas herramientas sobre los datos de entrada. Estas herramientas pueden ser las que trae por defecto el propio programa u otras desarrolladas por los usuarios y permitiendo su cualquier combinación compatible de las mismas.\textit{GATK} sugiere varios flujos de trabajo a seguir para conseguir determinados resultados, pero se pueden realizar otros flujos personalizados.\\
+Soporta datos provenientes de una amplia variedad de tecnologías de secuenciación y aunque inicialmente se desarrolló para genética humana, actualmente puede manejar el genoma de cualquier organismo. \textit{GATK} está formado por un engine que se ocupa de ejecutar las distintas herramientas sobre los datos de entrada. Estas herramientas pueden ser las que trae por defecto el propio programa u otras desarrolladas por los usuarios, permitiendo cualquier combinación compatible de las mismas. \textit{GATK} sugiere varios flujos de trabajo a seguir para conseguir determinados resultados, pero se pueden realizar otros flujos personalizados.\\
 
 Los requerimientos del programa son únicamente un sistema compatible con \textit{POSIX} y Java instalado. Ofrece también la posibilidad de mostrar los resultados gráficamente usando \textit{R}. En cuanto al rendimiento, utiliza un sistema \textit{MapReduce} para particionar el trabajo a realizar sobre la gran cantidad de datos de entrada y utiliza hilos para acelerar el proceso.\\
 
@@ -38,11 +38,11 @@ En el aspecto del rendimiento, se echa en falta un procesamiento paralelo a nive
 
 \subsection{OpenCB}
 
-\textit{OpenCB}\cite{opencb} es un grupo del Centro de Investigación Príncipe Felipe (CIPF) que nace como alternativa a los proyectos que normalmente se focalizan en un lenguaje de programación como el de Bioconductor o Bioperl orientados a la biología. Este grupo proporciona software avanzado y open-source para el análisis de datos de genómica con una alta productividad.\\
+\textit{OpenCB}\cite{opencb} es un grupo del Centro de Investigación Príncipe Felipe (CIPF) que nace como alternativa a los proyectos que normalmente se focalizan en un lenguaje de programación como el de Bioconductor o Bioperl. Este grupo proporciona software avanzado y open-source para el análisis de datos de genómica con una alta productividad.\\
 
 El grupo está organizado en cuatro subproyectos diferentes centrado en resolver un problema concreto. Estos son el \textit{``High-Performance Genomics''} (HPG), centrado en acelerar los análisis usando tecnologías \textit{HPC} (High Performance Computing); \textit{``Cloud computing''}, para almacenar y difundir los datos; \textit{``Distributed NoSQL databases''}, para manejar la gran cantidad de datos; y \textit{``Big data visualization''}, para obtener una representación visual de los resultados.\\
 
-\textit{HPG} es un proyecto escalable, de alto rendimiento y open-source, que consiste en diferentes herramientas y algoritmos para el análisis de datos a escala genómica. Utiliza HPC para acelerar los algoritmos y las herramientas para el análisis, usando el lenguaje de programación C y buscando los algoritmos que mejor se ajustan a cada problema en concreto.\\
+\textit{HPG} es un proyecto escalable, de alto rendimiento y open-source, que consiste en diferentes herramientas y algoritmos para el análisis de datos a escala genómica. Utiliza HPC para acelerar los algoritmos y las herramientas para el análisis, usando el lenguaje de programación C y buscando los algoritmos que mejor se ajustan a cada problema en concreto. Se busca también la escalabilidad, que permita acelerar las ejecuciones cuantos más recursos computacionales estén disponibles.\\
 
 
 
