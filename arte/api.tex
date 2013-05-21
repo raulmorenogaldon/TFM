@@ -1,0 +1,61 @@
+\subsection{APIs de programación paralela}
+En este apartado se presentarán algunas de las interfaces de programación (API) más utilizas en la elaboración de programas paralelos. Estas API se pueden ajustar siempre a uno de los dos modelos de memoria que ya se han visto: memoria compartida y memoria distribuida (o paso de mensajes). Se comentará brevemente el modo de funcionamiento de estas API y algunas de sus características.\\
+
+\subsubsection{POSIX threads}
+Los POSIX\cite{advunix} (\textit{Portable Operating System Interface uniX}) threads (a partir de ahora \textit{pthreads}) se basan en el concepto de hilo o thread, que la mayoría de sistemas operativos actuales utilizan.\\
+
+En un sistema UNIX, un proceso no es mas que un único hilo de control. Este hilo podría replicarse para crear más hilos ``hijos'', permitiendo que cada uno de estos hilos se dedique a ejecutar una tarea distinta a los demás. Esto permite no solo ejecutar un programa con varios hilos ejecutándose en paralelo, sino que permite abstraer el programa en ta\-reas definidas, independientemente del número de procesadores que tengamos. Estos hilos también comparten memoria, por lo que se utiliza un modelo de memoria compartida.\\
+
+Pthreads\cite{advunix} es la interfaz de programación con hilos que ofrecen las librerías POSIX. Esta interfaz nos ofrece funciones simples y potentes necesarias para crear cualquier código que utilice hilos.\\
+
+Programar con hilos nos ofrece algunas ventajas. Podemos simplificar el código para manejar eventos asíncronos, simplemente destinando un thread a manejar cada uno de esos eventos de forma síncrona. Además, es más fácil comunicarse entre hilos del mismo proceso que entre procesos distintos, puesto que los hilos comparten el mismo espacio de memoria y los descriptores de ficheros. También es posible mejorar el rendimiento en programas interactivos, asignando hilos a procesar la respuesta del usuario y otros hilos al resto de tareas.\\
+
+Por último comentar que en un sistema multiprocesador, un programa con hilos se ejecutará (probablemente) más rápido que en uno uniprocesador, pero aún así, en un sistema uniprocesador el proceso podría ejecutarse también más rápido si utiliza hilos. Esto podría deberse a que mientras unos hilos están bloqueados (esperando el resultado de operaciones I/O por ejemplo), otros hilos pueden continuar su ejecución.\\
+
+\subsubsection{OpenMP}
+\textit{OpenMP}\cite{openmpquinn,openmpchandra,openmpreview} es un API de programación paralela (basada en directivas del compilador, rutinas de librería y variables de entorno), en C/C++ y Fortran, para multiprocesadores de memoria compartida. Puede correr en sistemas Unix y Windows NT. Sus características más importantes residen en su simplicidad y flexibilidad, ofreciendo una interfaz que permite crear programas paralelos tanto para sistemas sobremesa como supercomputadores.\\
+
+OpenMP utiliza por debajo el modelo fork-join (Figura \ref{fig:forkjoin}) para llevar a cabo las tareas paralelas. Además se asegura una ejecución correcta tanto en sistemas paralelos como secuenciales (siempre y cuando sea correctamente utilizado).\\
+
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{forkjoin.png}
+\caption{Modelo paralelo \textit{Fork-Join} usado por \textit{OpenMP}.\label{fig:forkjoin}}
+\end{figure}
+
+Como cualquier proceso Unix, un programa que utiliza OpenMP comienza con un único hilo inicial que se ejecuta secuencialmente y que da lugar a más hilos. Otra característica de OpenMP es que no garantiza que las operaciones I/O se realicen de forma síncrona cuando se hace de forma paralela, para ello ofrece mecanismos de sincronización que la propia API ofrece.\\
+
+OpenMP utiliza el modelo de memoria compartida para ejecutar sus hilos. Permite que los hilos compartan espacio de memoria, pero también permite que tengan su propio espacio de memoria privada. Además permite a los hilos tener un snapshot de la memoria en cualquier momento, y utilizar esa información mientras el resto de hilos pueden seguir modificando la memoria sin afectar al snapshot.\\
+
+La API soporta el paralelismo a nivel de bucle, paralelismo anidado (hilos hijos pueden crear a su vez nuevos hilos hijos de estos) y paralelismo por tareas (cada hilo se encarga de un trozo de código).\\
+
+\subsubsection{MPI}
+\textit{Message Passing Interface}\cite{progparmachines,openmpquinn,usingmpi} es un estandard de facto para el modelo de programación paralela mediante paso de mensajes. MPI surgió como necesidad para permitir la programación paralela en el auge de los \textit{NOWs}. Un sistema de memoria compartida era entonces caro, por lo que se buscaba una alternativa viable.\\
+
+MPI, al igual que OpenMP, es una API usada generalmente en entornos C/C++ entre otros. Tiene implementaciones tanto en código libre, como propietarias. Entre las implementaciones más conocidas se encuentran \textit{Open MPI}, \textit{LAM} y \textit{MPICH}.\\
+
+La forma de procesar, en un entorno MPI, un programa consiste en ejecutar copias de ese programa (procesos) en tantas máquinas como se quieran utilizar. Cada copia se encarga de procesar una parte de los datos de entrada intercambiando información, mediante paso de mensajes, por la red.\\
+
+Dependiendo de la red, MPI puede introducir una sobrecarga importante si la comunicación entre procesos es fluida. Por ejemplo en sistemas cluster los procesos en distintos nodos comunicados mediante una red típica \textit{Infiniband} harán el trabajo generalmente más rápido cuanta menos comunicación haya entre ellos. En cambio en un sistema de memoria compartida como un multiprocesador o un multicore, la red es mucho más rápida por lo que la sobrecarga es menor. Incluso algunas implementaciones, podrían aprovechar la memoria compartida de estos sistemas para optimizar la comunicación.\\
+
+MPI permite distintas clases de comunicación en los sistemas que la utilizan. En las comunicaciones colectivas interviene un nodo que interactúa con los demás, ya sea que todos le manden información al mismo o que este envíe información a todos. También permite las comunicaciones punto a punto. Además, estas dos clases de comunicación tienen dos variantes: bloqueantes y no bloqueantes.\\
+
+Existe una API basada en MPI para operaciones I/O en sistemas paralelos de almacenamiento, se llama \textit{MPI-IO}\cite{usingmpi}. Esta API es la parte de MPI que maneja el I/O, ofreciendo distintas operaciones de lectura y escritura. Permite además determinar como se van a distribuir los datos entre los procesos, y como se van a almacenar los datos en disco una vez procesados. Esto permite solucionar las limitaciones de memoria al procesar ficheros muy grandes (no hay que cargarlos en la memoria de una sola máquina) y obtener un único fichero de salida.\\
+
+\subsubsection{CUDA}
+
+Debido a la industria del videojuego, las GPUs han evolucionado enormemente en estos últimos años, permitiendo procesar imágenes cada vez más rápido.y más reales. Esta evolución hizo plantearse si se podrían usar para algo más que no fuesen sólo gráficos.\\
+
+Todo esto desemboca con \textit{NVIDIA} desarrollando un lenguaje de programación para sus GPUs, denominado \textit{CUDA}\cite{progparmachines}. Las GPUs son máquinas SIMD según la taxonomía de Flynn (véase Sección \ref{sec:flynn}) y utilizan el modelo de memoria compartida. Una diferencia con los multicores que también utilizan este modelo, es que las GPUs pueden tener miles de hilos corriendo simultáneamente.\\
+
+Un programa en CUDA tiene dos partes, el código que se ejecuta en el \textit{host} o procesador central (CPU), y el código que se ejecuta en el \textit{device} (GPU) llamado \textit{kernel}. Debido a esto es necesaria una CPU que trabaje en conjunto con la GPU.\\
+
+Cualquier aplicación que siga encaje en el modelo SIMD, donde se apliquen las mismas instrucciones a un conjunto de datos, se verá muy beneficiada en el uso de una GPU. Cualquier otro tipo de aplicación no es factible en estas plataformas.\\
+
+\subsubsection{OpenCL}
+
+OpenCL\cite{openclprog} es un API de programación para sistemas compuestos por CPUs, GPUs y otros tipos de procesadores (sistemas heterogéneos). OpenCL te permite escribir programas que puedan corren en un amplio conjunto de sistemas, desde celulares hasta nodos de un cluster.\\
+
+A diferencia de otros APIs, OpenCL expone el hardware e informa de sus características al programador. Así, el programador decide como distribuye los datos entre los dispositivos que tiene disponibles. También ofrece un modelo de programación de alto nivel que abstrae las características hardware.\\
+
+OpenCL permite descubrir que componentes forman el sistema. Además testea esos componentes para determinar sus características, así el software puede adaptarse. Similar al procesamiento en GPUs, la API crea bloques de instrucciones (kernels) que se ejecutarán en el sistema en un determinado orden y en determinados dispositivos.\\

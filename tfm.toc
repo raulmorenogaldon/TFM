@@ -1,0 +1,33 @@
+\select@language {spanish}
+\contentsline {chapter}{\numberline {1}Introducci\'on}{5}
+\contentsline {section}{\numberline {1.1}Introducci\'on y motivaci\'on}{5}
+\contentsline {section}{\numberline {1.2}Estructura de la memoria}{7}
+\contentsline {chapter}{\numberline {2}Estado del arte}{9}
+\contentsline {section}{\numberline {2.1}Entornos paralelos}{9}
+\contentsline {subsection}{\numberline {2.1.1}Taxonom\IeC {\'\i }a de Flynn}{10}
+\contentsline {subsection}{\numberline {2.1.2}Modelos de programaci\'on paralela}{11}
+\contentsline {subsubsection}{Espacio de memoria compartido}{11}
+\contentsline {subsubsection}{Paso de mensajes}{13}
+\contentsline {subsubsection}{Partitioned Global Address Space - PGAS}{14}
+\contentsline {subsubsection}{OmpSS}{15}
+\contentsline {section}{\numberline {2.2}Tratamiento de grandes cantidades de datos}{15}
+\contentsline {subsection}{\numberline {2.2.1}MapReduce}{15}
+\contentsline {section}{\numberline {2.3}Bioinform\'atica}{17}
+\contentsline {subsection}{\numberline {2.3.1}Bioconductor}{17}
+\contentsline {subsection}{\numberline {2.3.2}Bioperl}{17}
+\contentsline {subsection}{\numberline {2.3.3}Genome Analysis ToolKit}{18}
+\contentsline {subsection}{\numberline {2.3.4}Bowtie}{19}
+\contentsline {subsection}{\numberline {2.3.5}OpenCB}{19}
+\contentsline {chapter}{\numberline {3}Asignaturas Cursadas}{21}
+\contentsline {section}{\numberline {3.1}Generaci\'on de documentos cient\IeC {\'\i }ficos en inform\'atica}{21}
+\contentsline {subsection}{\numberline {3.1.1}Descripci\'on}{21}
+\contentsline {subsection}{\numberline {3.1.2}Trabajo realizado}{22}
+\contentsline {subsection}{\numberline {3.1.3}Relaci\'on con el tema de investigaci\'on}{22}
+\contentsline {section}{\numberline {3.2}Introducci\'on a la programaci\'on de arquitecturas de altas prestaciones}{23}
+\contentsline {subsection}{\numberline {3.2.1}Descripci\'on}{23}
+\contentsline {subsection}{\numberline {3.2.2}Trabajo realizado}{23}
+\contentsline {subsection}{\numberline {3.2.3}Relaci\'on con el tema de investigaci\'on}{24}
+\contentsline {section}{\numberline {3.3}Tecnolog\IeC {\'\i }as de red de altas prestaciones}{25}
+\contentsline {subsection}{\numberline {3.3.1}Descripci\'on}{25}
+\contentsline {subsection}{\numberline {3.3.2}Trabajo realizado}{25}
+\contentsline {subsection}{\numberline {3.3.3}Relaci\'on con el tema de investigaci\'on}{26}

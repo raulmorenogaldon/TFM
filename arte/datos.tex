@@ -1,0 +1,18 @@
+\section{Tratamiento de grandes cantidades de datos}
+
+Una de las características más significativas en el tratamiento de genoma, es la gran cantidad de datasets que se generan. Estos datos hay que manejarlos de forma eficiente y adecuada, para preservar su integridad y a la vez que su acceso sea lo más rápido posible. Esta sección está dedicada a distintos modelos que se utilizan hoy día para el tratamiento de una gran cantidad de datos.
+
+\subsection{MapReduce}
+
+MapReduce\cite{mapreducesimp} es un modelo de programación con una implementación asociada para procesar y generar grandes datasets. En los últimos años se han venido implementando cientos de códigos de propósito especial (Google implementó la mayoría) para procesar grandes cantidades de datos en bruto, cómo documentos o peticiones web, para obtener distintos tipos de información derivada (índices, grafos de webs, resúmenes...). La mayoría de estos procesos son triviales y no requieren de un computo intensivo, pero los datos de entrada son demasiado grandes y tienen que ser distribuidos entre miles de máquinas para procesarlos en un tiempo razonable.\\
+
+Todo esto generaba cada vez más complejidad, por lo que la reacción fue el diseño de un nuevo tipo de abstracción que permitiese realizar simples cómputos ocultando detalles del paralelismo, la distribución de los datos y la carga, ofreciendo además tolerancia a fallos. Todo esto incluido en una simple librería, así fue como nació MapReduce (de mano de Google).\\
+
+El computo en este modelo se basa en un conjunto de pares clave/valor de entrada, que generan un conjunto de pares clave/valor de salida. Esto se genera mediante dos funciones que el programador debe definir: \textit{Map} y \textit{Reduce}. \textit{Map} obtiene un par de entrada y genera un conjunto de pares intermedios. Estos pares intermedios son recopilados internamente por la librería y los agrupa por su clave intermedia, pasándolos seguidamente a la función \textit{Reduce}. La función \textit{Reduce} acepta una de las claves intermedias y el conjunto de valores para esa clave, combinándolos para generar el conjunto de valores de salida. La Figura \ref{fig:mapreduce} muestra gráficamente un ejemplo para contar palabras usando el modelo \textit{MapReduce}.\\
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{mapreduce.png}
+\caption{Modelo paralelo \textit{MapReduce} para contar palabras.\label{fig:mapreduce}}
+\end{figure}

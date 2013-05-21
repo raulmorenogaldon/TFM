@@ -1,0 +1,48 @@
+\section{Bioinformática}
+
+En los últimos años se han producido avances en las tecnologías de secuenciación que han aumentado la productividad a una escala sin precedentes, con lo que la bioinformática ha encontrado dificultades para almacenar y analizar esas grandes cantidades de datos. Se habla de que la biología ha entrado en la era del \textit{``big data''}, enfrentándose a nuevos retos como son el almacenamiento, análisis, búsqueda, difusión y visualización de los datos que requieren nuevas soluciones.\\
+
+En esta sección se verán algunas de las herramientas y lenguajes de programación más utilizado para abordar los problemas de análisis genómico y cuales son sus características más relevantes. Señalar que no son las únicas y que existen más tanto de propósito especifico (la mayoría) como general.\\
+
+\subsection{Bioconductor}
+
+\textit{Bioconductor}\cite{bioconductor} es un software open-source, de libre desarrollo que proporciona herramientas para el análisis y comprensión de los datos de genómica. Está basado en el lenguaje de programación \textit{R}\cite{rproject}. Las herramientas que proporciona están contenidas en paquetes de \textit{R} por lo que es orientado a objetos y le proporciona ciertas características: un lenguaje interpretado de alto nivel para un rápido prototipado de nuevos algoritmos, sistema de paquetes, acceso a datos de genómica online, soporte completo estadístico y capacidades de visualización de los modelos.\\
+
+Los paquetes están bien documentados, incluso con ejemplos de uso. Ofrece además las herramientas junto con un flujo de trabajo a seguir para realizar distintos análisis y mostrar sus resultados de forma gráfica.\\
+
+\subsection{Bioperl}
+
+\textit{Bioperl}\cite{bioperl} es un conjunto de herramientas bioinformáticas basadas en módulos del lenguaje de programación \textit{Perl}. Está orientado a objetos, por lo que para llevar a cabo una tarea, algunos módulos necesitarán de otros para llevar a cabo su función. Posee, entre otras cosas, interfaces gráficas, almacenamiento persistente en bases de datos y parseadores de los resultados de varias de aplicaciones para poder usarlos. Se utiliza para producir nuevas herramientas más complejas.\\
+
+\subsection{Genome Analysis ToolKit}
+
+\textit{Genome Analysis Toolkit}\cite{gatkframework, gatkweb} (\textit{GATK}) es el estandard de facto para el análisis y descubrimiento de variantes de genoma. Es un conjunto de herramientas genérico que pueden ser aplicadas a cualquier tipo de conjunto de datos y problemas de análisis de genoma, ya que se puede usar tanto para descubrimiento como para validación.\\
+
+Soporta datos provenientes de una amplia variedad de tecnologías de secuenciación y aunque inicialmente se desarrolló para genética humana, actualmente puede manejar el genoma de cualquier organismo. \textit{GATK} está formado por un engine que se ocupa de correr las distintas herramientas sobre los datos de entrada. Estas herramientas pueden ser las que trae por defecto el propio programa u otras desarrolladas por los usuarios y permitiendo su cualquier combinación compatible de las mismas.\textit{GATK} sugiere varios flujos de trabajo a seguir para conseguir determinados resultados, pero se pueden realizar otros flujos personalizados.\\
+
+Los requerimientos del programa son únicamente un sistema compatible con \textit{POSIX} y Java instalado. Ofrece también la posibilidad de mostrar los resultados gráficamente usando \textit{R}. En cuanto al rendimiento, utiliza un sistema \textit{MapReduce} para particionar el trabajo a realizar sobre la gran cantidad de datos de entrada y utiliza hilos para acelerar el proceso.\\
+
+Para el procesamiento a gran escala utiliza una estrategia scatter-gather a groso modo que consiste en partir los datos de entrada y ejecutar cada parte en distintas máquinas independientemente. En la Figura \ref{fig:gatkqueue} se representa el modelo scatter-gather que utiliza el \textit{GATK} donde cada tarea naranja sería una instancia distinta del programa.\\
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{queuegatk.png}
+\caption{Modelo paralelo utilizado por \textit{GATK} para el procesamiento en cluster.\label{fig:gatkqueue}}
+\end{figure}
+
+En el aspecto del rendimiento, se echa en falta un procesamiento paralelo a nivel de cluster que permita a una tarea terminar antes y no tanto hacer varias a la vez. Además no se centra en obtener un alto rendimiento, en parte por usar Java, prefiriendo la facilidad de programación y la portabilidad que ofrece este lenguaje de programación.\\
+
+\subsection{Bowtie}
+
+\textit{Bowtie}\cite{bowtieweb} es un alineador de lecturas cortas de genoma (propósito específico) muy rápido y eficiente con la memoria. Este programa es muy usado pero tiene el inconveniente de que solo sirve para el alineamiento. Se puede utilizar como herramienta de altas prestaciones al inicio de un flujo de trabajo que utilice otras herramientas que la complementen. Este programa puede utilizar los cores del procesador usando hilos pero no tiene soporte interno al procesamiento en cluster.\\
+
+\subsection{OpenCB}
+
+\textit{OpenCB}\cite{opencb} es un grupo del Centro de Investigación Príncipe Felipe (CIPF) que nace como alternativa a los proyectos que normalmente se focalizan en un lenguaje de programación como el de Bioconductor o Bioperl orientados a la biología. Este grupo proporciona software avanzado y open-source para el análisis de datos de genómica con una alta productividad.\\
+
+El grupo está organizado en cuatro subproyectos diferentes centrado en resolver un problema concreto. Estos son el \textit{``High-Performance Genomics''} (HPG), centrado en acelerar los análisis usando tecnologías \textit{HPC} (High Performance Computing); \textit{``Cloud computing''}, para almacenar y difundir los datos; \textit{``Distributed NoSQL databases''}, para manejar la gran cantidad de datos; y \textit{``Big data visualization''}, para obtener una representación visual de los resultados.\\
+
+\textit{HPG} es un proyecto escalable, de alto rendimiento y open-source, que consiste en diferentes herramientas y algoritmos para el análisis de datos a escala genómica. Utiliza HPC para acelerar los algoritmos y las herramientas para el análisis, usando el lenguaje de programación C y buscando los algoritmos que mejor se ajustan a cada problema en concreto.\\
+
+
+

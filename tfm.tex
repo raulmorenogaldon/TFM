@@ -1,0 +1,54 @@
+\documentclass[spanish,12pt,a4paper, openright]{book}
+\usepackage[spanish]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[final]{graphicx}
+\graphicspath{{./figuras/}}
+
+\input{macros}
+
+%Avoid orphans
+\widowpenalty=300
+\clubpenalty=300
+
+
+\begin{document}
+
+%Evitar que llame a las tablas cuadros.
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\listtablename}{Índice de tablas}
+
+%\include{titulo}
+
+%no numerar esta pagina
+\thispagestyle{empty}
+\section*{}
+\newpage
+
+%\thispagestyle{empty}
+\tableofcontents
+
+\newpage
+
+
+\setcounter{secnumdepth}{2}
+
+%intentar no romper palabras
+\sloppy
+
+\input{intro}
+\input{arte}
+
+\input{asignaturas}
+
+
+\clearpage
+\bibliographystyle{amsplain}
+\bibliography{bibliografia}
+\listoffigures{}
+\listoftables{}
+
+
+
+\end{document}
+
+
