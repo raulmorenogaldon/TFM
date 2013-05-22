@@ -2,6 +2,6 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Modelo paralelo \textit {Fork-Join} usado por \textit {OpenMP}.}}{13}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Modelo paralelo \textit {MapReduce} para contar palabras.}}{16}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Modelo paralelo utilizado por \textit {GATK} para el procesamiento en cluster.}}{19}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Modelo paralelo \textit {MapReduce} para contar palabras.}}{17}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Modelo paralelo utilizado por \textit {GATK} para el procesamiento en cluster.}}{20}
 \addvspace {10\p@ }

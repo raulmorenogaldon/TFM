@@ -1,18 +1,55 @@
 \section{Tratamiento de grandes cantidades de datos}
 
-Una de las características más significativas en el tratamiento de genoma, es la gran cantidad de datasets que se generan. Estos datos hay que manejarlos de forma eficiente y adecuada, para preservar su integridad y a la vez que su acceso sea lo más rápido posible. Esta sección está dedicada a distintos modelos que se utilizan hoy día para el tratamiento de una gran cantidad de datos.
+Una de las características más significativas en el tratamiento de genoma, es la gran cantidad de datasets que se generan. Estos datos hay que manejarlos de forma eficiente y adecuada, para preservar su integridad y a la vez que su acceso sea lo más rápido posible. Esta sección está dedicada a distintos modelos que se utilizan hoy día para el tratamiento de una gran cantidad de datos.\\
+
+Conocidos habitualmente como \textit{``Big data''}, el tratamiento de una gran cantidad de datos busca abarcar varias dimensiones (según \textit{IBM}\cite{ibmbigdata}):
+\begin{itemize}
+\item
+\textbf{Volumen}: Big data solo conoce un tamaño, grande. Actualmente nos encontramos inundados de datos, hablando en términos de terabytes e incluso petabytes de información.
+\item
+\textbf{Velocidad}: Este aspecto tiene suma importancia en el acceso y manejo de los datos, donde es crítico en sistemas de tiempo real.
+\item
+\textbf{Variedad}: No solo se manejan muchos datos, también con distinta estructura cómo pueden ser texto, audio, vídeo, etc.
+\end{itemize}
+
+Todas estas dimensiones son las que se pretenden abordar con las soluciones presentadas en esta sección.\\
 
 \subsection{MapReduce}
 
-MapReduce\cite{mapreducesimp} es un modelo de programación con una implementación asociada para procesar y generar grandes datasets. En los últimos años se han venido implementando cientos de códigos de propósito especial (Google implementó la mayoría) para procesar grandes cantidades de datos en bruto, cómo documentos o peticiones web, para obtener distintos tipos de información derivada (índices, grafos de webs, resúmenes...). La mayoría de estos procesos son triviales y no requieren de un computo intensivo, pero los datos de entrada son demasiado grandes y tienen que ser distribuidos entre miles de máquinas para procesarlos en un tiempo razonable.\\
+MapReduce\cite{bigdataglos, mapreducesimp} es un modelo de programación con una implementación asociada para procesar y generar grandes datasets. En los últimos años se han venido implementando cientos de códigos de propósito especial (Google implementó la mayoría) para procesar grandes cantidades de datos en bruto, cómo documentos o peticiones web, para obtener distintos tipos de información derivada (índices, grafos de webs, resúmenes...). La mayoría de estos procesos son triviales y no requieren de un computo intensivo, pero los datos de entrada son demasiado grandes y tienen que ser distribuidos entre miles de máquinas para procesarlos en un tiempo razonable.\\
 
 Todo esto generaba cada vez más complejidad, por lo que la reacción fue el diseño de un nuevo tipo de abstracción que permitiese realizar simples cómputos ocultando detalles del paralelismo, la distribución de los datos y la carga, ofreciendo además tolerancia a fallos. Todo esto incluido en una simple librería, así fue como nació MapReduce (de mano de Google).\\
 
 El computo en este modelo se basa en un conjunto de pares clave/valor de entrada, que generan un conjunto de pares clave/valor de salida. Esto se genera mediante dos funciones que el programador debe definir: \textit{Map} y \textit{Reduce}. \textit{Map} obtiene un par de entrada y genera un conjunto de pares intermedios. Estos pares intermedios son recopilados internamente por la librería y los agrupa por su clave intermedia, pasándolos seguidamente a la función \textit{Reduce}. La función \textit{Reduce} acepta una de las claves intermedias y el conjunto de valores para esa clave, combinándolos para generar el conjunto de valores de salida. La Figura \ref{fig:mapreduce} muestra gráficamente un ejemplo para contar palabras usando el modelo \textit{MapReduce}.\\
-
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{mapreduce.png}
 \caption{Modelo paralelo \textit{MapReduce} para contar palabras.\label{fig:mapreduce}}
 \end{figure}
+
+Actualmente hay mucho software que implementa este modelo como puede ser el conocido \textit{Hadoop}, \textit{Hive}, \textit{Cascalog}, \textit{mrjob}\dots\\
+
+\subsection{Hadoop}
+
+\textit{Hadoop}\cite{bigdataglos, hadoopweb} es un proyecto open-source diseñado para el procesamiento de grandes cantidades datos. Es software fiable y escalable que se basa en computación distribuida. \textit{Hadoop} se encarga de ejecutar las aplicaciones en un entorno distribuido como puede ser un cluster.\\
+
+Entre sus funciones se encuentra la de particionar la gran cantidad de datos de entrada y repartirlos entra las máquinas disponibles. Una vez ejecutada la aplicación se recogen los resultados y se almacenan en el lugar correspondiente y adicionalmente junto con información sobre el progreso de la ejecución.\\
+
+Puesto que utiliza el modelo \textit{MapReduce} únicamente se puede utilizar para aplicaciones de paralelismo trivial, operaciones sencillas pero masivas que sean independientes las unas de las otras (y por tanto no haya comunicación entre las mismas). Por este motivo \textit{Hadoop} no funciona con aplicaciones que requieren de altas prestaciones.\\
+
+\subsection{S3}
+
+\textit{S3}\cite{bigdataglos, s3web} difiere de \textit{MapReduce} en que no se centra en el procesamiento de datos, sino en su almacenamiento. Este servicio de \textit{Amazon} te permite almacenar grandes bloques de datos en un servicio online, con una interfaz que facilita el acceso a los mismos (mediante \textit{HTTP}).\\
+
+La visión más acertada es la de una base de datos de pares clave/valor, donde cada clave almacena un gran bloque de datos que corresponde al valor. Esto limita las operaciones, no permitiendo por ejemplo añadir más datos a un bloque, renombrarlos, reescribirlos o incluso tener un árbol de directorios.\\
+
+La ventajas de este servicio residen en su bajo coste, su buena documentación, fiabilidad, rapidez y su fácil acceso desde cualquier entorno. Aún así normalmente se utiliza como una base de datos en bruto, muy simple.\\
+
+\subsection{Hadoop Distributed File System}
+
+\textit{Hadoop Distributed File System}\cite{bigdataglos, hadoopweb} (\textit{HDFS}) es un sistema de ficheros virtual diseñado para soportar aplicaciones que utilicen el modelo \textit{MapReduce} que necesiten leer y escribir una gran cantidad de datos en lotes. El sistema de ficheros se construye sobre un sistema de almacenamiento distribuido.\\
+
+Como ventajas en cuanto a almacenamiento con \textit{S3}, es la capacidad de renombrar y mover los ficheros, además de tener un árbol de directorios; pero sigue sin permitir la modificación de los mismos para facilitar la coherencia. La escritura en los ficheros solo se permite por tanto para su creación. Este es el sistema de ficheros utilizado por \textit{Hadoop}.\\
+
+
