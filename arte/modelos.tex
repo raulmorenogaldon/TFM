@@ -1,8 +1,8 @@
-\subsection{Modelos de programación paralela}
+\section{Modelos de programación paralela}
 
 En este apartado se presentarán los dos modelos principales de programación paralela que se utilizan, los cuales se distinguen en la forma que tienen los procesadores para comunicarse.\\
 
-\subsubsection{Espacio de memoria compartido}
+\subsection{Espacio de memoria compartido}
 
 Este modelo de programación paralela se caracteriza por tener un espacio de memoria físicamente unido, común a todos los procesadores que intervienen en el sistema. La interacción se realiza mediante la modificación de los datos que residen en la memoria compartida.\\
 
@@ -32,7 +32,7 @@ OpenMP utiliza por debajo el modelo fork-join (Figura \ref{fig:forkjoin}) para l
 
 Otro API de programación utilizado para plataformas de memoria compartida basadas en GPU es \textit{CUDA}\cite{progparmachines}. Las GPUs son máquinas SIMD según la taxonomía de Flynn (véase Sección \ref{sec:flynn}) utilizando el modelo de memoria compartida. Una diferencia con los multicores que también utilizan este modelo, es que las GPUs pueden tener miles de hilos corriendo simultáneamente. Un programa en CUDA tiene dos partes, el código que se ejecuta en el \textit{host} o procesador central (CPU), y el código que se ejecuta en el \textit{device} (GPU) llamado \textit{kernel}. Debido a esto es necesaria una CPU que trabaje en conjunto con la GPU. Cualquier aplicación que siga encaje en el modelo SIMD, donde se apliquen las mismas instrucciones a un conjunto de datos, se verá muy beneficiada en el uso de una GPU. Cualquier otro tipo de aplicación no es factible en estas plataformas.\\
 
-\subsubsection{Paso de mensajes}
+\subsection{Paso de mensajes}
 
 En este modelo, la plataforma consiste en una serie de nodos de procesamiento interconectados, cada uno con su propio espacio de direcciones de memoria. Cada nodo puede ser un solo procesador, o un multiprocesador con espacio de memoria compartido entre sus cores. En este modelo, la interacción entre procesos corriendo en distintos nodos se realiza mediante en el envío de mensajes.\\
 
@@ -46,12 +46,12 @@ La forma de procesar, en un entorno MPI, un programa consiste en ejecutar copias
 
 Adicionalmente, existe una API basada en MPI para operaciones I/O en sistemas paralelos de almacenamiento, se llama \textit{MPI-IO}\cite{usingmpi}. Esta API es la parte de MPI que maneja el I/O, ofreciendo distintas operaciones de lectura y escritura. Permite además determinar como se van a distribuir los datos entre los procesos, y como se van a almacenar los datos en disco una vez procesados. Esto permite solucionar las limitaciones de memoria al procesar ficheros muy grandes (no hay que cargarlos en la memoria de una sola máquina) y obtener un único fichero de salida.\\
 
-\subsubsection{Partitioned Global Address Space - PGAS}
+\subsection{Partitioned Global Address Space - PGAS}
 
 El modelo de PGAS\cite{intropgas} se caracteriza por ofrecer al programador un espacio de memoria único y compartido en un sistema con memoria distribuida. Mediante una capa interfaz, se ofrece a los nodos (que tiene cada uno su memoria local) una forma de utilizar también las memorias locales de los otros nodos del sistema. Lo que esto ofrece al programador es una visión local de todo el espacio de memoria como uno único y global, transparencia en las comunicaciones (puesto que el compilador se encarga de las mismas) y soporte para datos distribuidos.\\
 
 A nivel de nodo, la variables de memoria pueden ser \textit{shared} o \textit{local}, permitiendo compartir únicamente las variables que interesan para la comunicación y no sobrecargando la comunicación con variables auxiliares y privadas que solo le sirven al nodo local. Algunos APIs de programación que utilizan este modelo son \textit{Unified Parallel C}, \textit{Co-Array Fortran}, \textit{Titanium}, \textit{X-10} y \textit{Chapel}.\\
 
-\subsubsection{OmpSS}
+\subsection{OmpSS}
 
 OmpSS\cite{gpuompss} es un modelo de programación que utiliza como base OpenMP, modificándolo para soportar paralelismo irregular, asíncrono y en plataformas heterogéneas. Utiliza un modelo de \textit{pool} de hilos en lugar de \textit{fork-join}(usado por OpenMP), donde un hilo maestro crea los trabajos y el resto de hilos los procesan. Otra diferencia es la distinción de varios espacios de memoria de cada nodo, al contrario del único espacio de memoria de OpenMP. Es el propio compilador el que se encarga de distribuir los datos y elegir en qué dispositivo procesarlos.\\
