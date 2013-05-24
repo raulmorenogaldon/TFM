@@ -1,7 +1,0 @@
-\select@language {spanish}
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Modelo paralelo \textit {Fork-Join} usado por \textit {OpenMP}.}}{25}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Modelo paralelo \textit {MapReduce} para contar palabras.}}{29}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Modelo paralelo utilizado por \textit {GATK} para el procesamiento en cluster.}}{32}
