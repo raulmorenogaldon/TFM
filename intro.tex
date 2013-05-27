@@ -4,26 +4,26 @@ Este capitulo trata de ofrecer una visión general sobre la linea de investigació
 
 \section{Introducción y motivación}
 
-El ADN de todos los organismos vivos conocidos contiene las instrucciones genéticas usadas en su desarrollo y funcionamiento, es cómo una plantilla de la que saldrá el organismo final. El papel de la molecula de ADN es el de almacenar a largo plazo información sobre esa plantilla, plano o receta, como quiera llamarse; que al fin y al cabo es un \textit{código}. Este código contiene las instrucciones necesarias para construir los componentes de las células (proteinas y moleculas de ARN) y además se transmite de generación en generación.\\
+El ADN de todos los organismos vivos conocidos contiene las instrucciones genéticas usadas en su desarrollo y funcionamiento, es como una plantilla de la que saldrá el organismo final. El papel de la molécula de ADN es el de almacenar a largo plazo información sobre esa plantilla, plano o receta, como quiera llamarse, que al fin y al cabo es un \textit{código}. Este código contiene las instrucciones necesarias para construir los componentes de las células (proteínas y moléculas de ARN) y además se transmite de generación en generación.\\
 
-Un gen es una región de ADN que influye en una característica particular de un organismo (color de los ojos por ejemplo). Estos genes son el plano para producir las proteínas, que regulan las funciones del organismo. Si un gen resultase cambiado se podría producir una falta de proteínas dando lugar a enfermedades, en otros casos podría producir efectos beneficiosos que generarían individuos más adaptados a su entorno (en esto se basa la evolución).\\
+Un gen es una región de ADN que influye en una característica particular de un organismo (color de los ojos por ejemplo). Estos genes son el plano para producir las proteínas, que regulan las funciones del organismo. Si un gen resultase cambiado se podría producir una falta de proteínas dando lugar a enfermedades. En otros casos podría producir efectos beneficiosos que generarían individuos más adaptados a su entorno (en esto se basa la evolución).\\
 
-La búsqueda del estudio de la estructura del ADN permite por tanto el desarrollo de multitud de herramientas tecnológicas que explotan sus propiedades para analizar su implicación en problemas concretos. Por ejem\-plo la carac\-terización de la variabilidad individual de un paciente en respuesta a un determinado fármaco, o la obtención de una característica de común de un grupo de individuos de interés. Los beneficios son visibles en medicina, pero también en agricultura y ganadería (obtener carnes y cultivos de más calidad). Es posible incluso determinar la evolución que ha seguido una especie analizando las mutaciones que ha sufrido su ADN y que quedan grabadas en el mismo, avanzando en el campo de la ecología y la antropología.\\
+La búsqueda del estudio de la estructura del ADN permite por tanto el desarrollo de multitud de herramientas tecnológicas que explotan sus propiedades para analizar su implicación en problemas concretos. Por ejem\-plo la carac\-terización de la variabilidad individual de un paciente en respuesta a un determinado fármaco, o la obtención de una característica común de un grupo de individuos de interés. Los beneficios son visibles en medicina, pero también en agricultura y ganadería (obtener carnes y cultivos de más calidad). Es posible incluso determinar la evolución que ha seguido una especie analizando las mutaciones que ha sufrido su ADN y que quedan grabadas en el mismo, avanzando en el campo de la ecología y la antropología.\\
 
 En cuanto a la \textit{bioinformática} son muchos los avances que se han realizado en los últimos años en el campo de la genómica. La tecnología de secuenciación cada vez produce más datos a una escala sin precedentes, lo cual hace surgir dificultades a la hora de almacenar y procesar esos datos. Estos datos necesitan de recursos computacionales y técnicas de procesamiento que permitan obtener resultados rápidamente, permitiendo avanzar a los campos científicos que se basan en los mismos.\\
 
-Se han desarrollado muchas soluciones en los últimos años destinados al análisis del ADN, pero ninguna ha conseguido una alta calidad y completitud en cuanto a:
+Se han desarrollado muchas soluciones en los últimos años destinadas al análisis del ADN, pero ninguna ha conseguido una alta calidad y completitud. Los principales problemas encontrados son:
 \begin{itemize}
 \item
 Normalmente solo resuelven una parte específica del análisis y fallan en otras funciones, lo que provoca el uso de diferentes programas a modo \textit{pipeline}.
 \item
 Implementaciones pobres, con bugs y rendimiento muy bajo en términos de tiempo de ejecución y necesidades de memoria.
 \item
-No están preparadas para dar el salto a distintos escenarios de computación paralela como pueden ser los clusters.
+No están preparadas para dar el salto a distintos escenarios de computación paralela como puede ser un cluster con varios elementos de procesamiento interconectados entre sí.
 \item
 Falta de documentación.
 \end{itemize}
-Estos inconvenientes se convierten en un cuello de botella cuando los precios de los recursos de computo bajan mientras que los datos a procesar se incrementan.\\
+Estos inconvenientes se convierten en un cuello de botella cuando los precios de los recursos de cómputo bajan mientras que los datos a procesar se incrementan.\\
 
 Lo que se busca por tanto en esta tesis es la elaboración de un conjunto de programas que permitan analizar estos datos masivos obtenidos por los secuenciadores de ADN, que exploten al máximo las plataformas de computación de las que se puedan disponer y por tanto acelerar no solo la caracterización de un ADN, sino las ciencias que se apoyan en el mismo. Para acelerar estos programas se puede hacer uso de la programación paralela, la cual permite utilizar varías máquinas simultáneamente para obtener resultados. Además será necesario contar con mecanismos de gestión y tratamiento de grandes cantidades de datos para poder manejar los que producen los secuenciadores.\\
 

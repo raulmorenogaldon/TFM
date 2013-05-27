@@ -10,7 +10,7 @@ Además de las técnicas de programación, se presentan conceptos importantes que m
 
 \subsection{Trabajo realizado}
 
-En primer lugar, en la asignatura se ha estudiado como se puede optimizar un código secuencial para que aproveche eficientemente los recursos de computo de los que se dispone. Para ello se han presentado dos conceptos importantes a explotar: la localidad temporal y la localidad espacial. Estos conceptos nos dicen que si un programa utiliza un dato, es muy probable que se vuelva a utilizar en un futuro cercano (temporal), también nos dice que hay una alta probabilidad de utilizar seguidamente el dato contiguo (espacial).\\
+En primer lugar, en la asignatura se ha estudiado como se puede optimizar un código secuencial para que aproveche eficientemente los recursos de cómputo de los que se dispone. Para ello se han presentado dos conceptos importantes a explotar: la localidad temporal y la localidad espacial. Estos conceptos nos dicen que si un programa utiliza un dato, es muy probable que se vuelva a utilizar en un futuro cercano (temporal), también nos dice que hay una alta probabilidad de utilizar seguidamente el dato contiguo (espacial).\\
 
 %Utilizando estos conceptos se deduce la importancia de las memoria caché (de baja capacidad pero alta velocidad), que junto a estos aportan la gran mayoría del rendimiento, permitiendo acelerar la ejecución de un programa secuencial.\\
 
@@ -18,7 +18,7 @@ También se ha estudiado la importancia de detectar y minimizar el efecto de los 
 
 La técnica que se ha estudiado y que intenta minimizar los problemas anteriores y obtener más eficiencia es la denominada programación orientada a bloques. Es una técnica que funciona bien para operaciones de álgebra lineal, como puede ser la multiplicación de matrices. Consiste en dividir los datos de entrada en bloques y procesarlos a ese nivel.\\
 
-En las prácticas de la asignatura se realizan programas de multiplicación de matrices utilizando programación en bloques, observándose cómo efectivamente se conseguían unos resultados mucho más rápidos y de manera más eficiente. Además, se programa también utilizando la librería de cálculo \textit{BLAS} para comparar y ver hasta que punto se puede optimizar un algoritmo de multiplicación de matrices (hasta 12 veces más rápido en las pruebas).\\
+En las prácticas de la asignatura se realizan programas de multiplicación de matrices utilizando programación en bloques, observándose cómo efectivamente se conseguían unos resultados mucho más rápidos y de manera más eficiente. Además, se programa también utilizando la librería de cálculo \textit{BLAS} para comparar y ver hasta qué punto se puede optimizar un algoritmo de multiplicación de matrices (hasta 12 veces más rápido en las pruebas).\\
 
 El siguiente paso en la asignatura fue la utilización de la programación paralela utilizando la librería de paso de mensajes \textit{MPI}, y utilizando también una implementación paralela de la librería \textit{BLAS} llamada \textit{PBLAS}. Para ello se considera de nuevo el problema de la multiplicación de matrices y se realizan soluciones paralelas. Aunque solo se programa mediante el paradigma de programación en entornos de memoria distribuida, se estudia también el paradigma de memoria compartida.\\
 
@@ -28,6 +28,6 @@ Una vez obtenidas las soluciones paralelas, se obtienen medidas de rendimiento c
 
 La programación paralela puede ser muy importante a la hora de acelerar un programa que requiere de un alto rendimiento, como son los programas de análisis de genoma. Además, si se cumplen ciertas condiciones favorables al paralelismo, la velocidad podría aumentar cuantos más elementos de procesamiento utilizáramos.\\
 
-El concepto de computación por bloques es totalmente aplicable a nuestro problema, los ficheros que hay que procesar son tan grandes que necesariamente hay que procesarlos por partes (en bloques) ya que, de otro modo, colapsaríamos la memoria de la máquina. Esto nos permite también procesarlos de manera paralela, puesto que cada bloque es independiente de los demás y por tanto podemos procesarlo en procesadores distintos.\\
+El concepto de computación por bloques es totalmente aplicable a nuestro problema, los ficheros que hay que procesar son tan grandes que necesariamente hay que procesarlos por bloques ya que, de otro modo, colapsaríamos la memoria de la máquina. Esto nos permite también procesarlos de manera paralela, puesto que cada bloque es independiente de los demás y por tanto podemos procesarlo en procesadores distintos.\\
 
 Es necesaria la utilización de un mecanismo de paso de mensajes (como puede ser \textit{MPI}) para realizar un procesamiento paralelo en varías máquinas, por lo que la aplicación, con lo visto en esta asignatura, al programa de genómica es prácticamente directa. Esto permitirá partir el genoma en trozos y procesarlos de forma distribuida y paralela.\\
