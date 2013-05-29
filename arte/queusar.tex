@@ -1,4 +1,4 @@
-\chapter{Estado del arte: ¿Conclusiones?¿Factores a tener en cuenta?¿Lo meto en el capitulo de trabajo de investigación?}
+\chapter{Estado del arte: ¿Conclusiones?¿Factores a tener en cuenta?¿Lo meto en el capítulo de trabajo de investigación?}
 
 \section{Modelo de programación paralela a tener en cuenta}
 
@@ -12,6 +12,8 @@ Podemos concluir por tanto en el uso del modelo de memoria compartida combinado 
 
 \section{Tratamiento de datos}
 
+En esta \textit{tesis} se tendrá en cuenta, como base, el modelo \textit{MapReduce}. Lo que se pretende es utilizar un modelo similar, parecido al \textit{scatter-gather}, que nos permita leer por partes o lotes el dataset de entrada. Estos lotes serán enviados a procesar a distintos procesadores por orden de lectura y obteniendo los resultados de los mismos de forma parcial. Cuando un lote es procesado se lee el siguiente y se procesa. La cantidad de lotes leídos simultáneamente podría basarse en el factor de memoria disponible en todos los nodos.\\
+ 
 \section{Software referencia de bioinformática para esta tesis}
 
 En esta \textit{tesis} tenemos como referencia la \textit{suite} de herramientas del \textit{GATK} puesto que es la más utilizada. La razón de la elección radica en que aun siendo la más utilizada, no es una herramienta pensada para ofrecer un alto rendimiento. A pesar de esto, sus ventajas son la facilidad a la hora de procesar cualquier \textit{dataset} de entrada, sea cual sea el secuenciador que lo haya generado. Esto unido a la capacidad para procesar el \textit{dataset}, sea del tamaño que sea, y la posibilidad de aplicarle cualquier algoritmo justifican el amplio uso de esta herramienta.\\
