@@ -2,18 +2,18 @@
 
 \subsection{Descripción}
 
-En esta asignatura se estudian y analizan los diferentes aspectos de un cluster de computadores. Se describen las tendencias en cuanto a los nuevos sistemas de interconexión y I/O, como puede ser Infiniband. Además se presentan las posibilidades y los problemas a resolver en cuanto a la configuración de plataformas cluster, mostrando ejemplos de aplicaciones que permiten aprovechar estas arquitecturas. Como último punto se introduce al alumno en la programación paralela usando \textit{MPI}.\\
+En esta asignatura se estudian y analizan los diferentes aspectos de un \textit{cluster} de computadores. Se describen las tendencias en cuanto a los nuevos sistemas de interconexión y I/O, como puede ser Infiniband. Además se presentan las posibilidades y los problemas a resolver en cuanto a la configuración de plataformas \textit{cluster}, mostrando ejemplos de aplicaciones que permiten aprovechar estas arquitecturas. Como último punto se introduce al alumno en la programación paralela usando \textit{MPI}.\\
 
 \subsection{Trabajo realizado}
 
-En la primera parte de la asignatura se presenta al alumno un estado del arte sobre qué son los cluster y su impacto en el mercado, analizando la lista del \textit{Top 500} de computadores. Seguidamente se tratan los entornos software necesarios para que una arquitectura de tipo cluster de la sensación al usuario de estar trabajando con un único recurso computacional, lo cual se denomina imagen de sistema único.\\
+En la primera parte de la asignatura se presenta al alumno un estado del arte sobre qué son los \textit{cluster} y su impacto en el mercado, analizando la lista del \textit{Top 500} de computadores. Seguidamente se tratan los entornos software necesarios para que una arquitectura de tipo \textit{cluster} de la sensación al usuario de estar trabajando con un único recurso computacional, lo cual se denomina imagen de sistema único.\\
 
-En la parte final se presenta al alumno la librería \textit{MPI} y una pequeña introducción a su programación orientada a cluster. Para ello se le anima a programar un algoritmo basado en el recorrido de matrices usando esta librería y ejecutándolo con en un cluster con distinto número de nodos. Finalmente se hace uso de un software de monitorización llamado ``\textit{Paraver}'' analizando trazas de una aplicación \textit{MPI} y permitiendo determinar cual ha sido el comportamiento durante su ejecución.\\
+En la parte final se presenta al alumno la librería \textit{MPI} y una pequeña introducción a su programación orientada a \textit{cluster}. Para ello se le anima a programar un algoritmo basado en el recorrido de matrices usando esta librería y ejecutándolo con en un \textit{cluster} con distinto número de nodos. Finalmente se hace uso de un software de monitorización llamado ``\textit{Paraver}'' analizando trazas de una aplicación \textit{MPI} y permitiendo determinar cual ha sido el comportamiento durante su ejecución.\\
 
-Como trabajo final de asignatura, he realizado una introducción sobre la tecnología \textit{SSE}\cite{ssemanual} (\textit{Streaming SIMD Extensions}) como uso del paralelismo a nivel de procesador en un cluster, explicando en qué consiste y pequeños ejemplos sobre su uso.\\
+Como trabajo final de asignatura, he realizado una introducción sobre la tecnología \textit{SSE}\cite{ssemanual} (\textit{Streaming SIMD Extensions}) como uso del paralelismo a nivel de procesador en un \textit{cluster}, explicando en qué consiste y pequeños ejemplos sobre su uso.\\
 
 \subsection{Relación con el tema de investigación}
  
-El uso de un cluster es crucial para acelerar las aplicaciones de análisis de genoma, los grandes requisitos computacionales de estas requieren muchos recursos a su disposición, siendo un cluster el que puede ofrecerlos. Por lo tanto se puede orientar el desarrollo del software al uso de estas plataformas que ofrecen un alto grado de paralelismo y además distintos recursos, adecuados para distintas situaciones (procesadores, GPUs\dots).\\
+El uso de un \textit{cluster} es crucial para acelerar las aplicaciones de análisis de genoma, los grandes requisitos computacionales de estas requieren muchos recursos a su disposición, siendo un \textit{cluster} el que puede ofrecerlos. Por lo tanto se puede orientar el desarrollo del software al uso de estas plataformas que ofrecen un alto grado de paralelismo y además distintos recursos, adecuados para distintas situaciones (procesadores, GPUs\dots).\\
 
 Además se puede utilizar \textit{MPI} para estos fines, ya que permite aprovechar los recursos disponibles y además está ampliamente documentado y soportado por la comunidad científica.\\
