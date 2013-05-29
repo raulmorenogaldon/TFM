@@ -2,7 +2,19 @@
 
 En este capitulo se detalla el trabajo realizado durante la realización del master. Se presentara el ámbito en el que se ha trabajado, desde donde se ha partido y cuales han sido los pasos seguidos hasta llegar al final de este trabajo. Básicamente el objetivo del trabajo era conseguir un software recalibrador acelerado, usando técnicas de optimización y paralelismo que fuese más eficiente y rápido que el utilizado como referencia.\\
 
-Primeramente se describirá qué es un recalibrador y para qué sirve, pasando seguidamente a lo que se ha realizado a partir de ahí y qué pasos se han seguido.
+Primeramente se describirá en que consiste el proceso de descubrimiento de variantes, qué función tiene un recalibrador en esa proceso, pasando seguidamente a lo que se ha realizado a partir de ahí y qué pasos se han seguido.\\
+
+\section{Descripción del proceso de descubrimiento de variantes}
+
+El proceso de descubrimiento de variantes tiene como objetivo localizar variaciones, mutaciones o \textit{indels} (\textit{insertions/deletions}) en una muestra de ADN con respecto a otra. Este proceso tiene tres fases.\\
+
+En la primera fase se obtienen lecturas de ADN en un formato específico y dependiente de la plataforma que las haya obtenido. Lo que se hace con estas lecturas es transformarlas a un único formato genérico, con unas calidades bien calibradas, mapeadas y alineadas con su ADN de referencia. El formato utilizado es el \textit{SAM/BAM} \cite{bamsam} (\textit{Sequence Aligment Map/Binary Alignment Map}), el cual es independiente de la tecnología de obtención del ADN.\\
+
+En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}), pequeños \textit{indels}, etc.\\
+
+En la última fase se analizan las mutaciones obtenidas y la estructura del ADN para tomar conclusiones.\\ 
+
+
 
 \section{Descripción de un recalibrador}
 
