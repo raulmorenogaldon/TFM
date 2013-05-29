@@ -4,7 +4,7 @@ En este capitulo se detalla el trabajo realizado durante la realización del mast
 
 Primeramente se describirá en que consiste el proceso de descubrimiento de variantes, qué función tiene un recalibrador en esa proceso, pasando seguidamente a lo que se ha realizado a partir de ahí y qué pasos se han seguido.\\
 
-\section{Descripción del proceso de descubrimiento de variantes}
+\section{Descripción del proceso de descu\-bri\-mien\-to de variantes}
 
 El proceso de descubrimiento de variantes tiene como objetivo localizar variaciones, mutaciones o \textit{indels} (\textit{insertions/deletions}) en una muestra de ADN con respecto a otra. Este proceso tiene tres fases.\\
 
@@ -12,9 +12,13 @@ En la primera fase se obtienen lecturas de ADN en un formato específico y depend
 
 En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}), pequeños \textit{indels}, etc.\\
 
-En la última fase se analizan las mutaciones obtenidas y la estructura del ADN para tomar conclusiones.\\ 
+En la última fase se analizan las mutaciones obtenidas y la estructura del ADN para tomar conclusiones. En la Figura \ref{fig:procesodescubrimiento} se puede ver gráficamente estas tres fases.\\
 
-
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{variationdiscover.jpg}
+\caption{Proceso de descubrimiento de variantes en el ADN.\label{fig:procesodescubrimiento}}
+\end{figure} 
 
 \section{Descripción de un recalibrador}
 
