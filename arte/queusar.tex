@@ -1,0 +1,21 @@
+\chapter{Estado del arte: ¿Conclusiones?¿Factores a tener en cuenta?¿Lo meto en el capitulo de trabajo de investigación?}
+
+\section{Modelo de programación paralela a tener en cuenta}
+
+Es interesante la aplicación de ambos modelos de programación en la elaboración de esta \textit{tesis}, a distintos niveles. Podemos utilizar el modelo de memoria compartida a nivel de procesador, puesto que hoy día los nuevos procesadores son mayoritariamente un sistema \textit{SMP} \textit{on-chip} con varios núcleos de procesamiento y que comparten la misma memoria principal. Podemos usar este modelo de programación para acelerar los tiempos de ejecución dentro del procesador, usando con la máxima eficiencia posible todos los núcleos de procesamiento del mismo.\\
+
+Podemos aplicar igualmente el modelo de paso de mensajes para llevar la ejecución a un entorno multiprocesador o un \textit{cluster}. Mediante este modelo podemos acelerar el tiempo de ejecución de los programas usando en paralelo los procesadores de los que se dispone en un sistema tipo \textit{cluster}. Con ello se busca mayor velocidad de computo cuantos más recursos (procesadores) disponga el sistema.\\
+
+El modelo de \textit{PGAS} en cambio no se considera factible su uso en esta \textit{tesis}. Esto es debido a que la capa de virtualización, para dar la visión de memoria compartida, es costosa tanto económicamente como en prestaciones. Debido a la sobrecarga a la que somete al sistema y puesto que estamos en entornos de altas prestaciones, no se utilizará al no considerarse necesaria.\\
+
+Podemos concluir por tanto en el uso del modelo de memoria compartida combinado con el modelo de paso de mensajes, cada uno acelerando el tiempo de ejecución a distintos niveles en un sistema multiprocesador.\\
+
+\section{Tratamiento de datos}
+
+\section{Software referencia de bioinformática para esta tesis}
+
+En esta \textit{tesis} tenemos como referencia la \textit{suite} de herramientas del \textit{GATK} puesto que es la más utilizada. La razón de la elección radica en que aun siendo la más utilizada, no es una herramienta pensada para ofrecer un alto rendimiento. A pesar de esto, sus ventajas son la facilidad a la hora de procesar cualquier \textit{dataset} de entrada, sea cual sea el secuenciador que lo haya generado. Esto unido a la capacidad para procesar el \textit{dataset}, sea del tamaño que sea, y la posibilidad de aplicarle cualquier algoritmo justifican el amplio uso de esta herramienta.\\
+
+En cuanto a sus desventajas, la principal es la falta de rendimiento como ya se ha comentado. La herramienta en sí hace su trabajo y obtiene resultados, pero no es factible para una aplicación cotidiana aplicada, por ejemplo, al ámbito de la sanidad (donde no es lo mismo que se obtengan los resultados de un paciente a los 2 meses que a las 2 horas).\\
+
+Lo que se pretende por tanto es replicar esta herramienta para conservar sus ventajas pero intentando eliminar sus desventajas. Para ello se aplicarán técnicas de computación de altas prestaciones, usando lenguajes de programación eficientes con memoria y los recursos del sistema y además llevando la ejecución al ámbito de los sistemas multiprocesador.\\
