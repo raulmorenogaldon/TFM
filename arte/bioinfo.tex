@@ -44,3 +44,10 @@ El proyecto está organizado en cuatro subproyectos diferentes, cada uno centrado
 
 \textit{HPG} es un proyecto escalable, de alto rendimiento y open-source, que consiste en diferentes herramientas y algoritmos para el análisis de datos a escala genómica. Utiliza HPC para acelerar los algoritmos y las herramientas para el análisis, usando el lenguaje de programación C y buscando los algoritmos que mejor se ajustan a cada problema en concreto. Se busca también la escalabilidad, que permita acelerar las ejecuciones cuantos más recursos computacionales estén disponibles.\\
 
+\section{Conclusiones}
+
+En esta \textit{tesis} tenemos como referencia la \textit{suite} de herramientas del \textit{GATK} puesto que es la más utilizada. La razón de la elección radica en que aun siendo la más utilizada, no es una herramienta pensada para ofrecer un alto rendimiento. A pesar de esto, sus ventajas son la facilidad a la hora de procesar cualquier \textit{dataset} de entrada, sea cual sea el secuenciador que lo haya generado. Esto unido a la capacidad para procesar el \textit{dataset}, sea del tamaño que sea, y la posibilidad de aplicarle cualquier algoritmo justifican el amplio uso de esta herramienta.\\
+
+En cuanto a sus desventajas, la principal es la falta de rendimiento como ya se ha comentado. La herramienta en sí hace su trabajo y obtiene resultados, pero no es factible para una aplicación cotidiana, por ejemplo, al ámbito de la sanidad (donde no es lo mismo que se obtengan los resultados de un paciente a los 2 meses que a las 2 horas).\\
+
+Lo que se pretende por tanto es replicar esta herramienta para conservar sus ventajas pero intentando eliminar sus desventajas. Para ello se aplicarán técnicas de computación de altas prestaciones, usando lenguajes de programación eficientes con memoria y los recursos del sistema y además llevando la ejecución al ámbito de los sistemas multiprocesador.\\

@@ -25,3 +25,13 @@ Aunque esta clasificación se formuló hace unos 40 años, hoy día sigue siendo vál
 
 \input{arte/modelos}
 %\input{arte/api}
+
+\section{Conclusiones}
+
+Es interesante la aplicación de ambos modelos de programación en la elaboración de esta \textit{tesis}, a distintos niveles. Podemos utilizar el modelo de memoria compartida a nivel de procesador, puesto que hoy día los nuevos procesadores son mayoritariamente un sistema \textit{SMP} (\textit{Sistema Multi-Procesador}) \textit{on-chip} con varios núcleos de procesamiento y que comparten la misma memoria principal. Podemos usar este modelo de programación para acelerar los tiempos de ejecución dentro del procesador, usando eficientemente todos los núcleos de procesamiento del mismo.\\
+
+Podemos aplicar igualmente el modelo de paso de mensajes para llevar la ejecución a un entorno multiprocesador o un \textit{cluster}. Mediante este modelo podemos acelerar el tiempo de ejecución de los programas usando en paralelo los procesadores de los que se dispone en este tipo de sistemas. Con ello se busca mayor velocidad de computo cuantos más recursos (procesadores) disponga el sistema.\\
+
+En cambio, el uso del modelo de \textit{PGAS} no se considera factible en esta \textit{tesis}. Esto es debido a que la capa de virtualización, para dar la visión de memoria compartida, es costosa tanto económicamente como en prestaciones. Debido a la sobrecarga a la que somete al sistema y puesto que estamos en entornos de altas prestaciones, no se utilizará al no considerarse necesaria.\\
+
+Podemos concluir por tanto en el uso del modelo de memoria compartida combinado con el modelo de paso de mensajes, cada uno acelerando el tiempo de ejecución a distintos niveles en un sistema multiprocesador.\\

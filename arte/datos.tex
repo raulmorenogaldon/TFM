@@ -52,3 +52,6 @@ La visión más acertada es la de una base de datos de pares clave/valor, donde ca
 
 La ventajas de este servicio residen en su bajo coste, su buena documentación, fiabilidad, rapidez y su fácil acceso desde cualquier entorno. Aún así normalmente se utiliza como una base de datos en bruto, muy simple.\\
 
+\section{Conclusiones}
+
+En esta \textit{tesis} se tendrá en cuenta, como base, el modelo \textit{MapReduce}. Lo que se pretende es utilizar un modelo similar, parecido al \textit{scatter-gather}, que nos permita leer por partes o lotes el dataset de entrada. Estos lotes serán enviados a procesar a distintos procesadores por orden de lectura y obteniendo los resultados de los mismos de forma parcial. Cuando un lote es procesado se lee el siguiente y se procesa. La cantidad de lotes leídos simultáneamente podría basarse en el factor de memoria disponible en todos los nodos.\\
