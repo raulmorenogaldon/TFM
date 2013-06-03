@@ -71,8 +71,17 @@ Para este trabajo se incorporó el uso de las instrucciones \textit{SSE} \cite{ss
 
 \section{Herramientas utilizadas}
 
+Para el desarrollo del recalibrador se utilizaron varios tipos de herramientas, tanto para la edición del código como para su depurado. A continuación serán descritas.\\
 
-geani, git, gdb, valgrind
+\textit{Geany} \cite{geanyweb} es un editor de texto con algunas funciones de los entornos de desarrollo integrados (\textit{IDEs}). Es sencillo y rápido, ofreciendo una forma simple de manejar los ficheros de un proyecto. Puesto que lo he utilizado sólo para editar el código, no me han sido necesarias funciones adicionales de otros \textit{IDEs} o de compilación.\\
+
+Para compilar el código he utilizado \textit{Makefile}, el cual es ampliamente utilizado para la compilación automática, usando ficheros de texto. Lo he utilizado sin herramientas de compilación adicionales, pero existen otras herramientas que generan automáticamente los \textit{Makefiles} y los actualizan sin necesidad de que el programador intervenga. Un ejemplo de estas herramientas es el \textit{GNU build system} o \textit{Autotools} \cite{autotoolsweb}. \textit{Autotools} será tenido en cuenta para trabajo futuro, además de otra herramienta llamada \textit{Scons} \cite{sconsweb} basada en scripts de \textit{Phyton}\\
+
+Para el control de versiones del código se ha utilizado \textit{Git} \cite{gitweb}, esto me permite guardar la historia de cambios que ha sufrido el programa durante su desarrollo y permite revertir cambios para recuperar versiones anteriores. Ofrece un control de versiones distribuido, al contrario que otras herramientas como \textit{Subversion} \cite{subversionweb}, por lo que puedes trabajar en local y cuando sea posible combinar los cambios con el repositorio global. La razón de elegir \textit{Git} fue su facilidad de uso, por ejemplo a la hora de crear y combinar distintos flujos de trabajo.\\
+
+La forma de trabajar con \textit{Git} que he seguido consiste en tener un flujo de trabajo llamado \textit{master} donde se recogen las características ya implementadas en el programa. A la hora de añadir una nueva funcionalidad al programa, creo un nuevo flujo de trabajo y realizo los cambios sobre el mismo. Cuando esa funcionalidad está añadida, combino ese flujo de trabajo con el \textit{master} obteniendo el programa con la característica implementada en ese flujo principal. Esto me permite trabajar en varías funcionalidades de forma separada, a la vez y sin interferir unas sobre otras, lo cual facilita el manejo del código.\\
+
+geany, git, gdb, valgrind
 
 \section{Algoritmo de recalibrado}
 
