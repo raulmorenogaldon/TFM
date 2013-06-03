@@ -1,14 +1,36 @@
-\chapter{Trabajo de investigación: Recalibrador acelerado usando para\-lelismo}
+\chapter{Trabajo de investigación: Recalibrador de altas prestaciones usando para\-lelismo}
 
-En este capitulo se detalla el trabajo realizado durante la realización del master. Se presentara el ámbito en el que se ha trabajado, desde donde se ha partido y cuales han sido los pasos seguidos hasta llegar al final de este trabajo. Básicamente el objetivo del trabajo era conseguir un software recalibrador acelerado, usando técnicas de optimización y paralelismo que fuese más eficiente y rápido que el utilizado como referencia.\\
+En este capitulo se detalla el trabajo llevado a cabo durante la realización del máster. Se presentara el ámbito en el que se ha trabajado, desde donde se ha partido y cuales han sido los pasos seguidos hasta llegar al final de este trabajo. Básicamente el objetivo del trabajo era conseguir un software recalibrador acelerado, usando técnicas de optimización y paralelismo que fuesen más eficientes y rápidas que las utilizadas por el de referencia.\\
 
 Primeramente se describirá en que consiste el proceso de descubrimiento de variantes, qué función tiene un recalibrador en esa proceso, pasando seguidamente a lo que se ha realizado a partir de ahí y qué pasos se han seguido.\\
 
+\section{Introducción al ADN}
+
+El \textit{ADN} (ácido desoxirribonucleico) contiene las instrucciones genéticas usadas en el desarrollo y funcionamiento de todos los organismos vivos conocidos y algunos virus, y es responsable de su transmisión hereditaria. Se puede comparar el ADN con una receta o código, ya que a partir del mismo se obtienen las instrucciones necesarias para construir las células. Los segmentos de ADN que contienen esta información son los denominados genes, mientras que el resto de secuencias tienen propósitos estructurales y reguladores en el uso de esta información. En la Figura \ref{fig:adn} tenemos la representación gráfica que muestra dónde reside el ADN.\\
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{adn.png}
+\caption{¿Dónde se encuentra el ADN?.\label{fig:adn}}
+\end{figure} 
+
+El ADN es un polímero de nucleótidos, está formado por muchas unidades simples (nucleótidos) conectadas entre sí (Figura \ref{fig:adnquimic}). Los nucleótidos están formados por un azúcar, una base nitrogenada (pueden ser Adenina, Timina, Citosina y Guanina) y un grupo fosfato para interconectarlos. Puesto que lo único que distingue a un nucleótido de otro es la base nitrogenada, la secuencia de ADN se representa por una secuencia de estas bases. En estas secuencias cada base se representa por su inicial, por lo que tienen una representación del tipo \textit{AGTCTAGATCG}\ldots En los organismos vivos el ADN se presenta como una doble cadena de nucleótidos.\\
+
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{adnquimic.png}
+\caption{Representación química del ADN.\label{fig:adnquimic}}
+\end{figure} 
+
+Como ya se ha dicho, un gen es una secuencia del ADN que contiene información genética. Un gen es una unidad de herencia que influye en una característica particular de un organismo (como el color de los ojos, por ejemplo). A partir de los genes se producen las proteínas del organismo, que son las encargadas de generar los músculos, pelo, enzimas\ldots\\
+
 \section{Descripción del proceso de descu\-bri\-mien\-to de variantes}
 
-El proceso de descubrimiento de variantes tiene como objetivo localizar variaciones, mutaciones o \textit{indels} (\textit{insertions/deletions}) en una muestra de ADN con respecto a otra. Este proceso tiene tres fases.\\
+Puesto que un cambio en el ADN puede traducirse en un cambio brusco de las proteínas que genera el organismo, esto puede dar lugar a trastornos, enfermedades, etc. El proceso de descubrimiento de variantes tiene como objetivo localizar variaciones, mutaciones o \textit{indels} (\textit{insertions/deletions}) en una muestra de ADN con respecto a otra, por ejemplo para poder determinar la causa de enfermedades o prevenirlas.\\
 
-En la primera fase se obtienen lecturas de ADN en un formato específico y dependiente de la plataforma que las haya obtenido. Lo que se hace con estas lecturas es transformarlas a un único formato genérico, con unas calidades bien calibradas, mapeadas y alineadas con su ADN de referencia. El formato utilizado es el \textit{SAM/BAM} \cite{bamsam} (\textit{Sequence Aligment Map/Binary Alignment Map}), el cual es independiente de la tecnología de obtención del ADN.\\
+Un ejemplo sería analizar el ADN de una población (conjunto de individuos) que tengan un determinado tipo de cáncer y otra población que no lo tengan. Estos individuos tendrán muchas similitudes en el ADN puesto que pertenecen a la misma especie, pero también diferirán en otras. Cuando encontremos la secuencia de ADN común a la población con cáncer pero que no aparezca en la población sin cáncer, tendremos la razón de ese cáncer localizada y podremos tratarlo y prevenirlo.\\
+
+El proceso de descubrimiento de variantes tiene tres fases. En la primera fase se obtienen lecturas de ADN en un formato específico y dependiente de la plataforma que las haya obtenido. Lo que se hace con estas lecturas es transformarlas a un único formato genérico, con unas calidades bien calibradas, mapeadas y alineadas con su ADN de referencia. El formato utilizado es el \textit{SAM/BAM} \cite{bamsam} (\textit{Sequence Aligment Map/Binary Alignment Map}), el cual es independiente de la tecnología de obtención del ADN.\\
 
 En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}), pequeños \textit{indels}, etc.\\
 
@@ -16,7 +38,7 @@ En la última fase se analizan las mutaciones obtenidas y la estructura del ADN p
 
 \begin{figure}
 \centering
-\includegraphics[width=1.0\textwidth]{variationdiscover.jpg}
+\includegraphics[width=0.8\textwidth]{variationdiscover.jpg}
 \caption{Proceso de descubrimiento de variantes en el ADN.\label{fig:procesodescubrimiento}}
 \end{figure} 
 
