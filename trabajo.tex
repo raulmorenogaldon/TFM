@@ -2,9 +2,11 @@
 
 En este capitulo se detalla el trabajo llevado a cabo durante la realización del máster. Se presentara el ámbito en el que se ha trabajado, desde donde se ha partido y cuales han sido los pasos seguidos hasta llegar al final de este trabajo. Básicamente el objetivo del trabajo era conseguir un software recalibrador acelerado, usando técnicas de optimización y paralelismo que fuesen más eficientes y rápidas que las utilizadas por el de referencia.\\
 
-Primeramente se describirá en que consiste el proceso de descubrimiento de variantes, qué función tiene un recalibrador en esa proceso, pasando seguidamente a lo que se ha realizado a partir de ahí y qué pasos se han seguido.\\
+Primeramente se describirá en que consiste el proceso de descubrimiento de variantes, qué función tiene un recalibrador en ese proceso, pasando seguidamente a lo que se ha realizado a partir de ahí y qué pasos se han seguido. Se hará una descripción del algoritmo implementado y sus estructuras de datos, haciendo finalmente una evaluación de rendimiento.\\
 
-\section{Introducción al ADN}
+\section{Introducción al descubrimiento de variantes}
+
+\subsection{Introducción al ADN}
 
 El \textit{ADN} \cite{molecularbio} (ácido desoxirribonucleico) contiene las instrucciones genéticas usadas en el desarrollo y funcionamiento de todos los organismos vivos conocidos y algunos virus, y es responsable de su transmisión hereditaria. Se puede comparar el ADN con una receta o código, ya que a partir del mismo se obtienen las instrucciones necesarias para construir las células. Los segmentos de ADN que contienen esta información son los denominados genes, mientras que el resto de secuencias tienen propósitos estructurales y reguladores en el uso de esta información. En la Figura \ref{fig:adn} tenemos la representación gráfica que muestra dónde reside el ADN.\\
 
@@ -24,7 +26,7 @@ El ADN es un polímero de nucleótidos, está formado por muchas unidades simples (
 
 Como ya se ha dicho, un gen es una secuencia del ADN que contiene información genética. Un gen es una unidad de herencia que influye en una característica particular de un organismo (como el color de los ojos, por ejemplo). A partir de los genes se producen las proteínas del organismo, que son las encargadas de generar los músculos, pelo, enzimas\ldots\\
 
-\section{Descripción del proceso de descu\-bri\-mien\-to de variantes}
+\subsection{Descripción del proceso de descu\-bri\-mien\-to de variantes}
 
 Puesto que un cambio en el ADN puede traducirse en un cambio brusco de las proteínas que genera el organismo, esto puede dar lugar a trastornos, enfermedades, etc. El proceso de descubrimiento de variantes tiene como objetivo localizar variaciones, mutaciones o \textit{indels} (\textit{insertions/deletions}) en una muestra de ADN con respecto a otra, por ejemplo para poder determinar la causa de enfermedades o prevenirlas.\\
 
@@ -42,7 +44,7 @@ En la última fase se analizan las mutaciones obtenidas y la estructura del ADN p
 \caption{Proceso de descubrimiento de variantes en el ADN.\label{fig:procesodescubrimiento}}
 \end{figure} 
 
-\section{Descripción de un recalibrador}
+\subsection{Descripción de un recalibrador}
 
 El ADN se obtiene mediante máquinas de propósito específico llamadas secuenciadores. Se basan en técnicas bioquímicas cuya finalidad es la determinación del orden de los nucleótidos en la secuencia de ADN. Hay distintos factores que influyen en la toma de lecturas del ADN, que pueden llevar a errores. Estos factores se expresan mediante una calidad de error que el secuenciador asigna a cada lectura, en el momento de tomarla, dependiendo de qué posibilidad hay de que sea errónea.\\
 
@@ -54,6 +56,8 @@ cuya entrada es un rango de números reales [0,1] y su salida en el rango de núme
 Un recalibrador ajusta las calidades asignadas a cada lectura en un fichero \textit{BAM} para que sean más cercanas a la probabilidad de error real, teniendo en cuenta todas las lecturas del fichero y comparando si difieren del ADN de referencia.\\
 
 Por ejemplo, si tenemos un fichero, aún no recalibrado, donde todas sus bases tienen calidad 25 y nos encontramos al recalibrar que 1 de cada 100 lecturas difieren del ADN referencia, entonces su calidad sería 20 y se ajustarían las calidades teniendo esto en cuenta. Pero el recalibrador tiene en cuenta más cosas, como que las lecturas de los últimos ciclos del secuenciador presentan más errores que las primeras, o las combinaciones de dos nucleótidos en las lecturas (contexto de dinucleótido).\\
+
+\subsection{Formato \textit{BAM/SAM}}
 
 \section{Búsqueda de información}
 
@@ -73,20 +77,38 @@ Para este trabajo se incorporó el uso de las instrucciones \textit{SSE} \cite{ss
 
 Para el desarrollo del recalibrador se utilizaron varios tipos de herramientas, tanto para la edición del código como para su depurado. A continuación serán descritas.\\
 
+\subsection{Editor de código y compilación}
+
 \textit{Geany} \cite{geanyweb} es un editor de texto con algunas funciones de los entornos de desarrollo integrados (\textit{IDEs}). Es sencillo y rápido, ofreciendo una forma simple de manejar los ficheros de un proyecto. Puesto que lo he utilizado sólo para editar el código, no me han sido necesarias funciones adicionales de otros \textit{IDEs} o de compilación.\\
 
-Para compilar el código he utilizado \textit{Makefile}, el cual es ampliamente utilizado para la compilación automática, usando ficheros de texto. Lo he utilizado sin herramientas de compilación adicionales, pero existen otras herramientas que generan automáticamente los \textit{Makefiles} y los actualizan sin necesidad de que el programador intervenga. Un ejemplo de estas herramientas es el \textit{GNU build system} o \textit{Autotools} \cite{autotoolsweb}. \textit{Autotools} será tenido en cuenta para trabajo futuro, además de otra herramienta llamada \textit{Scons} \cite{sconsweb} basada en scripts de \textit{Phyton}\\
+Para compilar el código he utilizado \textit{Makefile}, el cual es ampliamente utilizado para la compilación automática, usando ficheros de texto. Lo he utilizado sin herramientas de compilación adicionales, pero existen otras herramientas que generan automáticamente los \textit{Makefiles} y los actualizan sin necesidad de que el programador intervenga. Un ejemplo de estas herramientas es el \textit{GNU build system} o \textit{Autotools} \cite{autotoolsweb}. \textit{Autotools} será tenido en cuenta para trabajo futuro, además de otra herramienta llamada \textit{Scons} \cite{sconsweb} basada en scripts de \textit{Phyton}.\\
+
+\subsection{Control de versiones}
 
 Para el control de versiones del código se ha utilizado \textit{Git} \cite{gitweb}, esto me permite guardar la historia de cambios que ha sufrido el programa durante su desarrollo y permite revertir cambios para recuperar versiones anteriores. Ofrece un control de versiones distribuido, al contrario que otras herramientas como \textit{Subversion} \cite{subversionweb}, por lo que puedes trabajar en local y cuando sea posible combinar los cambios con el repositorio global. La razón de elegir \textit{Git} fue su facilidad de uso, por ejemplo a la hora de crear y combinar distintos flujos de trabajo.\\
 
 La forma de trabajar con \textit{Git} que he seguido consiste en tener un flujo de trabajo llamado \textit{master} donde se recogen las características ya implementadas en el programa. A la hora de añadir una nueva funcionalidad al programa, creo un nuevo flujo de trabajo y realizo los cambios sobre el mismo. Cuando esa funcionalidad está añadida, combino ese flujo de trabajo con el \textit{master} obteniendo el programa con la característica implementada en ese flujo principal. Esto me permite trabajar en varías funcionalidades de forma separada, a la vez y sin interferir unas sobre otras, lo cual facilita el manejo del código.\\
 
+\subsection{Depuración}
+
 \textit{GDB} \cite{gdbweb} (\textit{GNU} debugger) es un depurador de código en línea de comandos. Entre otras cosas te permite comenzar la ejecución de un programa e incluir puntos de ruptura. En caso de que el programa termine su ejecución de forma anormal, te permite ver el estado de las variables y la pila de programa justo en el momento del error. Mayoritariamente he usado este programa para encontrar el origen de los fallos de segmentación que me he encontrado durante el desarrollo del recalibrador. Cuando ocurre un fallo de segmentación el propio sistema operativo vuelca el contenido de la memoria en ese momento en un fichero. \textit{GDB} permite restaurar la ejecución al momento del fallo usando ese fichero y ofreciendo una visión del estado del programa en ese momento.\\
 
-El otro programa que he utilizado para depuración es \textit{Valgrind} \cite{valgrindweb}. Es un conjunto de herramientas de depuración que permiten detectar automáticamente muchos fallos en el manejo de memoria e hilos, permitiendo analizar los programas en detalle.\\
+El otro programa que he utilizado para depuración es \textit{Valgrind} \cite{valgrindweb}. Es un co njunto de herramientas de depuración que permiten detectar automáticamente muchos fallos en el manejo de memoria e hilos, permitiendo analizar los programas en detalle.\\
 
 Durante el desarrollo del recalibrador he utilizado la herramienta \textit{memcheck} de \textit{Valgrind}. Esta herramienta permite detectar errores en la memoria, como accesos no válidos, uso de variables no inicializadas, liberación incorrecta de memoria reservada, fugas de memoria\ldots El principal uso que le he dado ha sido localizar puntos del código del recalibrador donde no se liberaba bien la memoria, provocando que la memoria se llene y disminuyendo el rendimiento de forma drástica.\\
 
 \section{Algoritmo de recalibrado}
 
-\section{Evaluación y comparación del recalibrador obtenido}
+El algoritmo de recalibrado usado se compone de dos fases. La primera fase consiste en 
+
+\subsection{Recogida de datos}
+
+
+
+\subsection{Recalibrado}
+
+
+
+\section{Estructura de datos utilizadas}
+
+\section{Evaluación del recalibrador obtenido}
