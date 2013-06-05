@@ -58,6 +58,7 @@ Un recalibrador ajusta las calidades asignadas a cada lectura en un fichero \tex
 Por ejemplo, si tenemos un fichero, aún no recalibrado, donde todas sus bases tienen calidad 25 y nos encontramos al recalibrar que 1 de cada 100 lecturas difieren del ADN referencia, entonces su calidad sería 20 y se ajustarían las calidades teniendo esto en cuenta. Pero el recalibrador tiene en cuenta más cosas, como que las lecturas de los últimos ciclos del secuenciador presentan más errores que las primeras, o las combinaciones de dos nucleótidos en las lecturas (contexto de dinucleótido).\\
 
 \subsection{Formato \textit{BAM/SAM}}
+\label{sec:bam}
 
 \section{Búsqueda de información}
 
@@ -99,16 +100,93 @@ Durante el desarrollo del recalibrador he utilizado la herramienta \textit{memch
 
 \section{Algoritmo de recalibrado}
 
-El algoritmo de recalibrado usado se compone de dos fases. La primera fase consiste en 
+El algoritmo de recalibrado usado se compone de dos fases. La primera fase consiste en recopilar datos sobre los ficheros \textit{BAM}. La segunda fase es la recalibración en sí, se utilizan los datos obtenidos en la primera fase para ajustar las calidades de \textit{BAM} usando fórmulas estadísticas. A continuación se describe el proceso formal de recalibrado y cómo se realizan las dos fases en el algoritmo.\\
 
-\subsection{Recogida de datos}
+\subsection{Proceso formal de recalibrado}
 
+formulas
 
+\begin{equation}
+\label{for:calidadsanger}
+Q_{sanger}(p) = -10*\log_{10}(p)
+\end{equation}
 
-\subsection{Recalibrado}
+\begin{equation}
+\label{for:probsanger}
+P_{sanger}(q) = 10^\frac{-q}{10}
+\end{equation}
 
+\begin{equation}
+\label{for:tasafallo}
+T = \frac{\textit{número de fallos}}{\textit{número de bases}}
+\end{equation}
 
+\begin{equation}
+\label{for:qualrecal}
+Q^*(r,c,d) = Q(r) + \Delta Q + \Delta Q(r) + \Delta Q(r,c) + \Delta Q(r,d)
+\end{equation}
 
-\section{Estructura de datos utilizadas}
+\begin{equation}
+\label{for:deltag}
+\Delta Q = Q_{sanger}(T_g) - Q_{sanger}\left(\frac{\sum\limits_{r} P_{sanger}(Q(r))*\textit{número bases r}}{\textit{número bases global}}\right)
+\end{equation}
+
+\begin{equation}
+\label{for:deltar}
+\Delta Q(r) = Q_{sanger}(T(r)) - Q(r) - \Delta Q
+\end{equation}
+
+\begin{equation}
+\label{for:deltarc}
+\Delta Q(r,c) = Q_{sanger}(T(r,c)) - Q(r) - (\Delta Q + \Delta Q(r))
+\end{equation}
+
+\begin{equation}
+\label{for:deltard}
+\Delta Q(r,d) = Q_{sanger}(T(r,d)) - Q(r) - (\Delta Q + \Delta Q(r))
+\end{equation}
+
+\subsection{Fase 1: Recogida de datos}
+
+En esta fase se lleva a cabo una recogida de datos sobre el fichero \textit{BAM} que se quiere analizar. Como ya se explicó en la sección \ref{sec:bam}, un fichero \textit{BAM} contiene un conjunto de lecturas de \textit{ADN}. Lo que se pretende es contabilizar la tasa de fallos de las lecturas de \textit{BAM} respecto al \textit{ADN} de referencia. La tasa de fallos se obtiene mediante la expresión de la fórmula \ref{for:tasafallo}. Es por ello que hay que contabilizar tanto los fallos que se han producido como las bases que se han leido.\\
+
+Para ello el \textit{BAM} de entrada se procesa por lotes, es decir, se lee un conjunto de lecturas del fichero y se procesan. Inicialmente esto se hace de forma secuencial, leyendo un lote y procesándolo. Cuando se termina de procesar este lote se lee el siguiente. La forma de leer los lotes es secuencialmente, estos se leen de forma ordenada (de principio a fin) en el fichero \textit{BAM} usando la librería \textit{samtools}.\\
+
+El procesado de cada lote consiste en leer por orden las lecturas que contiene. Cada una de estas lecturas tiene una secuencia de bases (nucleótidos) en forma de cadena de caracteres, indicando además qué posición de inicio representan en el \textit{ADN} de referencia. Lo que se hace para cada lectura es leer el \textit{ADN} de referencia en la misma posición y la misma longitud, obteniendo la cadena de caracteres del \textit{ADN} de referencia. La lectura de la cadena de referencia se realiza a través de \textit{samtools}.\\
+
+Una vez se tiene una lectura, con \textit{N} bases, y su secuencia correspondiente en el \textit{ADN} de referencia, se comparan entre sí. La comparación se realiza base a base, es decir, la base de la lectura en la posición $x$ se compara con la base en la posición $x$ de la referencia. Si las bases no son iguales se contabiliza como un fallo.\\
+
+Como son necesarias las tasas de fallo a distintos niveles, se contabilizan por separado en las estructuras de datos. La forma de contabilizar los fallos en una base consiste en utilizar la calidad asociada a esa base. Si es un fallo, se incrementa:
+\begin{itemize}
+\item
+El contador de fallos y de lecturas global ($T_g$),
+\item
+el contador de fallos y de lecturas para el valor de esa calidad ($T(r)$),
+\item
+el contador de fallos y de lecturas para el par calidad-ciclo ($T(r,c)$) y
+\item
+el contador de fallos y de lecturas para el par calidad-dinucleótido ($T(r,d)$).
+\end{itemize}
+
+En caso de que no sea fallo sólo se incrementarían los contadores de lecturas correspondientes.\\
+
+Una vez se han recorrido y contabilizado todas las lecturas del \textit{BAM} de entrada, se calculan las tasas de fallos en los diferentes niveles usando los contadores de fallos y lecturas correspondientes. Con estas tasas de fallos se calculan los deltas correspondientes. Finalmente tendremos en las estructuras de datos, el delta global ($\Delta Q$), el delta para cada valor de calidad ($\Delta Q(r)$), el delta para cada par calidad-ciclo ($\Delta Q(r,c)$) y el delta para cada par calidad-dinucleótido ($\Delta Q(r,d)$).\\
+
+Para incrementar el rendimiento de esta fase, se han utilizado instrucciones \textit{SSE/SEE2}, concretamente para realizar las comparaciones de bases entre la secuencia de la lectura y la secuencia de referencia. Estas dos secuencias se almacenan de forma continua en memoria (vector de tipos \textit{char} o enteros de un byte).\\
+
+Lo que se hace pues, en cada iteración, es cargar en un registro \textit{XMM} de 128 bits (utilizados por las instrucciones SSE) 16 bases del vector de la secuencia leída, utilizando una sola lectura de memoria. En otro registro \textit{XMM} se cargan las 16 bases correspondientes al vector de referencia, mediante otra lectura de memoria. Acto seguido se usa la instrucción de comparación de \textit{SSE2} sobre las 16 bases, obteniendo en un registro \textit{XMM} los resultados de las comparaciones (\textit{0}x\textit{FF} si es igual o \textit{0}x\textit{00} si no). Finalmente se guardan en una variable vector los resultados de las 16 comparaciones con otra instrucción de memoria.\\
+
+Como efecto resultante al usar \textit{SSE}, los vectores se recorren de 16 en 16 elementos. Si no usamos \textit{SSE} los elementos se recorrerían de 1 en 1. Esto tiene un gran impacto en el rendimiento como se verá en la sección \ref{sec:evaluacion}.\\
+
+\subsection{Fase 2: Recalibrado}
+
+En esta fase se lleva a cabo el proceso de recalibrado en sí. Al igual que en la fase anterior, el fichero \textit{BAM} de entrada se procesa por lotes. El fichero \textit{BAM} con las calidades recalibradas que se genera, se escribe por lotes conforme estos han sido procesados y en el mismo orden que se leyeron.\\
+
+El procesado de cada lectura consiste en aplicar únicamente la fórmula \ref{for:qualrecal} a cada una de las calidades de sus bases, sustituyendo las mismas por los nuevos valores. Puesto que los deltas ya han sido calculados en la fase anterior, se pueden utilizar directamente en los cálculos accediendo a sus valores en las estructuras de datos. El valor final de las calidades es pues las cuatro sumas de los deltas correspondientes. Finalmente se genera el fichero \textit{BAM} con las nuevas calidades.\\
+
+\subsection{Estructura de datos utilizadas}
+
+\subsection{Parámetros de ejecución del recalibrador}
 
 \section{Evaluación del recalibrador obtenido}
+\label{sec:evaluacion}
