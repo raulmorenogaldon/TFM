@@ -83,6 +83,54 @@ Usar estructuras de datos óptimas que permitan aprovechar las características de
 
 \section{Planificación de tareas}
 
+En esta sección se presenta un listado de las diferentes tareas a llevar a cabo para la consecución de los objetivos anteriormente marcados en este capítulo. En la Figura \ref{fig:gantt} se muestra la planificación temporal de estas tareas mediante un diagrama de Gantt. La tesis doctoral se llevará a cabo en 4 años, habiendo pasado ya casi un año en el momento de escribir este documento.\\
+
+La Tabla \ref{tab:tareas} muestra de forma resumida qué tareas se van a llevar a cabo y cual será su duración aproximada. Hay que destacar que algunas tareas se tienen que realizar durante los 4 años de tesis de forma continua, como es la documentación de la propia tesis y la publicación de resultados o difusión. A continuación se describen en detalle en qué consiste cada una de las tareas.\\
+
+\definecolor{LightCyan}   {rgb}{0.88,1.,1.}
+\definecolor{Orange}      {rgb}{1.,0.65,0.}
+\definecolor{PaleGreen}   {rgb}{0.6,0.98,0.6}
+\definecolor{Pink}        {rgb}{1.,0.75,0.8}
+
+\psset{gradmidpoint=0,fillstyle=gradient,gradbegin=LightCyan,gradend=white}
+\newpsstyle{TaskStyleA}{gradbegin=LightCyan,gradend=cyan}
+\newpsstyle{TaskStyleB}{gradbegin=red,gradend=Pink}
+\newpsstyle{TaskStyleC}{gradbegin=yellow,gradend=Orange}
+\newpsstyle{TaskStyleD}{gradbegin=green,gradend=PaleGreen}
+
+%\begin{landscape}
+\begin{figure}[!htp]
+%\fbox{
+\begin{center}
+\begin{PstGanttChart}[yunit=1.0,xunit=2.2,ChartUnitIntervalName=A\~no,
+                      ChartUnitBasicIntervalName=Month,
+                      TaskUnitIntervalValue=12,TaskUnitType=Month,
+                      TaskOutsideLabelMaxSize=4,ChartShowIntervals]{13}{48}
+  \psset{gradangle=90,TaskStyle=TaskStyleC}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{0}},TaskInsideLabel={\footnotesize{Master (10)}}]{0}{10}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{1}},TaskInsideLabel={\footnotesize{Estado del Arte (4)}}]{6}{4}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{2}},TaskInsideLabel={\footnotesize{Estudio de estructuras (6)}}]{9}{6}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{3}},TaskInsideLabel={\footnotesize{Pruebas preliminares sobre GPUs y CPUs (8)}}]{12}{8}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{4}},TaskInsideLabel={\footnotesize{Seleccio (8)}}]{18}{8}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{9}},TaskStyle=TaskStyleD,TaskInsideLabel={\footnotesize{Difusn}}]{18}{8}
+  \psset{TaskStyle=TaskStyleC}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{5}},TaskInsideLabel={\footnotesize{Implementaciones sobre GPUs (6)}}]{24}{6}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{6}},TaskInsideLabel={\footnotesize{Multicores (6)}}]{30}{6}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{9}},TaskStyle=TaskStyleD,TaskInsideLabel={\footnotesize{Difusion}}]{30}{8}
+    \psset{TaskStyle=TaskStyleC}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{7}},TaskInsideLabel={\footnotesize{Clusters de CPUs (6)}}]{36}{6}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{8}},TaskInsideLabel={\footnotesize{C. Hibridos (6)}}]{41}{6}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{9}},TaskStyle=TaskStyleD,TaskInsideLabel={\footnotesize{Difusion}}]{40}{8}
+  \PstGanttTask[TaskOutsideLabel={\footnotesize{10}},TaskStyle=TaskStyleA,TaskInsideLabel={\footnotesize{Documentacion y escritura Tesis Doctoral}}]{14}{34}
+\end{PstGanttChart}
+\end{center}
+%}%end fbox
+\caption{Diagrama Gant: desarrollo de la tesis de doctorado.}
+\label{fig:gantt}
+\end{figure}
+%\end{landscape}
+%-----------------
+
 \subsection{Descripción de tareas}
 
 \subsection{Situación actual}
