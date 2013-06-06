@@ -32,33 +32,15 @@ Un ejemplo sería analizar el ADN de una población (conjunto de individuos) que t
 
 El proceso de descubrimiento de variantes tiene tres fases. En la primera fase se obtienen lecturas de ADN en un formato específico y dependiente de la plataforma que las haya obtenido. Lo que se hace con estas lecturas es transformarlas a un único formato genérico, con unas calidades bien calibradas, mapeadas y alineadas con su ADN de referencia. El formato utilizado es el \textit{SAM/BAM} \cite{bamsam} (\textit{Sequence Aligment Map/Binary Alignment Map}), el cual es independiente de la tecnología de obtención del ADN.\\
 
-%AÑADIR
-En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}), pequeños \textit{indels}, etc.\\
+En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}), pequeños \textit{indels}, etc. Esta fase genera ficheros \textit{VCF} que contienen las diferencias con el ADN referencia.\\
 
-%AÑADIR
-En la última fase se analizan las mutaciones obtenidas y la estructura del ADN para tomar conclusiones. En la Figura \ref{fig:procesodescubrimiento} se puede ver gráficamente estas tres fases.\\
+En la última fase se analizan las mutaciones obtenidas y la estructura del ADN para generar conclusiones. En la Figura \ref{fig:procesodescubrimiento} se puede ver gráficamente estas tres fases.\\
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{variationdiscover.jpg}
 \caption{Proceso de descubrimiento de variantes en el ADN.\label{fig:procesodescubrimiento}}
 \end{figure} 
-
-\subsection{Descripción de un recalibrador}
-
-El ADN se obtiene mediante máquinas de propósito específico llamadas secuenciadores. Se basan en técnicas bioquímicas cuya finalidad es la determinación del orden de los nucleótidos en la secuencia de ADN. Hay distintos factores que influyen en la toma de lecturas del ADN, que pueden llevar a errores. Estos factores se expresan mediante una calidad de error que el secuenciador asigna a cada lectura, en el momento de tomarla, dependiendo de qué posibilidad hay de que sea errónea.\\
-
-La probabilidad de que una lectura sea errónea se mapea en un rango de enteros, denominado calidad \textit{Sanger} \cite{sanger}. Para ello se aplica la fórmula \begin{equation}
-Q = -10*\log_{10} P
-\end{equation} 
-cuya entrada es un rango de números reales [0,1] y su salida en el rango de número naturales positivos [0,93] (acotado superiormente). La razón de utilizar esta calidad es que solo es necesario usar un byte para su expresión, aunque se pierda precisión en la probabilidad de error.\\
-
-Un recalibrador ajusta las calidades asignadas a cada lectura en un fichero \textit{BAM} para que sean más cercanas a la probabilidad de error real, teniendo en cuenta todas las lecturas del fichero y comparando si difieren del ADN de referencia.\\
-
-Por ejemplo, si tenemos un fichero, aún no recalibrado, donde todas sus bases tienen calidad 25 y nos encontramos al recalibrar que 1 de cada 100 lecturas difieren del ADN referencia, entonces su calidad sería 20 y se ajustarían las calidades teniendo esto en cuenta. Pero el recalibrador tiene en cuenta más cosas, como que las lecturas de los últimos ciclos del secuenciador presentan más errores que las primeras, o las combinaciones de dos nucleótidos en las lecturas (contexto de dinucleótido).\\
-
-\subsection{Formato \textit{BAM/SAM}}
-\label{sec:bam}
 
 \section{Punto de partida}
 
