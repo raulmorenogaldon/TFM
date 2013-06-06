@@ -44,11 +44,42 @@ En la última fase se analizan las mutaciones obtenidas y la estructura del ADN p
 
 \section{Punto de partida}
 
+GATK será la herramienta de referencia para la realización de esta tesis, abarcando parte de la primera fase y la segunda del proceso de descubrimiento de variantes. Según la Figura \ref{fig:procesodescubrimiento}, se quiere implementar el recalibrado de las calidades de las bases (\textit{Base quality recalibration}) de la primera fase del descubrimiento de variantes, desarrollando un recalibrador. También se quiere implementar la segunda fase completa, desarrollando un descubridor de variantes.\\
+
+Las implementaciones tendrán que ser eficientes y aprovechar al máximo todos los recursos computacionales de los que se disponga en el entorno que se ejecuta, por ejemplo en un \textit{cluster}. Es en esto en lo que falla GATK, puesto que solo aprovecha la capacidad de proceso mediante hilos y no utiliza estructuras de datos eficientes ni gestión de memoria óptima (en parte por utilizar Java).\\
+
 \section{Objetivos}
 
 \subsection{Objetivo general}
 
+Desarrollar herramientas que permitan realizar el recalibrado de las calidades de las bases (\textit{Base quality recalibration}) y toda la segunda fase del descubrimiento de variantes. Estas herramientas deberán ser eficientes.\\
+
 \subsection{Objetivos específicos}
+
+El objetivo general de la tesis se puede desglosar en una serie de objetivos específicos, que mediante su cumplimiento permitirán alcanzar el objetivo general:
+
+\begin{itemize}
+\item
+Implementar un recalibrador que realice la parte del recalibrado de la calidad de las bases y genere ficheros BAM ya recalibrados.
+\item
+Implementar un descubridor de variantes que realice toda la segunda fase de descubrimiento de variantes y genere ficheros de resultados VCF.
+\item
+Desarrollar implementaciones lo más eficientes posible, utilizando tecnologías paralelas que permitan explotar los recursos de computo disponibles en cada situación.
+	\begin{itemize}
+	\item
+	Usar las tecnologías disponibles en los microprocesadores para acelerar la ejecución.
+	\item
+	Usar las capacidades de memoria compartida de los procesadores \textit{multicore}.
+	\item
+	Usar las capacidades de paso de mensaje de los sistemas multiprocesador o \textit{clusters}.
+	\item
+	Mantener las comunicaciones entre procesos al mínimo.
+	\item
+	Reducir el número de operaciones I/O al mínimo. 
+	\end{itemize}
+\item
+Usar estructuras de datos óptimas que permitan aprovechar las características de las arquitecturas y el sistema de memoria de los computadores. Explotar la localidad temporal y espacial de los datos en memoria.
+\end{itemize}
 
 \section{Planificación de tareas}
 
