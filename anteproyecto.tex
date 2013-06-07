@@ -91,46 +91,101 @@ La Tabla \ref{tab:tareas} muestra de forma resumida qué tareas se van a llevar a
 \definecolor{Orange}      {rgb}{1.,0.65,0.}
 \definecolor{PaleGreen}   {rgb}{0.6,0.98,0.6}
 \definecolor{Pink}        {rgb}{1.,0.75,0.8}
+%
+%\psset{gradmidpoint=0,fillstyle=gradient,gradbegin=LightCyan,gradend=white}
+%\newpsstyle{TaskStyleA}{gradbegin=LightCyan,gradend=cyan}
+%\newpsstyle{TaskStyleB}{gradbegin=red,gradend=Pink}
+%\newpsstyle{TaskStyleC}{gradbegin=yellow,gradend=Orange}
+%\newpsstyle{TaskStyleD}{gradbegin=green,gradend=PaleGreen}
 
-\psset{gradmidpoint=0,fillstyle=gradient,gradbegin=LightCyan,gradend=white}
-\newpsstyle{TaskStyleA}{gradbegin=LightCyan,gradend=cyan}
-\newpsstyle{TaskStyleB}{gradbegin=red,gradend=Pink}
-\newpsstyle{TaskStyleC}{gradbegin=yellow,gradend=Orange}
-\newpsstyle{TaskStyleD}{gradbegin=green,gradend=PaleGreen}
-
-%\begin{landscape}
+\begin{landscape}
 \begin{figure}[!htp]
-%\fbox{
 \begin{center}
-\begin{PstGanttChart}[yunit=1.0,xunit=2.2,ChartUnitIntervalName=A\~no,
-                      ChartUnitBasicIntervalName=Month,
-                      TaskUnitIntervalValue=12,TaskUnitType=Month,
-                      TaskOutsideLabelMaxSize=4,ChartShowIntervals]{13}{48}
-  \psset{gradangle=90,TaskStyle=TaskStyleC}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{0}},TaskInsideLabel={\footnotesize{Master (10)}}]{0}{10}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{1}},TaskInsideLabel={\footnotesize{Estado del Arte (4)}}]{6}{4}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{2}},TaskInsideLabel={\footnotesize{Estudio de estructuras (6)}}]{9}{6}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{3}},TaskInsideLabel={\footnotesize{Pruebas preliminares sobre GPUs y CPUs (8)}}]{12}{8}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{4}},TaskInsideLabel={\footnotesize{Seleccio (8)}}]{18}{8}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{9}},TaskStyle=TaskStyleD,TaskInsideLabel={\footnotesize{Difusn}}]{18}{8}
-  \psset{TaskStyle=TaskStyleC}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{5}},TaskInsideLabel={\footnotesize{Implementaciones sobre GPUs (6)}}]{24}{6}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{6}},TaskInsideLabel={\footnotesize{Multicores (6)}}]{30}{6}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{9}},TaskStyle=TaskStyleD,TaskInsideLabel={\footnotesize{Difusion}}]{30}{8}
-    \psset{TaskStyle=TaskStyleC}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{7}},TaskInsideLabel={\footnotesize{Clusters de CPUs (6)}}]{36}{6}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{8}},TaskInsideLabel={\footnotesize{C. Hibridos (6)}}]{41}{6}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{9}},TaskStyle=TaskStyleD,TaskInsideLabel={\footnotesize{Difusion}}]{40}{8}
-  \PstGanttTask[TaskOutsideLabel={\footnotesize{10}},TaskStyle=TaskStyleA,TaskInsideLabel={\footnotesize{Documentacion y escritura Tesis Doctoral}}]{14}{34}
-\end{PstGanttChart}
+\makebox[\textwidth]{
+\begin{ganttchart}[
+	y unit title = 0.3cm,
+	y unit chart = 0.4cm,
+	vgrid,
+	hgrid,
+	time slot format=isodate-yearmonth,
+	compress calendar,
+	today = 2013-06,
+	progress = today,
+	title/.append style={draw=none, fill=blue!70!white},
+	title label font=\sffamily\tiny\bfseries\color{white},
+	title left shift=.05,
+	title right shift=-.05,
+	title height = 1,
+	bar/.append style={fill=green!75},
+	bar incomplete/.append style={fill=red!75},
+	bar label font=\scriptsize\color{black!50},
+	group right shift=0,
+	group top shift=.3,
+	group height=.4,
+	group peaks height=.3,
+	group label font=\normalsize,
+]{2012-07}{2016-07}
+\gantttitlecalendar{year,month} \\
+%\gantttitlelist{1,...,12}{1} \\
+\ganttbar{Máster}{2012-07}{2013-05} \\
+\ganttbar{Estado arte}{2012-11}{2013-02} \\
+\ganttbar{Tecnologías}{2013-03}{2013-03} \\
+
+%RECALIBRADOR
+\ganttgroup{Impl. Recalibrador}{2013-03}{2014-03} \\
+\ganttbar{Estructuras datos}{2013-03}{2013-03} \\
+\ganttbar{Implementación}{2013-03}{2013-05} \\
+\ganttbar{Pruebas}{2013-05}{2013-05} \\
+%\ganttmilestone{Objetivo 1}{2013-05} \\
+\ganttbar{SSE}{2013-06}{2013-08} \\
+\ganttbar{Pruebas SSE}{2013-08}{2013-08} \\
+\ganttbar{OpenMP}{2013-09}{2013-11} \\
+\ganttbar{Pruebas OpenMP}{2013-11}{2013-11} \\
+\ganttbar{MPI}{2013-12}{2014-02} \\
+\ganttbar{Pruebas MPI}{2014-02}{2014-02} \\
+\ganttbar{Pruebas cluster}{2014-02}{2014-03} \\
+
+%VARIANTES
+\ganttgroup{Impl. Variantes}{2014-04}{2015-10} \\
+\ganttbar{Estructuras datos}{2014-04}{2014-04} \\
+\ganttbar{Implementación}{2014-04}{2014-07} \\
+\ganttbar{Pruebas}{2014-06}{2014-07} \\
+%\ganttmilestone{Objetivo 1}{2013-05} \\
+\ganttbar{SSE}{2014-08}{2014-11} \\
+\ganttbar{Pruebas SSE}{2014-10}{2014-11} \\
+\ganttbar{OpenMP}{2014-12}{2015-03} \\
+\ganttbar{Pruebas OpenMP}{2015-02}{2015-03} \\
+\ganttbar{MPI}{2015-04}{2015-10} \\
+\ganttbar{Pruebas MPI}{2015-06}{2015-10} \\
+\ganttbar{Pruebas cluster}{2015-08}{2015-10} \\
+
+%PUBLICACIONES
+\ganttgroup{Difusión}{2013-10}{2016-04} \\
+\ganttbar{Recalibrador}{2013-10}{2014-11} \\
+\ganttbar{Variantes}{2015-01}{2016-04} \\
+\ganttbar{Doc. tesis}{2014-04}{2016-04} \\
+
+\end{ganttchart}}
 \end{center}
-%}%end fbox
-\caption{Diagrama Gant: desarrollo de la tesis de doctorado.}
-\label{fig:gantt}
+\caption{Diagrama Gant: desarrollo de la tesis de doctorado.\label{fig:gantt}}
 \end{figure}
-%\end{landscape}
-%-----------------
+\end{landscape}
+%%-----------------
 
 \subsection{Descripción de tareas}
+
+\subsubsection{Finalización del máster}
+
+\subsubsection{Estado del arte}
+
+\subsubsection{Elección de tecnologías}
+
+\subsubsection{Elección de estructuras de datos para el recalibrador}
+
+\subsubsection{Implementación del recalibrador}
+
+\subsubsection{Implementación de SSE en el recalibrador}
+
+\subsection{Pruebas SSE en el recalibrador}
 
 \subsection{Situación actual}
