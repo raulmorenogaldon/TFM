@@ -87,10 +87,10 @@ En esta sección se presenta un listado de las diferentes tareas a llevar a cabo 
 
 La Tabla \ref{tab:tareas} muestra de forma resumida qué tareas se van a llevar a cabo y cual será su duración aproximada. Hay que destacar que algunas tareas se tienen que realizar durante los 4 años de tesis de forma continua, como es la documentación de la propia tesis y la publicación de resultados o difusión. A continuación se describen en detalle en qué consiste cada una de las tareas.\\
 
-\definecolor{LightCyan}   {rgb}{0.88,1.,1.}
-\definecolor{Orange}      {rgb}{1.,0.65,0.}
-\definecolor{PaleGreen}   {rgb}{0.6,0.98,0.6}
-\definecolor{Pink}        {rgb}{1.,0.75,0.8}
+%\definecolor{LightCyan}   {rgb}{0.88,1.,1.}
+%\definecolor{Orange}      {rgb}{1.,0.65,0.}
+%\definecolor{PaleGreen}   {rgb}{0.6,0.98,0.6}
+%\definecolor{Pink}        {rgb}{1.,0.75,0.8}
 %
 %\psset{gradmidpoint=0,fillstyle=gradient,gradbegin=LightCyan,gradend=white}
 %\newpsstyle{TaskStyleA}{gradbegin=LightCyan,gradend=cyan}
@@ -171,6 +171,53 @@ La Tabla \ref{tab:tareas} muestra de forma resumida qué tareas se van a llevar a
 \end{figure}
 \end{landscape}
 %%-----------------
+
+\begin{table}
+\centering
+\resizebox{\textwidth}{!} {
+\begin{tabular}{| l | p{0.9\textwidth} | c |}
+\hline
+\textbf{Actividad} 	& \textbf{Descripción} & \textbf{Tiempo (meses)}  \\\hline\hline
+Máster 		& Realización de los cursos del máster de tecnologías informáticas avanzadas & 11 \\\hline
+Estado arte & Búsqueda de información y recopilación del estado del arte de las tecnologías de computación paralelas y bioinformática & 4 \\
+Tecnologías & Elección de las tecnologías a utilizar durante el desarrollo de las herramientas & 1 \\\hline\hline
+
+& \textit{\textbf{Implementación del recalibrador}} & \\\hline
+
+Estructuras datos	& Elección y diseño de las estructuras de datos que se utilizarán en el recalibrador & 1 \\\hline
+Implementación		& Implementación de un recalibrador secuencial en C & 3 \\\hline
+Pruebas				& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador secuencial & 1 \\\hline
+SSE					& Utilización de la tecnología SSE para aumentar el rendimiento del recalibrador & 3 \\\hline
+Pruebas SSE			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE & 1 \\\hline
+OpenMP				& Utilización de OpenMP para aumentar el rendimiento del recalibrador & 3 \\\hline
+Pruebas OpenMP		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP & 1 \\\hline
+MPI					& Utilización de MPI para aumentar el rendimiento del recalibrador & 4 \\\hline
+Pruebas MPI			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP + MPI & 2 \\\hline
+Pruebas cluster		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP + MPI en un sistema cluster & 2 \\\hline\hline
+
+& \textit{\textbf{Implementación del descubridor de variantes}} & \\\hline
+
+Estructuras datos	& Elección y diseño de las estructuras de datos que se utilizarán en el descubridor & 1 \\\hline
+Implementación		& Implementación de un descubridor secuencial en C & 4 \\\hline
+Pruebas				& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor secuencial & 2 \\\hline
+SSE					& Utilización de la tecnología SSE para aumentar el rendimiento del descubridor & 4 \\\hline
+Pruebas SSE			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE & 2 \\\hline
+OpenMP				& Utilización de OpenMP para aumentar el rendimiento del descubridor & 4 \\\hline
+Pruebas OpenMP		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP & 2 \\\hline
+MPI					& Utilización de MPI para aumentar el rendimiento del descubridor & 7 \\\hline
+Pruebas MPI			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP + MPI & 5 \\\hline
+Pruebas cluster		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP + MPI en un sistema cluster & 3 \\\hline\hline
+
+& \textit{\textbf{Difusión}} & \\\hline
+
+Recalibrador	& Publicación de los resultados y conclusiones obtenidos en la implementación del recalibrador & 14 \\\hline
+Variantes		& Publicación de los resultados y conclusiones obtenidos en la implementación del descubridor de variantes & 16 \\\hline
+Doc. tesis		& Documentación y escritura de Tesis Doctoral & 25 \\\hline
+\end{tabular}
+}
+\caption{Planificación de tareas y duración.\label{tab:tareas}}
+\end{table}
+
 
 \subsection{Descripción de tareas}
 
