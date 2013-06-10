@@ -9,7 +9,7 @@ En este capítulo se detalla el trabajo llevado a cabo hasta la fecha en que es r
 El ADN se obtiene mediante máquinas de propósito específico llamadas secuenciadores. Se basan en técnicas bioquímicas cuya finalidad es la determinación del orden de los nucleótidos en la secuencia de ADN. Hay distintos factores que influyen en la toma de lecturas del ADN, que pueden llevar a errores. Estos factores se expresan mediante una calidad de error que el secuenciador asigna a cada lectura, en el momento de tomarla, dependiendo de qué posibilidad hay de que sea errónea.\\
 
 La probabilidad de que una lectura sea errónea se mapea en un rango de enteros, denominado calidad \textit{Sanger} \cite{sanger}. Para ello se aplica la fórmula \begin{equation}
-Q = -10*\log_{10} P
+Q = -10 \times \log_{10} P
 \end{equation} 
 cuya entrada es un rango de números reales [0,1] y su salida en el rango de números naturales positivos [0,93] (acotado superiormente). La razón de utilizar esta calidad es que solo es necesario usar un byte para su expresión, aunque se pierda precisión en la probabilidad de error.\\
 
@@ -95,28 +95,28 @@ Las calidades de un fichero \textit{BAM} se expresan mediante un número entero e
 
 \begin{equation}
 \label{for:calidadsanger}
-Q_{sanger}(p) = -10*\log_{10}(p)
-\end{equation}
+Q_{sanger}(p) = -10 \times \log_{10}(p)
+\end{equation}\\
 
 Obtener la probabilidad de error a partir de una calidad es posible utilizando la operación inversa de la fórmula \ref{for:calidadsanger} (usando la fórmula \ref{for:probsanger}).\\
 
 \begin{equation}
 \label{for:probsanger}
 P_{sanger}(q) = 10^\frac{-q}{10}
-\end{equation}
+\end{equation}\\
 
 La calidad recalibrada de una base se obtiene al aplicar la fórmula \ref{for:qualrecal}, la cual tiene como entrada los parámetros de la posición de la base leída en el ADN de referencia, el ciclo del secuenciador en que se ha leído y el contexto de dinucleótido (par compuesto por la base anterior y la actual, por ejemplo, ``AG'').\\
 
 \begin{equation}
 \label{for:qualrecal}
 Q^*(r,c,d) = Q(r) + \Delta Q + \Delta Q(r) + \Delta Q(r,c) + \Delta Q(r,d)
-\end{equation}
+\end{equation}\\
 
 La nueva calidad se obtiene a partir de la calidad original de esa posición ($Q(r)$), sumándole las variaciones o \textit{deltas} que influyen en la misma. Estos deltas se calculan según las fórmulas \ref{for:deltag}, \ref{for:deltar}, \ref{for:deltarc} y \ref{for:deltard}. Puesto que para calcular cada delta es necesario contabilizar las lecturas y fallos del fichero que se recalibra, son necesarios dos procesamientos o pasadas sobre el fichero. La primera pasada o fase de recogida de datos contabiliza las bases que lee y si son fallos, datos que necesita para calcular finalmente los deltas. Una vez se calculan los deltas se hace una segunda pasada que aplica a cada calidad la fórmula que obtiene su calidad final recalibrada.\\
 
 \begin{equation}
 \label{for:deltag}
-\Delta Q = Q_{sanger}(T_g) - Q_{sanger}\left(\frac{\sum\limits_{r} P_{sanger}(Q(r))*\textit{número bases r}}{\textit{número bases global}}\right)
+\Delta Q = Q_{sanger}(T_g) - Q_{sanger}\left(\frac{\sum\limits_{r} P_{sanger}(Q(r)) \times \textit{número bases r}}{\textit{número bases global}}\right)
 \end{equation}
 
 \begin{equation}
@@ -132,21 +132,21 @@ La nueva calidad se obtiene a partir de la calidad original de esa posición ($Q(
 \begin{equation}
 \label{for:deltard}
 \Delta Q(r,d) = Q_{sanger}(T(r,d)) - Q(r) - (\Delta Q + \Delta Q(r))
-\end{equation}
+\end{equation}\\
 
 En la primera fase se recorre el fichero \textit{BAM} contabilizando las lecturas y sus errores, almacenándolos en las estructuras de datos. Con estos datos se puede obtener la tasa de fallos $T$ que se define en la fórmula \ref{for:tasafallo}, cuyo resultado es utilizado en el cálculo de los deltas. Una vez se ha recorrido el fichero y obtenidas las $T$, se calculan finalmente los deltas para cada combinación \textit{posición-ciclo-dinucleótido}.\\
 
 \begin{equation}
 \label{for:tasafallo}
 T = \frac{\textit{número de fallos}}{\textit{número de bases}}
-\end{equation}
+\end{equation}\\
 
 
-Tomando un ejemplo donde hay un rango de calidades $[0,49]$, 100 ciclos de secuenciador y 12 tipos de dinucleótido, el cálculo de los deltas se traduce en un delta global, 50 deltas (uno para cada posible calidad), $50*100=5000$ deltas para cada par calidad-ciclo y $50*12=600$ deltas para cada par calidad-dinucleótido. Esto se traduce en el cálculo de $5651$ deltas.\\
+Tomando un ejemplo donde hay un rango de calidades $[0,49]$, 100 ciclos de secuenciador y 12 tipos de dinucleótido, el cálculo de los deltas se traduce en un delta global, 50 deltas (uno para cada posible calidad), $50 \times 100=5000$ deltas para cada par calidad-ciclo y $50 \times 12=600$ deltas para cada par calidad-dinucleótido. Esto se traduce en el cálculo de $5651$ deltas.\\
 
 En la segunda fase se vuelve a recorrer el fichero para aplicar la fórmula \ref{for:qualrecal} que devuelve la calidad recalibrada para cada base leída. Puesto que tenemos todos los deltas calculados en las estructuras de datos, sólo nos llevará 4 sumas el cálculo de cada calidad. \\
 
-Por ejemplo un fichero de un secuenciador de 100 ciclos, con 35 millones de lecturas ($35\exp^6$) tendrá aproximadamente 3500 millones de bases ($3,5\exp^9$). Usando los deltas ya calculados sólo usaríamos 4 sumas por cada base, es decir, $4*3,5\exp^9=14\exp^9$ sumas en total. En cambio, si calculásemos los deltas a la vez que cada calidad recalibrada necesitaríamos más operaciones que 4 sumas (varios ordenes de magnitud más). Esta es la razón de precalcular los deltas en la primera fase, aunque su almacenamiento signifique un coste en memoria adicional.\\
+Por ejemplo un fichero de un secuenciador de 100 ciclos, con 35 millones de lecturas ($35 \times 10^6$) tendrá aproximadamente 3500 millones de bases ($3,5 \times 10^9$). Usando los deltas ya calculados sólo usaríamos 4 sumas por cada base, es decir, $4 \times 3,5 \times 10^9=14 \times 10^9$ sumas en total. En cambio, si calculásemos los deltas a la vez que cada calidad recalibrada necesitaríamos más operaciones que 4 sumas (varios ordenes de magnitud más). Esta es la razón de precalcular los deltas en la primera fase, aunque su almacenamiento signifique un coste en memoria adicional.\\
 
 
 \subsection{Fase 1: Recogida de datos}
@@ -192,18 +192,18 @@ El procesado de cada lectura consiste en aplicar únicamente la fórmula \ref{for:
 
 Las estructuras de datos utilizadas para el recalibrado consisten en matrices. Cada delta que se calcula necesita de 3 matrices. Una matriz acumula el número de bases que se leen, otra matriz acumula el número de fallos que se han detectado y la ultima matriz almacena los deltas calculados. Puesto que hay 4 tipos de delta (global, posición, posición-ciclo y posición-dinucleótido), son necesarias 12 matrices.\\
 
-Las matrices para el delta global tiene dimensión $1x1$, puesto que sólo hay un caso. Las matrices para el delta de posición tiene dimensión $1xn$ siendo $n$ el número de posibles calidades que puede tener una posición. Para los delta de posición-ciclo y posición-dinucleótido la dimensión es $nxc$ y $nxd$ respectivamente, siendo $c$ el número de ciclos y $d$ el número de dinucleótidos (lo normal es que $d$ sea 12).\\
+Las matrices para el delta global tiene dimensión $1 \times 1$, puesto que sólo hay un caso. Las matrices para el delta de posición tiene dimensión $1xn$ siendo $n$ el número de posibles calidades que puede tener una posición. Para los delta de posición-ciclo y posición-dinucleótido la dimensión es $n \times c$ y $n \times d$ respectivamente, siendo $c$ el número de ciclos y $d$ el número de dinucleótidos (lo normal es que $d$ sea 12).\\
 
-Por ejemplo, tenemos un fichero \textit{BAM} de un secuenciador de 100 ciclos, con 35 millones de lecturas ($35\exp^6$) tendrá aproximadamente 3500 millones de bases ($3,5\exp^9$), con calidades comprendidas en el rango $[0,50]$. Las estructuras de datos utilizadas en este caso serán:
+Por ejemplo, tenemos un fichero \textit{BAM} de un secuenciador de 100 ciclos, con 35 millones de lecturas ($35 \times 10^6$) tendrá aproximadamente 3500 millones de bases ($3,5 \times 10^9$), con calidades comprendidas en el rango $[0,50]$. Las estructuras de datos utilizadas en este caso serán:
 \begin{itemize}
 \item
-Para el delta global: tres matrices de dimensión $1x1$ que contengan el número de bases leídas en total, el número de fallos y su delta. Hacen un total de 2 enteros y un número en coma flotante (\textit{double} en C).
+Para el delta global: tres matrices de dimensión $1 \times 1$ que contengan el número de bases leídas en total, el número de fallos y su delta. Hacen un total de 2 enteros y un número en coma flotante (\textit{double} en C).
 \item
-Para el delta de cada calidad: tres matrices de dimensión $1x50$ que contengan el número de bases leídas que tengan esa calidad, sus fallos y su delta. Hacen un total de 100 enteros y 50 \textit{double}.
+Para el delta de cada calidad: tres matrices de dimensión $1 \times 50$ que contengan el número de bases leídas que tengan esa calidad, sus fallos y su delta. Hacen un total de 100 enteros y 50 \textit{double}.
 \item
-Para el delta de cada calidad-ciclo: tres matrices de dimensión $50x100$ que contengan el número de bases leídas que tengan esa calidad en ese ciclo, sus fallos y su delta. Hacen un total de 10000 enteros y 5000 \textit{double}.
+Para el delta de cada calidad-ciclo: tres matrices de dimensión $50 \times 100$ que contengan el número de bases leídas que tengan esa calidad en ese ciclo, sus fallos y su delta. Hacen un total de 10000 enteros y 5000 \textit{double}.
 \item
-Para el delta de cada calidad-dinucleótido: tres matrices de dimensión $50x12$ que contengan el número de bases leídas que tengan esa dinucleótido, sus fallos y su delta. Hacen un total de 1200 enteros y 600 \textit{double}.
+Para el delta de cada calidad-dinucleótido: tres matrices de dimensión $50 \times 12$ que contengan el número de bases leídas que tengan esa dinucleótido, sus fallos y su delta. Hacen un total de 1200 enteros y 600 \textit{double}.
 \end{itemize}
 
 En el ejemplo anterior tenemos finalmente unos requisitos de memoria de 11302 enteros y 5651 \textit{double}. Teniendo en cuenta que el tamaño de un entero largo son 4 bytes y los tipo \textit{double} son 8 bytes, necesitaremos $90416$ bytes (90,5Kb aproximadamente). Actualmente 90 Kb es un tamaño muy pequeño para una memoria de un sistema de altas prestaciones, por lo que el sobrecoste de precalcular los deltas es despreciable. Con esto se ha conseguido un uso eficiente de la memoria.\\
