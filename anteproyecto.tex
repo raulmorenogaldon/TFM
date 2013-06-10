@@ -221,18 +221,64 @@ Doc. tesis		& Documentación y escritura de Tesis Doctoral & 25 \\\hline
 
 \subsection{Descripción de tareas}
 
+En esta sección se describirán las tareas a realizar durante el desarrollo de la tesis doctoral.
+
 \subsubsection{Finalización del máster}
+
+Esta tarea consiste en la superación del curso de máster de tecnologías informáticas avanzadas de la Universidad de Castilla-La Mancha. Para ello se superarán las asignaturas ofertadas por el máster que tengan que ver con el tema de investigación. Esta tarea acaba con la realización de este documento, describiendo el progreso alcanzado durante el primer año de tesis, y su defensa ante un tribunal.\\
 
 \subsubsection{Estado del arte}
 
+Esta tarea corresponde a la documentación y estudio del estado del arte en modelos y sistemas de programación paralela, tratamiento de grandes cantidades y datos, y situación actual de las herramientas utilizadas en bioinformática para el análisis de ADN. Los resultados de este estudio y sus conclusiones se recogen en los capítulos de ``Estado del arte'' de este documento.
+
 \subsubsection{Elección de tecnologías}
+
+Elección de tecnologías se usarán en el desarrollo del software para el descubrimiento de variantes. Es importante la elección del lenguaje de programación, que determinará las librerías a utilizar y su adecuación a los entornos de computación de altas prestaciones. Otro aspecto a tener en cuenta es el modelo de programación en sistemas distribuidos que se utilizará (memoria compartida, paso de mensajes\ldots). Puesto que el objetivo es obtener la máxima eficiencia a través del paralelismo, hay que elegir las tecnologías de cómputo paralelo viables y las herramientas para manejarlas.\\
 
 \subsubsection{Elección de estructuras de datos para el recalibrador}
 
+Esta tarea engloba el diseño y elección de las estructuras de datos que se utilizarán en la implementación del recalibrador. Estas estructuras de datos deberán ser eficientes con memoria y almacenar la información necesaria para el funcionamiento del algoritmo. Puesto que se busca la eficiencia, hay que buscar un compromiso entre almacenar el mínimo número de datos necesarios para obtener un buen rendimiento sin llenar la memoria disponible.\\
+
 \subsubsection{Implementación del recalibrador}
+
+Implementar el recalibrador de forma secuencial, imitando el comportamiento del recalibrador incorporado en GATK pero ya introduciendo las mejoras de utilizar código y estructuras de datos eficientes. Dado un fichero BAM de entrada, el código debe procesarlo y producir un fichero BAM de salida con las calidades recalibradas, en un tiempo similar o menor que el obtenido por el recalibrador de GATK.\\
+
+\subsubsection{Pruebas del recalibrador}
+
+Esta tarea consiste en evaluar si efectivamente el recalibrador desarrollado genera una salida correcta y el rendimiento que obtiene, comparandolo con el rendimiento del recalibrador de GATK.\\
 
 \subsubsection{Implementación de SSE en el recalibrador}
 
+Una vez implementado el recalibrador, hay que acelerar los cálculos utilizando instrucciones SSE donde sea posible. En principio esto debería acelerar las partes de código donde se utilice, gracias al modelo de sistema SIMD.\\
+
 \subsubsection{Pruebas SSE en el recalibrador}
+
+Estas pruebas se centrarán en las partes de código del recalibrador que implementen operaciones con SSE. Estas partes de código deberán ser comparadas con su respectiva versión del algoritmo secuencial inicialmente obtenido. Para ello se analizará el rendimiento utilizando SSE comparándolo con el obtenido en la versión sin SSE. También debe comprobarse la validez de los ficheros BAM de salida.\\
+
+\subsubsection{Implementación de OpenMP en el recalibrador}
+
+Una vez incorporadas instrucciones SSE al recalibrador, se implementará el uso de OpenMP en el mísmo. Esto permitirá utilizar las capacidades de memoria compartida de los recursos computacionales, incrementando el rendimiento.
+
+\subsubsection{Pruebas OpenMP en el recalibrador}
+
+Al igual que en las pruebas descritas anteriormente, el objetivo de esta tarea es la validación de los resultados obtenidos por el recalibrador y una comparación del rendimiento obtenido respecto a las anteriores versiones. En este caso lo que se evalúa son las partes de código que utilicen OpenMP, comprobando el correcto funcionamiento de la esta nueva funcionalidad añadida junto a la funcionalidad anterior basada en SSE.\\
+
+\subsubsection{Implementación de MPI en el recalibrador}
+
+La ultima funcionalidad a añadir al recalibrador es el soporte multiprocesador utilizando la librería MPI. Esta tarea consiste por tanto en la implementación del modelo de paso de mensajes para permitir el reparto de trabajo entre múltiples procesadores, utilizando MPI. Esto permitirá incrementar el rendimiento cuantos más procesadores disponga el sistema en el que se ejecute el recalibrador.\\
+
+\subsubsection{Pruebas MPI en el recalibrador}
+
+Estas pruebas consisten en validar los resultados obtenidos por el recalibrador que incorpora MPI y su mejora de rendimiento respecto a las versiones anteriores. Para ello se realizarán pruebas con la implicación de varios procesadores.\\
+
+\subsubsection{Pruebas en cluster del recalibrador con SSE + OpenMP + MPI}
+
+Esta tarea evalúa el recalibrador desarrollado en un entorno \textit{cluster} con cientos de nodos. En este entorno se probarán todas las funcionalidades implementadas en el recalibrador de forma simultánea (SSE + OpenMP + MPI), aprovechando los recursos que ofrecen los procesadores del \textit{cluster}. Se evaluará también el rendimiento final obtenido mediante el uso de estos modelos de programación paralelos y cual es el resultado final en cuanto a rendimiento y eficiencia ganado al utilizar el recalibrador desarrollado.\\
+
+\subsubsection{Desarrollo del descubridor de variantes}
+
+Las tareas llevadas a cabo para el desarrollo de un descubridor de variantes son análogas a las llevadas a cabo en el desarrollo del recalibrador. Primeramente se diseñarán las estructuras de datos que serán necesarias para la correcta ejecución de los algoritmos y manejar eficientemente la memoria.\\
+
+Una vez diseñadas las estructuras de datos se implementará una primera versión del descubridor de variantes, la cual servirá de base para añadir más funcionalidades. Hechas las correspondientes pruebas a la primera versión del descubridor de variantes, se procederá a la implementación y prueba de las funcionalidades SSE, OpenMP y MPI en el mismo. Finalmente se probará el descubridor de variantes obtenido en un sistema \textit{cluster} con cientos de nodos, evaluando su eficiencia y rendimiento.
 
 \subsection{Situación actual}
