@@ -44,7 +44,11 @@ Esta tarea ha sido completada.\\
 
 \subsection{Elección de estructuras de datos para el recalibrador}
 
+Esta tarea ha sido completada. Las estructuras de datos debían ser eficientes y almacenar información sobre diversos tipos de contadores. Se ha llegado a la conclusión de que la mejor estructura de datos a utilizar en este caso son las matrices, pues que esta forma de almacenamiento permite aprovechar la localidad espacial y temporal en memoria al estar todos los datos de forma continua. En la sección \ref{sec:estructuras} se describen detalladamente las estructuras de datos que se han utilizado, puesto que se entienden mejor una vez introducido el algoritmo de recalibrado (sección \ref{sec:algoritmo}).\\
+
 \subsection{Implementación del recalibrador}
+
+Esta tarea ha sido completada. Se ha desarrollado el código de un algoritmo recalibrador secuencial, que utiliza eficientemente las estructuras de datos que se han diseñado y por tanto la memoria. El algoritmo intenta utilizar el mínimo de operaciones necesarias para los cálculos, haciendo especial hincapié en las operaciones \textit{I/O}. Como se verá en la sección \ref{sec:evaluacion}, los resultados obtenidos en cuanto a rendimiento han sido prometedores desde la primera versión.\\
 
 \subsection{Implementación de SSE en el recalibrador}
 
@@ -53,6 +57,8 @@ Para este trabajo se incorporó el uso de las instrucciones \textit{SSE} \cite{ss
 Esta tarea está en progreso pero ya hay alguna parte del código que la implementa.\\
 
 \subsection{Pruebas SSE en el recalibrador}
+
+Esta tarea se ha iniciado de forma parcial. Ya se ha realizado alguna prueba sobre las instrucciones SSE que se van incorporando. cuyos resultados se encuentran. Como se verá en la sección \ref{sec:evaluacion}, se ha incrementado bastante el rendimiento con unos pequeños cambios en el código de la versión anterior. Esto indica la factibilidad de usar las instrucciones SSE en el desarrollo.\\
 
 \section{Herramientas utilizadas}
 
@@ -79,6 +85,7 @@ El otro programa que he utilizado para depuración es \textit{Valgrind} \cite{val
 Durante el desarrollo del recalibrador he utilizado la herramienta \textit{memcheck} de \textit{Valgrind}. Esta herramienta permite detectar errores en la memoria, como accesos no válidos, uso de variables no inicializadas, liberación incorrecta de memoria reservada, fugas de memoria\ldots El principal uso que le he dado ha sido localizar puntos del código del recalibrador donde no se liberaba bien la memoria, provocando que la memoria libre se agote y disminuyendo el rendimiento de forma drástica.\\
 
 \section{Algoritmo de recalibrado}
+\label{sec:algoritmo}
 
 El algoritmo de recalibrado usado se compone de dos fases. La primera fase consiste en recopilar datos sobre los ficheros \textit{BAM}. La segunda fase es la recalibración en sí, se utilizan los datos obtenidos en la primera fase para ajustar las calidades de \textit{BAM} usando fórmulas estadísticas. A continuación se describe el proceso formal de recalibrado y cómo se realizan las dos fases en el algoritmo.\\
 
@@ -156,7 +163,7 @@ Para incrementar el rendimiento de esta fase, se han utilizado instrucciones \te
 
 Lo que se hace pues, en cada iteración, es cargar en un registro \textit{XMM} de 128 bits (utilizados por las instrucciones SSE) 16 bases del vector de la secuencia leída, utilizando una sola lectura de memoria. En otro registro \textit{XMM} se cargan las 16 bases correspondientes al vector de referencia, mediante otra lectura de memoria. Acto seguido se usa la instrucción de comparación de \textit{SSE2} sobre las 16 bases, obteniendo en un registro \textit{XMM} los resultados de las comparaciones (\textit{0}x\textit{FF} si es igual o \textit{0}x\textit{00} si no). Finalmente se guardan en una variable vector los resultados de las 16 comparaciones con otra instrucción de memoria.\\
 
-Como efecto resultante al usar \textit{SSE}, los vectores se recorren de 16 en 16 elementos. Si no usamos \textit{SSE} los elementos se recorrerían de 1 en 1. Esto tiene un gran impacto en el rendimiento como se verá en la sección \ref{sec:evaluacion}.\\
+Como efecto resultante al usar \textit{SSE}, los vectores se recorren de 16 en 16 elementos. Si no usamos \textit{SSE} los elementos se recorrerían de 1 en 1. Esto tiene un gran impacto en el rendimiento como se verá en hanla sección \ref{sec:evaluacion}.\\
 
 \subsection{Fase 2: Recalibrado}
 
@@ -165,6 +172,7 @@ En esta fase se lleva a cabo el proceso de recalibrado en sí. Al igual que en la
 El procesado de cada lectura consiste en aplicar únicamente la fórmula \ref{for:qualrecal} a cada una de las calidades de sus bases, sustituyendo las mismas por los nuevos valores. Puesto que los deltas ya han sido calculados en la fase anterior, se pueden utilizar directamente en los cálculos accediendo a sus valores en las estructuras de datos. Por tanto, el valor final de las calidades corresponde a las cuatro sumas de los deltas correspondientes. Finalmente se genera el fichero \textit{BAM} con las nuevas calidades.\\
 
 \subsection{Estructura de datos utilizadas}
+\label{sec:estructuras}
 
 \subsection{Parámetros de ejecución del recalibrador}
 
