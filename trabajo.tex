@@ -1,6 +1,6 @@
 \chapter{Trabajo de investigación: Recalibrador de altas prestaciones usando para\-lelismo}
 
-En este capitulo se detalla el trabajo llevado a cabo hasta la fecha en que se redacta este documento. Se presentaran las tareas realizadas y hasta donde se ha llegado, según la planificación del anteproyecto de tesis. Básicamente el objetivo del trabajo era conseguir un software recalibrador acelerado, usando técnicas de optimización y paralelismo que fuesen más eficientes y rápidas que las utilizadas por el recalibrador de GATK.\\
+En este capítulo se detalla el trabajo llevado a cabo hasta la fecha en que es redactado este documento. Se presentarán las tareas realizadas y hasta donde se ha llegado, según la planificación del anteproyecto de tesis. El objetivo del trabajo de máster es conseguir un software recalibrador acelerado, usando técnicas de optimización y paralelismo que fuesen más eficientes y rápidas que las utilizadas por el recalibrador de GATK.\\
 
 \section{Descripción de un recalibrador}
 
@@ -9,32 +9,32 @@ El ADN se obtiene mediante máquinas de propósito específico llamadas secuenciado
 La probabilidad de que una lectura sea errónea se mapea en un rango de enteros, denominado calidad \textit{Sanger} \cite{sanger}. Para ello se aplica la fórmula \begin{equation}
 Q = -10*\log_{10} P
 \end{equation} 
-cuya entrada es un rango de números reales [0,1] y su salida en el rango de número naturales positivos [0,93] (acotado superiormente). La razón de utilizar esta calidad es que solo es necesario usar un byte para su expresión, aunque se pierda precisión en la probabilidad de error.\\
+cuya entrada es un rango de números reales [0,1] y su salida en el rango de números naturales positivos [0,93] (acotado superiormente). La razón de utilizar esta calidad es que solo es necesario usar un byte para su expresión, aunque se pierda precisión en la probabilidad de error.\\
 
 Un recalibrador ajusta las calidades asignadas a cada lectura en un fichero \textit{BAM} para que sean más cercanas a la probabilidad de error real, teniendo en cuenta todas las lecturas del fichero y comparando si difieren del ADN de referencia.\\
 
-Por ejemplo, si tenemos un fichero, aún no recalibrado, donde todas sus bases tienen calidad 25 y nos encontramos al recalibrar que 1 de cada 100 lecturas difieren del ADN referencia, entonces su calidad sería 20 y se ajustarían las calidades teniendo esto en cuenta. Pero el recalibrador tiene en cuenta más cosas, como que las lecturas de los últimos ciclos del secuenciador presentan más errores que las primeras, o las combinaciones de dos nucleótidos en las lecturas (contexto de dinucleótido).\\
+Por ejemplo, si tenemos un fichero, aún no recalibrado, donde todas sus bases tienen calidad 25 y nos encontramos al recalibrar que 1 de cada 100 lecturas difieren del ADN referencia, entonces su calidad sería 20 y se ajustarían las calidades teniendo esto en cuenta. Pero el recalibrador tiene en cuenta más cosas, como que las lecturas de los últimos ciclos del secuenciador presentan más errores que las primeras, o la probabilidad de que se den determinadas combinaciones de dos nucleótidos en las lecturas (contexto de dinucleótido).\\
 
 \subsection{Formato \textit{BAM/SAM}}
 \label{sec:bam}
 
 \textit{SAM} \cite{bamsam} es un formato de texto para almacenar los datos de secuenciación de ADN en una serie de columnas ASCII tabuladas. Este formato está pensado para ser legible por humanos. \textit{BAM} es el formato alternativo a \textit{SAM}, almacenando los datos de forma binaría, comprimida e indexada.\\
 
-Los formatos \textit{BAM/SAM} contienen la misma información aunque en diferente formato. Están compuestos por una cabecera opcional, que contiene información adicional sobre el fichero y las lecturas, seguida de las lecturas de secuenciación. Cada lectura contiene información de la secuencia de ADN que contiene y cómo se alinea con el ADN de referencia.\\
+Los formatos \textit{BAM/SAM} contienen la misma información aunque en diferente formato. Están compuestos por una cabecera opcional, que puede contener información adicional sobre el fichero y las lecturas que contiene, seguida de las lecturas de secuenciación. Cada lectura contiene información de la secuencia de ADN que contiene y cómo se alinea con el ADN de referencia.\\
 
 \section{Tareas completadas o en progreso}
 
 \subsection{Estado del arte}
 
-Se ha completado la tarea de búsqueda de información y obtención del estado del arte sobre las herramientas disponibles para el análisis de ADN, tecnologías paralelas útiles para aumentar el rendimiento de dichas herramientas y formas de tratar grandes cantidades de datos.
+Se ha completado la tarea de búsqueda de información y obtención del estado del arte sobre: herramientas disponibles para el análisis de ADN, tecnologías paralelas útiles para aumentar el rendimiento de dichas herramientas y formas de tratar grandes cantidades de datos.
 
 \subsection{Elección de tecnologías}
 
 Una de las decisiones a tomar al comenzar el trabajo consistía en elegir el lenguaje de programación. El software de referencia, \textit{GATK}, utiliza Java \cite{javaweb}. Este lenguaje es ampliamente utilizado en el desarrollo de aplicaciones web y de servicios debido a su facilidad de uso, además de tener una curva de aprendizaje rápida. Es un lenguaje orientado a objetos e interpretado, lo cual permite su ejecución en distintas plataformas sin necesidad de recompilar. Su gestión de la memoria es automática.\\
 
-Se desechó Java puesto que es interpretado por su máquina virtual (\textit{JVM} \textit{Java Virtual Machine}), lo cual produce una sobrecarga en el ejecución que no compensa su portabilidad. Además su gestión automática de memoria es también un inconveniente en sistemas donde el uso de la memoria es crítico para el rendimiento.\\
+Se desechó Java puesto que es interpretado por su máquina virtual (\textit{JVM} \textit{Java Virtual Machine}), lo cual produce una sobrecarga en la ejecución que no compensa su portabilidad. Además su gestión automática de memoria es también un inconveniente en sistemas donde el uso de la memoria es crítico para el rendimiento.\\
 
-Se optó finalmente por utilizar C, puesto que es un lenguaje que te permite hacer cualquier cosa, aunque no sea tan fácil como java. La otra variante, C++, se desechó puesto que no necesitamos un enfoque orientado a objetos. C te permite un control total sobre la memoria y sus datos, lo cual permite optimizar el código para que se ajuste al sistema de memoria donde se alojará y utilizar estructuras de datos óptimas, con la consecuente ganancia en rendimiento. Además el código en C es compilado y optimizado por el propio compilador. Permite fácilmente la inclusión de código en ensamblador, lo cual puede ser un punto crítico en la ejecución de algunas operaciones básicas ejecutadas masivamente en el código. Como ventaja final, existe una amplia variedad de librerías para este lenguaje, depuradas y optimizadas durante años que facilitan bastante la programación sin sacrificar rendimiento.\\
+Se optó finalmente por utilizar C, puesto que es un lenguaje que te permite hacer cualquier cosa, aunque no sea tan fácil como Java. La otra variante, C++, se desechó puesto que no necesitamos un enfoque orientado a objetos. C te permite un control total sobre la memoria y sus datos, lo cual permite optimizar el código para que se ajuste al sistema de memoria donde se alojará y utilizar estructuras de datos óptimas, con la consecuente ganancia en rendimiento. Además el código en C es compilado y optimizado por el propio compilador. Permite fácilmente la inclusión de código en ensamblador, lo cual puede ser un punto crítico en la ejecución de algunas operaciones básicas ejecutadas masivamente en el código. Como ventaja final, existe una amplia variedad de librerías para este lenguaje, depuradas y optimizadas durante años que facilitan bastante la programación sin sacrificar rendimiento.\\
 
 En cuanto a las librerías a utilizar para aprovechar el paralelismo y obtener mayor rendimiento se ha optado por MPI, OpenMP y SSE. Las instrucciones SSE permiten aprovechar las capacidades SIMD de los procesadores actuales, lo cual permitirá aumentar el rendimiento en determinadas operaciones que involucren datos almacenados en vectores de forma continua. OpenMP permitirá aprovechar los distintos cores de cada procesador, puesto que actualmente todos los procesadores son multicore. Finalmente MPI permitirá la ejecución en entornos de múltiples procesadores, como puede ser un \textit{cluster}. La combinación de estas tres tecnologías nos permitirá explotar los recursos de computo basados en microprocesador de forma eficiente.\\
 
@@ -46,7 +46,7 @@ Esta tarea ha sido completada.\\
 
 \subsection{Implementación de SSE en el recalibrador}
 
-Para este trabajo se incorporó el uso de las instrucciones \textit{SSE} \cite{ssemanual}, puesto que el compilador de C proporciona las funciones optimizadas para su uso, y en caso de no existir esas funciones, se pueden utilizar las instrucciones \textit{SSE} directamente en ensamblador (puesto que C lo permite). El uso de \textit{SSE}, en las partes del código que lo permitían, aumentaron el rendimiento como se verá más adelante.\\
+Para este trabajo se incorporó el uso de las instrucciones \textit{SSE} \cite{ssemanual}, puesto que el compilador de C proporciona las funciones optimizadas para su uso. En caso de no existir estas funciones, se pueden utilizar las instrucciones \textit{SSE} directamente en ensamblador (puesto que C lo permite). El uso de \textit{SSE}, en las partes del código que lo permitían, aumentaron el rendimiento como se verá más adelante.\\
 
 Esta tarea está en progreso pero ya hay alguna parte del código que la implementa.\\
 
@@ -64,17 +64,17 @@ Para compilar el código he utilizado \textit{Makefile}, el cual es ampliamente u
 
 \subsection{Control de versiones}
 
-Para el control de versiones del código se ha utilizado \textit{Git} \cite{gitweb}, esto me permite guardar la historia de cambios que ha sufrido el programa durante su desarrollo y permite revertir cambios para recuperar versiones anteriores. Ofrece un control de versiones distribuido, al contrario que otras herramientas como \textit{Subversion} \cite{subversionweb}, por lo que puedes trabajar en local y cuando sea posible combinar los cambios con el repositorio global. La razón de elegir \textit{Git} fue su facilidad de uso, por ejemplo a la hora de crear y combinar distintos flujos de trabajo.\\
+Para el control de versiones del código se ha utilizado \textit{Git} \cite{gitweb}, esto me permite guardar el historial de cambios que ha sufrido el programa durante su desarrollo y permite revertir cambios para recuperar versiones anteriores. Ofrece un control de versiones distribuido, al contrario que otras herramientas como \textit{Subversion} \cite{subversionweb}, por lo que puedes trabajar en local, y cuando sea posible, combinar los cambios con el repositorio global. La razón de elegir \textit{Git} fue su facilidad de uso, por ejemplo a la hora de crear y combinar distintos flujos de trabajo.\\
 
-La forma de trabajar con \textit{Git} que he seguido consiste en tener un flujo de trabajo llamado \textit{master} donde se recogen las características ya implementadas en el programa. A la hora de añadir una nueva funcionalidad al programa, creo un nuevo flujo de trabajo y realizo los cambios sobre el mismo. Cuando esa funcionalidad está añadida, combino ese flujo de trabajo con el \textit{master} obteniendo el programa con la característica implementada en ese flujo principal. Esto me permite trabajar en varías funcionalidades de forma separada, a la vez y sin interferir unas sobre otras, lo cual facilita el manejo del código.\\
+La forma de trabajar que he seguido con \textit{Git} consiste en tener un flujo de trabajo llamado \textit{master} donde se recogen las características ya implementadas en el programa. A la hora de añadir una nueva funcionalidad al programa, creo un nuevo flujo de trabajo y realizo los cambios sobre el mismo. Cuando esa funcionalidad está añadida, combino ese flujo de trabajo con el \textit{master} obteniendo el programa con la característica implementada en ese flujo principal. Esto me permite trabajar en varías funcionalidades de forma separada, a la vez y sin interferir unas sobre otras, lo cual facilita el manejo del código.\\
 
 \subsection{Depuración}
 
 \textit{GDB} \cite{gdbweb} (\textit{GNU} debugger) es un depurador de código en línea de comandos. Entre otras cosas te permite comenzar la ejecución de un programa e incluir puntos de ruptura. En caso de que el programa termine su ejecución de forma anormal, te permite ver el estado de las variables y la pila de programa justo en el momento del error. Mayoritariamente he usado este programa para encontrar el origen de los fallos de segmentación que me he encontrado durante el desarrollo del recalibrador. Cuando ocurre un fallo de segmentación el propio sistema operativo vuelca el contenido de la memoria en ese momento en un fichero. \textit{GDB} permite restaurar la ejecución al momento del fallo usando ese fichero y ofreciendo una visión del estado del programa en ese momento.\\
 
-El otro programa que he utilizado para depuración es \textit{Valgrind} \cite{valgrindweb}. Es un co njunto de herramientas de depuración que permiten detectar automáticamente muchos fallos en el manejo de memoria e hilos, permitiendo analizar los programas en detalle.\\
+El otro programa que he utilizado para depuración es \textit{Valgrind} \cite{valgrindweb}. Es un conjunto de herramientas de depuración que permiten detectar automáticamente muchos fallos en el manejo de memoria e hilos, permitiendo analizar los programas en detalle.\\
 
-Durante el desarrollo del recalibrador he utilizado la herramienta \textit{memcheck} de \textit{Valgrind}. Esta herramienta permite detectar errores en la memoria, como accesos no válidos, uso de variables no inicializadas, liberación incorrecta de memoria reservada, fugas de memoria\ldots El principal uso que le he dado ha sido localizar puntos del código del recalibrador donde no se liberaba bien la memoria, provocando que la memoria se llene y disminuyendo el rendimiento de forma drástica.\\
+Durante el desarrollo del recalibrador he utilizado la herramienta \textit{memcheck} de \textit{Valgrind}. Esta herramienta permite detectar errores en la memoria, como accesos no válidos, uso de variables no inicializadas, liberación incorrecta de memoria reservada, fugas de memoria\ldots El principal uso que le he dado ha sido localizar puntos del código del recalibrador donde no se liberaba bien la memoria, provocando que la memoria libre se agote y disminuyendo el rendimiento de forma drástica.\\
 
 \section{Algoritmo de recalibrado}
 
@@ -128,7 +128,7 @@ Q^*(r,c,d) = Q(r) + \Delta Q + \Delta Q(r) + \Delta Q(r,c) + \Delta Q(r,d)
 
 En esta fase se lleva a cabo una recogida de datos sobre el fichero \textit{BAM} que se quiere analizar. Como ya se explicó en la sección \ref{sec:bam}, un fichero \textit{BAM} contiene un conjunto de lecturas de \textit{ADN}. Lo que se pretende es contabilizar la tasa de fallos de las lecturas de \textit{BAM} respecto al \textit{ADN} de referencia. La tasa de fallos se obtiene mediante la expresión de la fórmula \ref{for:tasafallo}. Es por ello que hay que contabilizar tanto los fallos que se han producido como las bases que se han leido.\\
 
-Para ello el \textit{BAM} de entrada se procesa por lotes, es decir, se lee un conjunto de lecturas del fichero y se procesan. Inicialmente esto se hace de forma secuencial, leyendo un lote y procesándolo. Cuando se termina de procesar este lote se lee el siguiente. La forma de leer los lotes es secuencialmente, estos se leen de forma ordenada (de principio a fin) en el fichero \textit{BAM} usando la librería \textit{samtools}.\\
+Para ello el \textit{BAM} de entrada se procesa por lotes, es decir, se lee un conjunto de lecturas del fichero y se procesan. Inicialmente esto se hace de forma secuencial, leyendo un lote y procesándolo. Cuando se termina de procesar este lote se lee el siguiente. Los lotes se leen secuencialmente en el fichero \textit{BAM} usando la librería \textit{samtools} \cite{bamsam}.\\
 
 El procesado de cada lote consiste en leer por orden las lecturas que contiene. Cada una de estas lecturas tiene una secuencia de bases (nucleótidos) en forma de cadena de caracteres, indicando además qué posición de inicio representan en el \textit{ADN} de referencia. Lo que se hace para cada lectura es leer el \textit{ADN} de referencia en la misma posición y la misma longitud, obteniendo la cadena de caracteres del \textit{ADN} de referencia. La lectura de la cadena de referencia se realiza a través de \textit{samtools}.\\
 
@@ -160,7 +160,7 @@ Como efecto resultante al usar \textit{SSE}, los vectores se recorren de 16 en 1
 
 En esta fase se lleva a cabo el proceso de recalibrado en sí. Al igual que en la fase anterior, el fichero \textit{BAM} de entrada se procesa por lotes. El fichero \textit{BAM} con las calidades recalibradas que se genera, se escribe por lotes conforme estos han sido procesados y en el mismo orden que se leyeron.\\
 
-El procesado de cada lectura consiste en aplicar únicamente la fórmula \ref{for:qualrecal} a cada una de las calidades de sus bases, sustituyendo las mismas por los nuevos valores. Puesto que los deltas ya han sido calculados en la fase anterior, se pueden utilizar directamente en los cálculos accediendo a sus valores en las estructuras de datos. El valor final de las calidades es pues las cuatro sumas de los deltas correspondientes. Finalmente se genera el fichero \textit{BAM} con las nuevas calidades.\\
+El procesado de cada lectura consiste en aplicar únicamente la fórmula \ref{for:qualrecal} a cada una de las calidades de sus bases, sustituyendo las mismas por los nuevos valores. Puesto que los deltas ya han sido calculados en la fase anterior, se pueden utilizar directamente en los cálculos accediendo a sus valores en las estructuras de datos. Por tanto, el valor final de las calidades corresponde a las cuatro sumas de los deltas correspondientes. Finalmente se genera el fichero \textit{BAM} con las nuevas calidades.\\
 
 \subsection{Estructura de datos utilizadas}
 

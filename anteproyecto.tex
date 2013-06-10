@@ -1,6 +1,6 @@
 \chapter{Anteproyecto de Tesis}
 
-Primeramente se describirá en qué consiste el proceso de descubrimiento de variantes, dando una breve introducción a la genética y al \textit{ADN}. Se describirá desde donde se parte y cuales son los objetivos a cumplir durante la realización de esta tesis. Finalmente se presentará un desglose de las tareas que se llevarán a cabo para alcanzar los objetivos propuestos y cuál será su planificación.\\
+Primeramente se describirá en qué consiste el proceso de descubrimiento de variantes, dando una breve introducción a la genética y al \textit{ADN}. Se describirá desde dónde se parte y cuales son los objetivos a cumplir durante la realización de esta tesis. Finalmente se presentará un desglose de las tareas que se llevarán a cabo para alcanzar los objetivos propuestos y cuál será su planificación.\\
 
 \section{Introducción al descubrimiento de variantes}
 
@@ -22,17 +22,17 @@ El ADN es un polímero de nucleótidos, está formado por muchas unidades simples (
 \caption{Representación química del ADN.\label{fig:adnquimic}}
 \end{figure} 
 
-Como ya se ha dicho, un gen es una secuencia del ADN que contiene información genética. Un gen es una unidad de herencia que influye en una característica particular de un organismo (como el color de los ojos, por ejemplo). A partir de los genes se producen las proteínas del organismo, que son las encargadas de generar los músculos, pelo, enzimas\ldots\\
+Como ya se ha dicho, un gen es una secuencia del ADN que contiene información genética, concretamente es una unidad de herencia que influye en una característica particular de un organismo (como el color de los ojos, por ejemplo). A partir de los genes se producen las proteínas del organismo, que son las encargadas de generar los músculos, pelo, enzimas\ldots\\
 
 \subsection{Descripción del proceso de descu\-bri\-mien\-to de variantes}
 
 Puesto que un cambio en el ADN puede traducirse en un cambio brusco de las proteínas que genera el organismo, esto puede dar lugar a trastornos, enfermedades, etc. El proceso de descubrimiento de variantes tiene como objetivo localizar variaciones, mutaciones o \textit{indels} (\textit{insertions/deletions}) en una muestra de ADN con respecto a otra, por ejemplo para poder determinar la causa de enfermedades o prevenirlas.\\
 
-Un ejemplo sería analizar el ADN de una población (conjunto de individuos) que tengan un determinado tipo de cáncer y otra población que no lo tengan. Estos individuos tendrán muchas similitudes en el ADN puesto que pertenecen a la misma especie, pero también diferirán en otras. Cuando encontremos la secuencia de ADN común a la población con cáncer pero que no aparezca en la población sin cáncer, tendremos la razón de ese cáncer localizada y podremos tratarlo y prevenirlo.\\
+Un ejemplo sería analizar el ADN de una población (conjunto de individuos) que tengan un determinado tipo de cáncer y otra población que no lo tengan. Estos individuos tendrán muchas similitudes en el ADN puesto que pertenecen a la misma especie, pero también diferirán en otras. Cuando encontremos la secuencia de ADN común a la población con cáncer, pero que no aparezca en la población sin cáncer, tendremos la razón de ese cáncer localizada y podremos tratarlo y prevenirlo.\\
 
 El proceso de descubrimiento de variantes tiene tres fases. En la primera fase se obtienen lecturas de ADN en un formato específico y dependiente de la plataforma que las haya obtenido. Lo que se hace con estas lecturas es transformarlas a un único formato genérico, con unas calidades bien calibradas, mapeadas y alineadas con su ADN de referencia. El formato utilizado es el \textit{SAM/BAM} \cite{bamsam} (\textit{Sequence Aligment Map/Binary Alignment Map}), el cual es independiente de la tecnología de obtención del ADN.\\
 
-En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}), pequeños \textit{indels}, etc. Esta fase genera ficheros \textit{VCF} que contienen las diferencias con el ADN referencia.\\
+En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}, \textit{Single Nucleotide Polymorphism}), pequeños \textit{indels}, etc. Esta fase genera ficheros \textit{VCF} que contienen las diferencias con el ADN referencia.\\
 
 En la última fase se analizan las mutaciones obtenidas y la estructura del ADN para generar conclusiones. En la Figura \ref{fig:procesodescubrimiento} se puede ver gráficamente estas tres fases.\\
 
@@ -46,13 +46,13 @@ En la última fase se analizan las mutaciones obtenidas y la estructura del ADN p
 
 GATK será la herramienta de referencia para la realización de esta tesis, abarcando parte de la primera fase y la segunda del proceso de descubrimiento de variantes. Según la Figura \ref{fig:procesodescubrimiento}, se quiere implementar el recalibrado de las calidades de las bases (\textit{Base quality recalibration}) de la primera fase del descubrimiento de variantes, desarrollando un recalibrador. También se quiere implementar la segunda fase completa, desarrollando un descubridor de variantes.\\
 
-Las implementaciones tendrán que ser eficientes y aprovechar al máximo todos los recursos computacionales de los que se disponga en el entorno que se ejecuta, por ejemplo en un \textit{cluster}. Es en esto en lo que falla GATK, puesto que solo aprovecha la capacidad de proceso mediante hilos y no utiliza estructuras de datos eficientes ni gestión de memoria óptima (en parte por utilizar Java).\\
+Las implementaciones tendrán que ser eficientes y aprovechar al máximo todos los recursos computacionales de los que se disponga en el entorno que se ejecuta, por ejemplo en un \textit{cluster}. GATK no incorpora completamente estas características, puesto que solo aprovecha la capacidad de proceso mediante hilos y no utiliza estructuras de datos eficientes ni gestión de memoria óptima (en parte por utilizar Java).\\
 
 \section{Objetivos}
 
 \subsection{Objetivo general}
 
-Desarrollar herramientas que permitan realizar el recalibrado de las calidades de las bases (\textit{Base quality recalibration}) y toda la segunda fase del descubrimiento de variantes. Estas herramientas deberán ser eficientes.\\
+Desarrollar herramientas que permitan realizar el recalibrado de las calidades de las bases (\textit{Base quality recalibration}) y toda la segunda fase del descubrimiento de variantes. Estas herramientas deberán ser eficientes con los recursos computacionales y con la gestión de memoria.\\
 
 \subsection{Objetivos específicos}
 
@@ -60,11 +60,11 @@ El objetivo general de la tesis se puede desglosar en una serie de objetivos esp
 
 \begin{itemize}
 \item
-Implementar un recalibrador que realice la parte del recalibrado de la calidad de las bases y genere ficheros BAM ya recalibrados.
+Implementar un recalibrador que realice el recalibrado de la calidad de las bases y genere ficheros BAM ya recalibrados.
 \item
 Implementar un descubridor de variantes que realice toda la segunda fase de descubrimiento de variantes y genere ficheros de resultados VCF.
 \item
-Desarrollar implementaciones lo más eficientes posible, utilizando tecnologías paralelas que permitan explotar los recursos de computo disponibles en cada situación.
+Desarrollar implementaciones lo más eficientes posible, utilizando tecnologías paralelas que permitan explotar los recursos de cómputo disponibles en cada situación.
 	\begin{itemize}
 	\item
 	Usar las tecnologías disponibles en los microprocesadores para acelerar la ejecución.
@@ -233,6 +233,6 @@ Doc. tesis		& Documentación y escritura de Tesis Doctoral & 25 \\\hline
 
 \subsubsection{Implementación de SSE en el recalibrador}
 
-\subsection{Pruebas SSE en el recalibrador}
+\subsubsection{Pruebas SSE en el recalibrador}
 
 \subsection{Situación actual}
