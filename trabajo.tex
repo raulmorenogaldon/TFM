@@ -58,11 +58,11 @@ Esta tarea ha sido completada. Se han realizado diversas pruebas de rendimiento,
 
 Para este trabajo se incorporó el uso de las instrucciones \textit{SSE} \cite{ssemanual}, puesto que el compilador de C proporciona las funciones optimizadas para su uso. En caso de no existir estas funciones, se pueden utilizar las instrucciones \textit{SSE} directamente en ensamblador (puesto que C lo permite). El uso de \textit{SSE}, en las partes del código que lo permitían, aumentaron el rendimiento como se verá más adelante.\\
 
-Esta tarea está en progreso pero ya hay alguna parte del código que la implementa.\\
+Esta tarea está en progreso pero ya se implementa en la parte de código que compara las cadenas de ADN en la primera fase para detectar si es fallo.\\
 
 \subsection{Pruebas SSE en el recalibrador}
 
-Esta tarea se ha iniciado de forma parcial. Ya se ha realizado alguna prueba sobre las instrucciones SSE que se van incorporando. cuyos resultados se encuentran. Como se verá en la sección \ref{sec:evaluacion}, se ha incrementado bastante el rendimiento con unos pequeños cambios en el código de la versión anterior. Esto indica la factibilidad de usar las instrucciones SSE en el desarrollo.\\
+Esta tarea se ha iniciado de forma parcial. Ya se ha realizado alguna prueba sobre las instrucciones SSE que se van incorporando. cuyos resultados se encuentran. En la sección \ref{sec:evaluacion} se verá el rendimiento obtenido al utilizar estas instrucciones.\\
 
 \section{Herramientas utilizadas}
 
@@ -269,4 +269,20 @@ Calidad máxima de las lecturas 	& 50 \\\hline
 \caption{Detalles del sistema utilizado y las pruebas del nuevo recalibrador.\label{tab:specprueba}}
 \end{table}
 
-Los dos recalibradores han realizado el mismo proceso de recalibrado en las mismas condiciones, teniendo en cuenta la posición de las bases, su ciclo de secuenciador y su entorno de dinucleótido.\\
+Los dos recalibradores han realizado el mismo proceso de recalibrado en las mismas condiciones, teniendo en cuenta la posición de las bases, su ciclo de secuenciador y su entorno de dinucleótido. Las pruebas se pueden dividir en dos, primeramente la comparación de la herramienta de GATK con el recalibrador desarrollado sin SSE, siendo la segunda prueba una comparación entre la versión del recalibrador sin SSE con la que lo implementa.\\
+
+\subsection{Evaluación del recalibrador sin SSE}
+
+En esta prueba se ha evaluado primeramente el rendimiento de GATK, al cual se le ha pasado como entrada el fichero BAM descrito anteriormente y se ha generado otro fichero BAM recalibrado. El tiempo que tardó GATK en recalibrar el fichero fueron 2685 segundos. Teniendo en cuenta el número de bases que se analizan, obtenemos un \textit{throughput} de $\frac{3.5 \times 10^9}{2685} \approx 1,30 \times 10^6$ bases/segundo.\\
+
+Al evaluar el tiempo de ejecución de la versión del recalibrador que utiliza únicamente las estructuras de datos optimizadas, se obtuvo el BAM resultado en 830 segundos. Al igual que con GATK se obtiene el \textit{throughput} y se obtiene $\frac{3.5 \times 10^9}{830} \approx 4,22 \times 10^6$ bases/segundo.\\
+
+Comparando los dos \textit{throughput}, el nuevo recalibrador es mucho más productivo que el implementado por GATK, en términos de \textit{SpeedUp} se ha conseguido $\frac{2685}{830} = \textbf{3,23}$ como factor de aceleración. Este factor nos indica que efectivamente la herramienta desarrollada es mucho más rápida que la herramienta de GATK.\\
+
+\subsection{Evaluación del recalibrador con SSE}
+
+Esta prueba pretende comparar el rendimiento del recalibrador cuando implementa instrucciones SSE2, respecto a la versión anterior sin SSE. Puesto que sólo las implementa actualmente para la primera fase de recalibrado, solo se tendrán en cuenta los tiempos en esta fase. Para realizar la primera fase sobre el fichero BAM de prueba se necesitaron 179 segundos usando SSE. En la versión sin SSE esta fase tardó 183 segundos, lo que indica que hubo una mejora de rendimiento menor, es decir, con SSE es un 2\% más rápido. \\
+
+Aún con esta pequeña mejora de rendimiento, sólo se ha utilizado SSE en una pequeña parte del código, por lo que podremos sacar más rendimiento cuando lo implementemos en el resto.\\
+
+\section{Conclusiones}
