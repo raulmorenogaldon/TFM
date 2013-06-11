@@ -20,7 +20,7 @@
 
 
 \begin{document}
-
+\frontmatter
 %Evitar que llame a las tablas cuadros.
 \renewcommand{\tablename}{Tabla}
 \renewcommand{\listtablename}{Índice de tablas}
@@ -45,13 +45,14 @@
 
 %intentar no romper palabras
 \sloppy
-
+\mainmatter
 \input{intro}
 \input{asignaturas}
 \input{arte}
 \input{anteproyecto}
 \input{trabajo}
 
+\backmatter
 \clearpage
 \bibliographystyle{plain}
 \bibliography{bibliografia}
