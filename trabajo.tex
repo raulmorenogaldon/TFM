@@ -25,7 +25,7 @@ Por ejemplo, si tenemos un fichero, aún no recalibrado, donde todas sus bases ti
 Los formatos \textit{BAM/SAM} contienen la misma información aunque en diferente formato. Están compuestos por una cabecera opcional, que puede contener información adicional sobre el fichero y las lecturas que contiene, seguida de las lecturas de secuenciación. Cada lectura contiene información de la secuencia de ADN que contiene y cómo se alinea con el ADN de referencia.\\
 
 \section{Tareas completadas o en progreso}
-
+\label{sec:tareascomp}
 \subsection{Estado del arte}
 
 Se ha completado la tarea de búsqueda de información y obtención del estado del arte sobre: herramientas disponibles para el análisis de ADN, tecnologías paralelas útiles para aumentar el rendimiento de dichas herramientas y formas de tratar grandes cantidades de datos.
@@ -48,7 +48,11 @@ Esta tarea ha sido completada. Las estructuras de datos debían ser eficientes y 
 
 \subsection{Implementación del recalibrador}
 
-Esta tarea ha sido completada. Se ha desarrollado el código de un algoritmo recalibrador secuencial, que utiliza eficientemente las estructuras de datos que se han diseñado y por tanto la memoria. El algoritmo intenta utilizar el mínimo de operaciones necesarias para los cálculos, haciendo especial hincapié en las operaciones \textit{I/O}. Como se verá en la sección \ref{sec:evaluacion}, los resultados obtenidos en cuanto a rendimiento han sido prometedores desde la primera versión.\\
+Esta tarea ha sido completada. Se ha desarrollado el código de un algoritmo recalibrador secuencial, que utiliza eficientemente las estructuras de datos que se han diseñado y por tanto la memoria. El algoritmo intenta utilizar el mínimo de operaciones necesarias para los cálculos, haciendo especial hincapié en las operaciones \textit{I/O}.\\
+
+\subsection{Pruebas del recalibrador}
+
+Esta tarea ha sido completada. Se han realizado diversas pruebas de rendimiento, sobre un fichero BAM de entrada en el recalibrador obtenido y el que incorpora la herramienta GATK. Las pruebas procuraron evaluar ambas herramientas en igualdad de condiciones. Como se verá en la sección \ref{sec:evaluacion}, los resultados obtenidos en cuanto a rendimiento han sido prometedores desde la primera versión.\\
 
 \subsection{Implementación de SSE en el recalibrador}
 
@@ -210,5 +214,59 @@ En el ejemplo anterior tenemos finalmente unos requisitos de memoria de 11302 en
 
 \subsection{Parámetros de ejecución del recalibrador}
 
+En el momento de la elaboración de este documento, el recalibrador obtenido posee algunos parámetros configurables y opciones de ejecución que serán explicados a continuación y recogidos en la Tabla \ref{tab:param}.\\
+
+\begin{table}
+\centering
+\resizebox{\textwidth}{!} {
+\begin{tabular}{| l | p{0.9\textwidth} |}
+\hline
+Parámetro	& Descripción \\\hline
+\verb;-F			& Ejecuta el proceso de recalibrado completo \\\hline
+\verb;-1			& Ejecuta la primera fase del proceso de recalibrado \\\hline
+\verb;-2			& Ejecuta la segunda fase del proceso de recalibrado \\\hline
+\verb;-C <int>		& Determina el número de ciclos máximo que se analizarán por lectura \\\hline
+\verb;-R <reference> & Ruta al fichero del ADN referencia \\\hline
+\verb;-I <input>	& Ruta del fichero BAM a recalibrar \\\hline
+\verb;-o <output>	& Ruta donde se almacenará el fichero BAM recalibrado \\\hline
+\verb;-d <data>		& Ruta donde se guarda el fichero de datos resultado de la fase 1 \\\hline
+\verb;-i <info>		& Ruta donde se guarda el fichero de datos resultado de la fase 1 en formato de texto \\\hline
+\verb;--help		& Muestra la ayuda sobre los parámetros \\\hline
+\verb;--version		& Muestra la versión del programa \\\hline
+\end{tabular}
+}
+\caption{Parámetros configurables del recalibrador desarrollado.\label{tab:param}}
+\end{table}
+
+El recalibrador desarrollado cuenta con 2 fases de ejecución, pudiendo ejecutarse sólo una de ellas o ambas. Estas fases corresponden a las fases de recalibrado explicadas en la sección \ref{sec:algoritmo}. Para ejecutar las dos fases se utilizaría el parámetro \verb+-F+.\\
+
+La primera fase se ejecuta con el parámetro \verb+-F+ o \verb+-1+. Esta fase necesita obligatoriamente que los parámetros del número máximo de ciclos (\verb+-C+), la ruta del fichero de ADN de referencia (\verb+-R+) y la ruta del BAM de entrada (\verb+-I+) sean especificados. Opcionalmente se pueden especificar los parámetros \verb+-d+ y \verb+-i+. El parámetro \verb+-d+ genera un fichero que contiene las estructuras de datos generadas en la primera fase, por lo que se puede utilizar para realizar la segunda fase de recalibrado sin necesidad de repetir la primera. El parámetro \verb+-i+ genera un fichero de texto que muestra los resultados tabulados de la primera fase de recalibrado (el contenido del fichero de datos que se genera con \verb+-d+).\\
+
+La segunda fase se ejecuta con el parámetro \verb+-F+ o \verb+-2+. Esta fase tiene como parámetros obligatorios un fichero BAM de entrada obligatorio (\verb+-I+), el número máximo de ciclos (\verb+-C+), y un fichero de salida para el BAM recalibrado (\verb+-o+). Si se ejecuta esta fase sin haber ejecutado anteriormente la primera (sólo con el parámetro \verb+-2+), es necesario especificar el fichero de datos que se utilizará y que se generó en la primera fase (\verb+-d+).\\
+
 \section{Evaluación del recalibrador obtenido}
 \label{sec:evaluacion}
+
+Como ya se ha visto en la sección \ref{sec:tareascomp} de tareas completadas, ya se han realizado las pruebas sobre la implementación del recalibrador. En esta sección se describirán estas pruebas y sus resultados.\\
+
+Las primeras pruebas se realizaron una vez implementada la versión secuencial del nuevo recalibrador, usando las estructuras de datos optimizadas. El objetivo era obtener el rendimiento que se obtiene con la nueva herramienta comparándolo con el obtenido en las mismas condiciones para la herramienta recalibrador que incorpora GATK.\\
+
+El entorno de prueba se detalla en la Tabla \ref{tab:specprueba}. Consistía en un sistema de un solo procesador de 4 núcleos de procesamiento con 4 GB de memoria principal. Las pruebas se han realizado utilizando un BAM de entrada con $35 \times 10^6$ lecturas, que con 100 ciclos por entrada hacen un total de $3.5 \times 10^9$ bases a recalibrar.\\
+
+\begin{table}
+\centering
+\resizebox{\textwidth}{!} {
+\begin{tabular}{| l | l |}
+\hline
+Procesador						& Intel Core 2 Quad 2.66GHz, 4 núcleos \\\hline
+Memoria	principal				& 4 GB \\\hline
+Fichero BAM entrada 			& $35 \times 10^6$ lecturas\\\hline
+Número ciclos por lectura 		& 100 ciclos\\\hline
+Número total de bases			& $35 \times 10^6 \times 100 \textbf{ciclos} = 3.5 \times 10^9$ bases\\\hline
+Calidad máxima de las lecturas 	& 50 \\\hline
+\end{tabular}
+}
+\caption{Detalles del sistema utilizado y las pruebas del nuevo recalibrador.\label{tab:specprueba}}
+\end{table}
+
+Los dos recalibradores han realizado el mismo proceso de recalibrado en las mismas condiciones, teniendo en cuenta la posición de las bases, su ciclo de secuenciador y su entorno de dinucleótido.\\
