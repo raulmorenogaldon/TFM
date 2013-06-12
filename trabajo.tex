@@ -249,9 +249,9 @@ La segunda fase se ejecuta con el parámetro \verb+-F+ o \verb+-2+. Esta fase tie
 
 Como ya se ha visto en la sección \ref{sec:tareascomp} de tareas completadas, ya se han realizado las pruebas sobre la implementación del recalibrador. En esta sección se describirán estas pruebas y sus resultados.\\
 
-Las primeras pruebas se realizaron una vez implementada la versión secuencial del nuevo recalibrador, usando las estructuras de datos optimizadas. El objetivo era obtener el rendimiento que se obtiene con la nueva herramienta comparándolo con el obtenido en las mismas condiciones para la herramienta recalibrador que incorpora GATK.\\
+Las primeras pruebas se realizaron una vez implementada la versión secuencial del nuevo recalibrador, usando las estructuras de datos optimizadas pero sin utilizar las optimizaciones automáticas que el compilador ofrece. El objetivo era obtener el rendimiento que se obtiene con la nueva herramienta comparándolo con el obtenido en las mismas condiciones para la herramienta recalibrador que incorpora GATK.\\
 
-El entorno de prueba se detalla en la Tabla \ref{tab:specprueba}. Consistía en un sistema de un solo procesador de 4 núcleos de procesamiento con 4 GB de memoria principal. Las pruebas se han realizado utilizando un BAM de entrada con $35 \times 10^6$ lecturas, que con 100 ciclos por entrada hacen un total de $3.5 \times 10^9$ bases a recalibrar.\\
+El entorno de prueba se detalla en la Tabla \ref{tab:specprueba}. Consistía en un sistema de un solo procesador de 4 núcleos de procesamiento con 4 GB de memoria principal. Las pruebas se han realizado utilizando un BAM de entrada con $35 \times 10^6$ lecturas, que con 100 ciclos por entrada hacen un total de $3.5 \times 10^9$ bases a recalibrar. Además sólo se ha utilizado un núcleo del procesador.\\
 
 \begin{table}
 \centering
@@ -269,20 +269,24 @@ Calidad máxima de las lecturas 	& 50 \\\hline
 \caption{Detalles del sistema utilizado y las pruebas del nuevo recalibrador.\label{tab:specprueba}}
 \end{table}
 
-Los dos recalibradores han realizado el mismo proceso de recalibrado en las mismas condiciones, teniendo en cuenta la posición de las bases, su ciclo de secuenciador y su entorno de dinucleótido. Las pruebas se pueden dividir en dos, primeramente la comparación de la herramienta de GATK con el recalibrador desarrollado sin SSE, siendo la segunda prueba una comparación entre la versión del recalibrador sin SSE con la que lo implementa.\\
+Los dos recalibradores han realizado el mismo proceso de recalibrado en las mismas condiciones, teniendo en cuenta la posición de las bases, su ciclo de secuenciador y su entorno de dinucleótido. Las pruebas se pueden dividir en tres, primeramente la comparación de la herramienta de GATK con el recalibrador desarrollado sin SSE, siendo la segunda prueba una comparación entre la versión del recalibrador sin SSE con la que lo implementa en una pequeña proporción. Finalmente la ultima prueba compara el rendimiento obtenido por el recalibrador con las opciones de optimización (\verb+-O3+ de GCC) activadas.\\
 
-\subsection{Evaluación del recalibrador sin SSE}
+\subsection[Evaluación del recalibrador sin optimizar]{Evaluación del recalibrador sin SSE ni optimizaciones de compilador}
 
 En esta prueba se ha evaluado primeramente el rendimiento de GATK, al cual se le ha pasado como entrada el fichero BAM descrito anteriormente y se ha generado otro fichero BAM recalibrado. El tiempo que tardó GATK en recalibrar el fichero fueron 2685 segundos. Teniendo en cuenta el número de bases que se analizan, obtenemos un \textit{throughput} de $\frac{3.5 \times 10^9}{2685} \approx 1,30 \times 10^6$ bases/segundo.\\
 
-Al evaluar el tiempo de ejecución de la versión del recalibrador que utiliza únicamente las estructuras de datos optimizadas, se obtuvo el BAM resultado en 830 segundos. Al igual que con GATK se obtiene el \textit{throughput} y se obtiene $\frac{3.5 \times 10^9}{830} \approx 4,22 \times 10^6$ bases/segundo.\\
+Al evaluar el tiempo de ejecución de la versión del recalibrador que utiliza únicamente las estructuras de datos optimizadas, se obtuvo el BAM resultado en 880 segundos. Al igual que con GATK se obtiene el \textit{throughput} y se obtiene $\frac{3.5 \times 10^9}{880} \approx 3,98 \times 10^6$ bases/segundo.\\
 
-Comparando los dos \textit{throughput}, el nuevo recalibrador es mucho más productivo que el implementado por GATK, en términos de \textit{SpeedUp} se ha conseguido $\frac{2685}{830} = \textbf{3,23}$ como factor de aceleración. Este factor nos indica que efectivamente la herramienta desarrollada es mucho más rápida que la herramienta de GATK.\\
+Comparando los dos \textit{throughput}, el nuevo recalibrador es mucho más productivo que el implementado por GATK, en términos de \textit{SpeedUp} se ha conseguido $\frac{2685}{880} = \textbf{3,05}$ como factor de aceleración. Este factor nos indica que efectivamente la herramienta desarrollada es más rápida que la herramienta de GATK.\\
 
-\subsection{Evaluación del recalibrador con SSE}
+\subsection[Evaluación del recalibrador con SSE sin optimizar]{Evaluación del recalibrador con SSE sin optimizaciones del compilador}
 
-Esta prueba pretende comparar el rendimiento del recalibrador cuando implementa instrucciones SSE2, respecto a la versión anterior sin SSE. Puesto que sólo las implementa actualmente para la primera fase de recalibrado, solo se tendrán en cuenta los tiempos en esta fase. Para realizar la primera fase sobre el fichero BAM de prueba se necesitaron 179 segundos usando SSE. En la versión sin SSE esta fase tardó 183 segundos, lo que indica que hubo una mejora de rendimiento menor, es decir, con SSE es un 2\% más rápido. \\
+Esta prueba pretende comparar el rendimiento del recalibrador cuando implementa instrucciones SSE2, respecto a la versión anterior sin SSE. En este caso tampoco estaban activadas las opciones de optimización del compilador. Puesto que sólo las implementa actualmente para la primera fase de recalibrado, solo se tendrán en cuenta los tiempos en esta fase, concretamente en lo que tarda en procesar una lectura (de media). Para procesar una lectura sobre el fichero BAM de prueba se necesitaron de media 7.36 microsegundos usando SSE. En la versión sin SSE el procesador de cada lectura tardó de media 7.57 microsegundos, lo que indica que hubo una mejora de rendimiento menor, es decir, con SSE es un 2\% - 3\% más rápido. \\
 
-Aún con esta pequeña mejora de rendimiento, sólo se ha utilizado SSE en una pequeña parte del código, por lo que podremos sacar más rendimiento cuando lo implementemos en el resto.\\
+Aún siendo una pequeña mejora de rendimiento, sólo se ha utilizado SSE en una pequeña parte del código total, por lo que esperamos sacar más rendimiento cuando lo implementemos en el resto.\\
+
+\subsection[Evaluación del recalibrador con optimizaciones]{Evaluación del recalibrador con optimizaciones del compilador}
+
+Para estas pruebas se activaron las optimizaciones que el compilador GCC implementa automáticamente mediante el parámetro \verb+-O3+. Hay que tener en cuenta que entre estas mejoras se encuentra la utilización automática de instrucciones SSE en los sistemas de 64 bits. Con estas optimizaciones el recalibrador procesó el fichero BAM en sólo 645 segundos, por lo que si lo comparamos directamente con GATK obtenemos un \textit{SpeedUp} de $\frac{2685}{645} = \textbf{4,16}$. Lo cual nos indica que el nuevo recalibrador es hasta 4 veces más rápido que el de GATK.\\
 
 \section{Conclusiones}
