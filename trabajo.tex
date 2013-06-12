@@ -279,6 +279,8 @@ Al evaluar el tiempo de ejecución de la versión del recalibrador que utiliza úni
 
 Comparando los dos \textit{throughput}, el nuevo recalibrador es mucho más productivo que el implementado por GATK, en términos de \textit{SpeedUp} se ha conseguido $\frac{2685}{880} = \textbf{3,05}$ como factor de aceleración. Este factor nos indica que efectivamente la herramienta desarrollada es más rápida que la herramienta de GATK.\\
 
+Puesto que no sería justo comparar las dos herramientas sin que GATK utilice su capacidad \textit{multithreading}, se ejecutó con 4 hilos de procesamiento en el mismo entorno de pruebas. El tiempo que obtuvo en este caso es de 2040 segundos, por lo que aumentó su \textit{throughtput} pero con una eficiencia de sólo $\frac{2685}{2040}/4*100 \approx 33\%$. Aún así, el nuevo recalibrador es más rápido utilizando un solo hilo de procesamiento.\\
+
 \subsection[Evaluación del recalibrador con SSE sin optimizar]{Evaluación del recalibrador con SSE sin optimizaciones del compilador}
 
 Esta prueba pretende comparar el rendimiento del recalibrador cuando implementa instrucciones SSE2, respecto a la versión anterior sin SSE. En este caso tampoco estaban activadas las opciones de optimización del compilador. Puesto que sólo las implementa actualmente para la primera fase de recalibrado, solo se tendrán en cuenta los tiempos en esta fase, concretamente en lo que tarda en procesar una lectura (de media). Para procesar una lectura sobre el fichero BAM de prueba se necesitaron de media 7.36 microsegundos usando SSE. En la versión sin SSE el procesador de cada lectura tardó de media 7.57 microsegundos, lo que indica que hubo una mejora de rendimiento menor, es decir, con SSE es un 2\% - 3\% más rápido. \\
