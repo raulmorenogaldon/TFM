@@ -4,22 +4,22 @@ Primeramente se describirá en qué consiste el proceso de descubrimiento de varia
 
 \section{Introducción al descubrimiento de variantes}
 
-\subsection{Introducción al ADN}
+\subsection{ADN}
 
 El \textit{ADN} \cite{molecularbio} (ácido desoxirribonucleico) contiene las instrucciones genéticas usadas en el desarrollo y funcionamiento de todos los organismos vivos conocidos y algunos virus, y es responsable de su transmisión hereditaria. Se puede comparar el ADN con una receta o código, ya que a partir del mismo se obtienen las instrucciones necesarias para construir las células. Los segmentos de ADN que contienen esta información son los denominados genes, mientras que el resto de secuencias tienen propósitos estructurales y reguladores en el uso de esta información. En la Figura \ref{fig:adn} tenemos la representación gráfica que muestra dónde reside el ADN.\\
 
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{adn.png}
-\caption{¿Dónde se encuentra el ADN?.\label{fig:adn}}
+\caption{¿Dónde se encuentra el ADN? \cite{adnwiki}.\label{fig:adn}}
 \end{figure} 
 
-El ADN es un polímero de nucleótidos, está formado por muchas unidades simples (nucleótidos) conectadas entre sí (Figura \ref{fig:adnquimic}). Los nucleótidos están formados por un azúcar, una base nitrogenada (pueden ser Adenina, Timina, Citosina y Guanina) y un grupo fosfato para interconectarlos. Puesto que lo único que distingue a un nucleótido de otro es la base nitrogenada, la secuencia de ADN se representa por una secuencia de estas bases. En estas secuencias cada base se representa por su inicial, por lo que tienen una representación del tipo \textit{AGTCTAGATCG}\ldots En los organismos vivos el ADN se presenta como una doble cadena de nucleótidos.\\
+El ADN es un polímero de nucleótidos formado por muchas unidades simples (nucleótidos) conectadas entre sí (Figura \ref{fig:adnquimic}). Los nucleótidos están formados por un azúcar, una base nitrogenada (pueden ser Adenina, Timina, Citosina y Guanina) y un grupo fosfato para interconectarlos. Puesto que lo único que distingue a un nucleótido de otro es la base nitrogenada, la secuencia de ADN se representa por una secuencia de estas bases. En estas secuencias cada base se representa por su inicial, por lo que tienen una representación del tipo \textit{AGTCTAGATCG}\ldots En los organismos vivos el ADN se presenta como una doble cadena de nucleótidos.\\
 
 \begin{figure}
 \centering
 \includegraphics[width=0.4\textwidth]{adnquimic.png}
-\caption{Representación química del ADN.\label{fig:adnquimic}}
+\caption{Representación química del ADN \cite{adnwiki}.\label{fig:adnquimic}}
 \end{figure} 
 
 Como ya se ha dicho, un gen es una secuencia del ADN que contiene información genética, concretamente es una unidad de herencia que influye en una característica particular de un organismo (como el color de los ojos, por ejemplo). A partir de los genes se producen las proteínas del organismo, que son las encargadas de generar los músculos, pelo, enzimas\ldots\\
@@ -32,14 +32,14 @@ Un ejemplo sería analizar el ADN de una población (conjunto de individuos) que t
 
 El proceso de descubrimiento de variantes tiene tres fases. En la primera fase se obtienen lecturas de ADN en un formato específico y dependiente de la plataforma que las haya obtenido. Lo que se hace con estas lecturas es transformarlas a un único formato genérico, con unas calidades bien calibradas, mapeadas y alineadas con su ADN de referencia. El formato utilizado es el \textit{SAM/BAM} \cite{bamsam} (\textit{Sequence Aligment Map/Binary Alignment Map}), el cual es independiente de la tecnología de obtención del ADN.\\
 
-En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}, \textit{Single Nucleotide Polymorphism}), pequeños \textit{indels}, etc. Esta fase genera ficheros \textit{VCF} que contienen las diferencias con el ADN referencia.\\
+En la segunda fase se analizan los ficheros \textit{SAM/BAM} para obtener posiciones del ADN que, según evidencia estadística, sean mutaciones respecto al ADN de referencia. Esto incluye diferencias en una sola posición de la cadena de ADN (\textit{SNP}, \textit{Single Nucleotide Polymorphism}), pequeños \textit{indels}, etc. Esta fase genera ficheros \textit{VCF} (\textit{Variant Call Format}) que contienen las diferencias con el ADN referencia.\\
 
 En la última fase se analizan las mutaciones obtenidas y la estructura del ADN para generar conclusiones. En la Figura \ref{fig:procesodescubrimiento} se puede ver gráficamente estas tres fases.\\
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{variationdiscover.jpg}
-\caption{Proceso de descubrimiento de variantes en el ADN.\label{fig:procesodescubrimiento}}
+\caption{Proceso de descubrimiento de variantes en el ADN \cite{gatkframework}.\label{fig:procesodescubrimiento}}
 \end{figure} 
 
 \section{Punto de partida}
@@ -85,7 +85,20 @@ Usar estructuras de datos óptimas que permitan aprovechar las características de
 
 En esta sección se presenta un listado de las diferentes tareas a llevar a cabo para la consecución de los objetivos anteriormente marcados en este capítulo. En la Figura \ref{fig:gantt} se muestra la planificación temporal de estas tareas mediante un diagrama de Gantt. La tesis doctoral se llevará a cabo en 4 años, habiendo pasado ya casi un año en el momento de escribir este documento.\\
 
-La Tabla \ref{tab:tareas} muestra de forma resumida qué tareas se van a llevar a cabo y cual será su duración aproximada. Hay que destacar que algunas tareas se tienen que realizar durante los 4 años de tesis de forma continua, como es la documentación de la propia tesis y la publicación de resultados o difusión. A continuación se describen en detalle en qué consiste cada una de las tareas.\\
+La Tabla \ref{tab:tareas} muestra de forma resumida qué tareas se van a llevar a cabo y su duración aproximada. Hay que destacar que algunas tareas se tienen que realizar durante los 4 años de tesis de forma continua, como es la documentación de la propia Tesis y la publicación de resultados o difusión. A continuación se describe en detalle en qué consiste cada una de las tareas.\\
+
+\subsection{Descripción de tareas}
+
+En esta sección se describirán las tareas a realizar durante el desarrollo de la tesis doctoral.
+
+\subsubsection{1 - Realización del máster}
+
+Esta tarea consiste en la superación del curso de Máster de Tecnologías Informáticas Avanzadas de la Universidad de Castilla-La Mancha. Para ello se superarán las asignaturas ofertadas por el máster que tengan que ver con el tema de investigación. Esta tarea acaba con la realización de este documento, describiendo el progreso alcanzado durante el primer año de tesis, y su defensa ante un tribunal.\\
+
+\subsubsection{2 - Estado del arte}
+
+Esta tarea corresponde a la documentación y estudio del estado del arte en modelos y sistemas de programación paralela, tratamiento de grandes cantidades de datos, y situación actual de las herramientas utilizadas en bioinformática para el análisis de ADN. Los resultados de este estudio y sus conclusiones se recogen en los capítulos de ``Estado del arte'' de este documento.
+
 
 %\definecolor{LightCyan}   {rgb}{0.88,1.,1.}
 %\definecolor{Orange}      {rgb}{1.,0.65,0.}
@@ -127,43 +140,43 @@ La Tabla \ref{tab:tareas} muestra de forma resumida qué tareas se van a llevar a
 ]{2012-07}{2016-07}
 \gantttitlecalendar{year,month} \\
 %\gantttitlelist{1,...,12}{1} \\
-\ganttbar{Máster}{2012-07}{2013-05} \\
-\ganttbar{Estado arte}{2012-11}{2013-02} \\
-\ganttbar{Tecnologías}{2013-03}{2013-03} \\
+\ganttbar{1-Máster}{2012-07}{2013-05} \\
+\ganttbar{2-Estado arte}{2012-11}{2013-02} \\
+\ganttbar{3-Tecnologías}{2013-03}{2013-03} \\
 
 %RECALIBRADOR
-\ganttgroup{Impl. Recalibrador}{2013-03}{2014-03} \\
-\ganttbar{Estructuras datos}{2013-03}{2013-03} \\
-\ganttbar{Implementación}{2013-03}{2013-05} \\
-\ganttbar{Pruebas}{2013-05}{2013-05} \\
+\ganttgroup{4-Impl. Recalibrador}{2013-03}{2014-03} \\
+\ganttbar{4.1-Estructuras datos}{2013-03}{2013-03} \\
+\ganttbar{4.2-Implementación}{2013-03}{2013-05} \\
+\ganttbar{4.3-Pruebas}{2013-05}{2013-05} \\
 %\ganttmilestone{Objetivo 1}{2013-05} \\
-\ganttbar{SSE}{2013-06}{2013-08} \\
-\ganttbar{Pruebas SSE}{2013-08}{2013-08} \\
-\ganttbar{OpenMP}{2013-09}{2013-11} \\
-\ganttbar{Pruebas OpenMP}{2013-11}{2013-11} \\
-\ganttbar{MPI}{2013-12}{2014-03} \\
-\ganttbar{Pruebas MPI}{2014-02}{2014-03} \\
-\ganttbar{Pruebas cluster}{2014-02}{2014-03} \\
+\ganttbar{4.4-SSE}{2013-06}{2013-08} \\
+\ganttbar{4.5-Pruebas SSE}{2013-08}{2013-08} \\
+\ganttbar{4.6-OpenMP}{2013-09}{2013-11} \\
+\ganttbar{4.7-Pruebas OpenMP}{2013-11}{2013-11} \\
+\ganttbar{4.8-MPI}{2013-12}{2014-03} \\
+\ganttbar{4.9-Pruebas MPI}{2014-02}{2014-03} \\
+\ganttbar{4.10-Pruebas cluster}{2014-02}{2014-03} \\
 
 %VARIANTES
-\ganttgroup{Impl. Variantes}{2014-04}{2015-10} \\
-\ganttbar{Estructuras datos}{2014-04}{2014-04} \\
-\ganttbar{Implementación}{2014-04}{2014-07} \\
-\ganttbar{Pruebas}{2014-06}{2014-07} \\
+\ganttgroup{5-Impl. Variantes}{2014-04}{2015-10} \\
+\ganttbar{5.1-Estructuras datos}{2014-04}{2014-04} \\
+\ganttbar{5.2-Implementación}{2014-04}{2014-07} \\
+\ganttbar{5.3-Pruebas}{2014-06}{2014-07} \\
 %\ganttmilestone{Objetivo 1}{2013-05} \\
-\ganttbar{SSE}{2014-08}{2014-11} \\
-\ganttbar{Pruebas SSE}{2014-10}{2014-11} \\
-\ganttbar{OpenMP}{2014-12}{2015-03} \\
-\ganttbar{Pruebas OpenMP}{2015-02}{2015-03} \\
-\ganttbar{MPI}{2015-04}{2015-10} \\
-\ganttbar{Pruebas MPI}{2015-06}{2015-10} \\
-\ganttbar{Pruebas cluster}{2015-08}{2015-10} \\
+\ganttbar{5.4-SSE}{2014-08}{2014-11} \\
+\ganttbar{5.5-Pruebas SSE}{2014-10}{2014-11} \\
+\ganttbar{5.6-OpenMP}{2014-12}{2015-03} \\
+\ganttbar{5.7-Pruebas OpenMP}{2015-02}{2015-03} \\
+\ganttbar{5.8-MPI}{2015-04}{2015-10} \\
+\ganttbar{5.9-Pruebas MPI}{2015-06}{2015-10} \\
+\ganttbar{5.10-Pruebas cluster}{2015-08}{2015-10} \\
 
 %PUBLICACIONES
-\ganttgroup{Difusión}{2013-10}{2016-04} \\
-\ganttbar{Recalibrador}{2013-10}{2014-11} \\
-\ganttbar{Variantes}{2015-01}{2016-04} \\
-\ganttbar{Doc. tesis}{2014-04}{2016-04} \\
+\ganttgroup{6-Difusión}{2013-10}{2016-04} \\
+\ganttbar{6.1-Recalibrador}{2013-10}{2014-11} \\
+\ganttbar{6.2-Variantes}{2015-01}{2016-04} \\
+\ganttbar{6.3-Doc. tesis}{2014-04}{2016-04} \\
 
 \end{ganttchart}}
 \end{center}
@@ -175,107 +188,94 @@ La Tabla \ref{tab:tareas} muestra de forma resumida qué tareas se van a llevar a
 \begin{table}
 \centering
 \resizebox{\textwidth}{!} {
-\begin{tabular}{| l | p{0.9\textwidth} | c |}
+\begin{tabular}{| c | l | p{0.9\textwidth} | c |}
 \hline
-\textbf{Actividad} 	& \textbf{Descripción} & \textbf{Tiempo (meses)}  \\\hline\hline
-Máster 		& Realización de los cursos del máster de tecnologías informáticas avanzadas & 11 \\\hline
-Estado arte & Búsqueda de información y recopilación del estado del arte de las tecnologías de computación paralelas y bioinformática & 4 \\
-Tecnologías & Elección de las tecnologías a utilizar durante el desarrollo de las herramientas & 1 \\\hline\hline
+Num & \textbf{Actividad} 	& \textbf{Descripción} & \textbf{Tiempo (meses)}  \\\hline\hline
+1 & Máster 		& Realización de los cursos del máster de tecnologías informáticas avanzadas & 11 \\\hline
+2 &Estado arte & Búsqueda de información y recopilación del estado del arte de las tecnologías de computación paralelas y bioinformática & 4 \\
+3 &Tecnologías & Elección de las tecnologías a utilizar durante el desarrollo de las herramientas & 1 \\\hline\hline
 
-& \textit{\textbf{Implementación del recalibrador}} & \\\hline
+4 && \textit{\textbf{Implementación del recalibrador}} & \\\hline
 
-Estructuras datos	& Elección y diseño de las estructuras de datos que se utilizarán en el recalibrador & 1 \\\hline
-Implementación		& Implementación de un recalibrador secuencial en C & 3 \\\hline
-Pruebas				& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador secuencial & 1 \\\hline
-SSE					& Utilización de la tecnología SSE para aumentar el rendimiento del recalibrador & 3 \\\hline
-Pruebas SSE			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE & 1 \\\hline
-OpenMP				& Utilización de OpenMP para aumentar el rendimiento del recalibrador & 3 \\\hline
-Pruebas OpenMP		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP & 1 \\\hline
-MPI					& Utilización de MPI para aumentar el rendimiento del recalibrador & 4 \\\hline
-Pruebas MPI			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP + MPI & 2 \\\hline
-Pruebas cluster		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP + MPI en un sistema cluster & 2 \\\hline\hline
+4.1 &Estructuras datos	& Elección y diseño de las estructuras de datos que se utilizarán en el recalibrador & 1 \\\hline
+4.2 &Implementación		& Implementación de un recalibrador secuencial en C & 3 \\\hline
+4.3 &Pruebas				& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador secuencial & 1 \\\hline
+4.4 &SSE					& Utilización de la tecnología SSE para aumentar el rendimiento del recalibrador & 3 \\\hline
+4.5 &Pruebas SSE			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE & 1 \\\hline
+4.6 &OpenMP				& Utilización de OpenMP para aumentar el rendimiento del recalibrador & 3 \\\hline
+4.7 &Pruebas OpenMP		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP & 1 \\\hline
+4.8 &MPI					& Utilización de MPI para aumentar el rendimiento del recalibrador & 4 \\\hline
+4.9 &Pruebas MPI			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP + MPI & 2 \\\hline
+4.10 &Pruebas cluster		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del recalibrador con SSE + OpenMP + MPI en un sistema cluster & 2 \\\hline\hline
 
-& \textit{\textbf{Implementación del descubridor de variantes}} & \\\hline
+5 && \textit{\textbf{Implementación del descubridor de variantes}} & \\\hline
 
-Estructuras datos	& Elección y diseño de las estructuras de datos que se utilizarán en el descubridor & 1 \\\hline
-Implementación		& Implementación de un descubridor secuencial en C & 4 \\\hline
-Pruebas				& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor secuencial & 2 \\\hline
-SSE					& Utilización de la tecnología SSE para aumentar el rendimiento del descubridor & 4 \\\hline
-Pruebas SSE			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE & 2 \\\hline
-OpenMP				& Utilización de OpenMP para aumentar el rendimiento del descubridor & 4 \\\hline
-Pruebas OpenMP		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP & 2 \\\hline
-MPI					& Utilización de MPI para aumentar el rendimiento del descubridor & 7 \\\hline
-Pruebas MPI			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP + MPI & 5 \\\hline
-Pruebas cluster		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP + MPI en un sistema cluster & 3 \\\hline\hline
+5.1 &Estructuras datos	& Elección y diseño de las estructuras de datos que se utilizarán en el descubridor & 1 \\\hline
+5.2 &Implementación		& Implementación de un descubridor secuencial en C & 4 \\\hline
+5.3 &Pruebas				& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor secuencial & 2 \\\hline
+5.4 &SSE					& Utilización de la tecnología SSE para aumentar el rendimiento del descubridor & 4 \\\hline
+5.5 &Pruebas SSE			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE & 2 \\\hline
+5.6 &OpenMP				& Utilización de OpenMP para aumentar el rendimiento del descubridor & 4 \\\hline
+5.7 &Pruebas OpenMP		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP & 2 \\\hline
+5.8 &MPI					& Utilización de MPI para aumentar el rendimiento del descubridor & 7 \\\hline
+5.9 &Pruebas MPI			& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP + MPI & 5 \\\hline
+5.10 &Pruebas cluster		& Pruebas para evaluar la validez de los datos obtenidos y el rendimiento del descubridor con SSE + OpenMP + MPI en un sistema cluster & 3 \\\hline\hline
 
-& \textit{\textbf{Difusión}} & \\\hline
+6 && \textit{\textbf{Difusión}} & \\\hline
 
-Recalibrador	& Publicación de los resultados y conclusiones obtenidos en la implementación del recalibrador & 14 \\\hline
-Variantes		& Publicación de los resultados y conclusiones obtenidos en la implementación del descubridor de variantes & 16 \\\hline
-Doc. tesis		& Documentación y escritura de Tesis Doctoral & 25 \\\hline
+6.1 &Recalibrador	& Publicación de los resultados y conclusiones obtenidos en la implementación del recalibrador & 14 \\\hline
+6.2 &Variantes		& Publicación de los resultados y conclusiones obtenidos en la implementación del descubridor de variantes & 16 \\\hline
+6.3 &Doc. tesis		& Documentación y escritura de Tesis Doctoral & 25 \\\hline
 \end{tabular}
 }
 \caption{Planificación de tareas y duración.\label{tab:tareas}}
 \end{table}
 
+\subsubsection{3 - Elección de tecnologías}
 
-\subsection{Descripción de tareas}
+Elección de tecnologías que se usarán en el desarrollo del software para el descubrimiento de variantes. Es importante la elección del lenguaje de programación, que determinará las librerías a utilizar y su adecuación a los entornos de computación de altas prestaciones. Otro aspecto a tener en cuenta es el modelo de programación en sistemas distribuidos que se utilizará (memoria compartida, paso de mensajes\ldots). Puesto que el objetivo es obtener la máxima eficiencia a través del paralelismo, hay que elegir las tecnologías de cómputo paralelo viables y las herramientas para manejarlas. En la elección de tecnologías se tiene que contar con el consenso del grupo de investigación del CIPF.\\
 
-En esta sección se describirán las tareas a realizar durante el desarrollo de la tesis doctoral.
+\subsubsection{4.1 - Elección de estructuras de datos para el recalibrador}
 
-\subsubsection{Finalización del máster}
+Esta tarea engloba el diseño y elección de las estructuras de datos que se utilizarán en la implementación del recalibrador. Estas estructuras de datos deberán ser eficientes en el uso de la memoria y almacenar la información necesaria para el funcionamiento del algoritmo. Puesto que se busca la eficiencia, hay que buscar un compromiso entre almacenar el mínimo número de datos necesarios para obtener un buen rendimiento sin llenar la memoria disponible. En la elección de estructuras de datos se tiene que contar con el consenso del grupo de investigación del CIPF.\\\\
 
-Esta tarea consiste en la superación del curso de máster de tecnologías informáticas avanzadas de la Universidad de Castilla-La Mancha. Para ello se superarán las asignaturas ofertadas por el máster que tengan que ver con el tema de investigación. Esta tarea acaba con la realización de este documento, describiendo el progreso alcanzado durante el primer año de tesis, y su defensa ante un tribunal.\\
+\subsubsection{4.2 - Implementación del recalibrador}
 
-\subsubsection{Estado del arte}
+Implementar el recalibrador de forma secuencial, imitando el comportamiento del recalibrador incorporado en GATK pero ya introduciendo las mejoras de utilizar código y estructuras de datos eficientes. Dado un fichero BAM de entrada, el código debe procesarlo y producir un fichero BAM de salida con las calidades recalibradas, en un tiempo menor que el utilizado por el recalibrador de GATK.\\
 
-Esta tarea corresponde a la documentación y estudio del estado del arte en modelos y sistemas de programación paralela, tratamiento de grandes cantidades y datos, y situación actual de las herramientas utilizadas en bioinformática para el análisis de ADN. Los resultados de este estudio y sus conclusiones se recogen en los capítulos de ``Estado del arte'' de este documento.
+\subsubsection{4.3 - Pruebas del recalibrador}
 
-\subsubsection{Elección de tecnologías}
+Esta tarea consiste en evaluar si efectivamente el recalibrador desarrollado genera una salida correcta y el rendimiento que obtiene, comparándolo con el rendimiento del recalibrador de GATK.\\
 
-Elección de tecnologías se usarán en el desarrollo del software para el descubrimiento de variantes. Es importante la elección del lenguaje de programación, que determinará las librerías a utilizar y su adecuación a los entornos de computación de altas prestaciones. Otro aspecto a tener en cuenta es el modelo de programación en sistemas distribuidos que se utilizará (memoria compartida, paso de mensajes\ldots). Puesto que el objetivo es obtener la máxima eficiencia a través del paralelismo, hay que elegir las tecnologías de cómputo paralelo viables y las herramientas para manejarlas.\\
-
-\subsubsection{Elección de estructuras de datos para el recalibrador}
-
-Esta tarea engloba el diseño y elección de las estructuras de datos que se utilizarán en la implementación del recalibrador. Estas estructuras de datos deberán ser eficientes con memoria y almacenar la información necesaria para el funcionamiento del algoritmo. Puesto que se busca la eficiencia, hay que buscar un compromiso entre almacenar el mínimo número de datos necesarios para obtener un buen rendimiento sin llenar la memoria disponible.\\
-
-\subsubsection{Implementación del recalibrador}
-
-Implementar el recalibrador de forma secuencial, imitando el comportamiento del recalibrador incorporado en GATK pero ya introduciendo las mejoras de utilizar código y estructuras de datos eficientes. Dado un fichero BAM de entrada, el código debe procesarlo y producir un fichero BAM de salida con las calidades recalibradas, en un tiempo similar o menor que el obtenido por el recalibrador de GATK.\\
-
-\subsubsection{Pruebas del recalibrador}
-
-Esta tarea consiste en evaluar si efectivamente el recalibrador desarrollado genera una salida correcta y el rendimiento que obtiene, comparandolo con el rendimiento del recalibrador de GATK.\\
-
-\subsubsection{Implementación de SSE en el recalibrador}
+\subsubsection{4.4 - Introducción de instrucciones SSE en el código del recalibrador}
 
 Una vez implementado el recalibrador, hay que acelerar los cálculos utilizando instrucciones SSE donde sea posible. En principio esto debería acelerar las partes de código donde se utilice, gracias al modelo de sistema SIMD.\\
 
-\subsubsection{Pruebas SSE en el recalibrador}
+\subsubsection{4.5 - Pruebas SSE en el recalibrador}
 
 Estas pruebas se centrarán en las partes de código del recalibrador que implementen operaciones con SSE. Estas partes de código deberán ser comparadas con su respectiva versión del algoritmo secuencial inicialmente obtenido. Para ello se analizará el rendimiento utilizando SSE comparándolo con el obtenido en la versión sin SSE. También debe comprobarse la validez de los ficheros BAM de salida.\\
 
-\subsubsection{Implementación de OpenMP en el recalibrador}
+\subsubsection{4.6 - Implementación de OpenMP en el recalibrador}
 
 Una vez incorporadas instrucciones SSE al recalibrador, se implementará el uso de OpenMP en el mísmo. Esto permitirá utilizar las capacidades de memoria compartida de los recursos computacionales, incrementando el rendimiento.
 
-\subsubsection{Pruebas OpenMP en el recalibrador}
+\subsubsection{4.7 - Pruebas OpenMP en el recalibrador}
 
 Al igual que en las pruebas descritas anteriormente, el objetivo de esta tarea es la validación de los resultados obtenidos por el recalibrador y una comparación del rendimiento obtenido respecto a las anteriores versiones. En este caso lo que se evalúa son las partes de código que utilicen OpenMP, comprobando el correcto funcionamiento de la esta nueva funcionalidad añadida junto a la funcionalidad anterior basada en SSE.\\
 
-\subsubsection{Implementación de MPI en el recalibrador}
+\subsubsection{4.8 - Implementación de MPI en el recalibrador}
 
 La ultima funcionalidad a añadir al recalibrador es el soporte multiprocesador utilizando la librería MPI. Esta tarea consiste por tanto en la implementación del modelo de paso de mensajes para permitir el reparto de trabajo entre múltiples procesadores, utilizando MPI. Esto permitirá incrementar el rendimiento cuantos más procesadores disponga el sistema en el que se ejecute el recalibrador.\\
 
-\subsubsection{Pruebas MPI en el recalibrador}
+\subsubsection{4.9 - Pruebas MPI en el recalibrador}
 
 Estas pruebas consisten en validar los resultados obtenidos por el recalibrador que incorpora MPI y su mejora de rendimiento respecto a las versiones anteriores. Para ello se realizarán pruebas con la implicación de varios procesadores.\\
 
-\subsubsection{Pruebas en cluster del recalibrador con SSE + OpenMP + MPI}
+\subsubsection{4.10 - Pruebas en cluster del recalibrador con SSE + OpenMP + MPI}
 
 Esta tarea evalúa el recalibrador desarrollado en un entorno \textit{cluster} con cientos de nodos. En este entorno se probarán todas las funcionalidades implementadas en el recalibrador de forma simultánea (SSE + OpenMP + MPI), aprovechando los recursos que ofrecen los procesadores del \textit{cluster}. Se evaluará también el rendimiento final obtenido mediante el uso de estos modelos de programación paralelos y cual es el resultado final en cuanto a rendimiento y eficiencia ganado al utilizar el recalibrador desarrollado.\\
 
-\subsubsection{Desarrollo del descubridor de variantes}
+\subsubsection{5 - Desarrollo del descubridor de variantes}
 
 Las tareas llevadas a cabo para el desarrollo de un descubridor de variantes son análogas a las llevadas a cabo en el desarrollo del recalibrador. Primeramente se diseñarán las estructuras de datos que serán necesarias para la correcta ejecución de los algoritmos y manejar eficientemente la memoria.\\
 

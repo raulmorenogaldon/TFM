@@ -2,20 +2,20 @@
 
 \label{cap:trabajo}
 
-En este capítulo se detalla el trabajo llevado a cabo hasta la fecha en que es redactado este documento. Se presentarán las tareas realizadas y hasta donde se ha llegado, según la planificación del anteproyecto de tesis. El objetivo del trabajo de máster es conseguir un software recalibrador acelerado, usando técnicas de optimización y paralelismo que fuesen más eficientes y rápidas que las utilizadas por el recalibrador de GATK.\\
+En este capítulo se detalla el trabajo llevado a cabo hasta la fecha en que es redactado este documento. Se presentarán las tareas realizadas y hasta donde se ha llegado, según la planificación del anteproyecto de tesis. El objetivo del trabajo de máster es conseguir un software recalibrador acelerado, usando técnicas de optimización y paralelismo que sean más eficientes y rápidas que las utilizadas por el recalibrador de GATK.\\
 
 \section{Descripción de un recalibrador}
 
 El ADN se obtiene mediante máquinas de propósito específico llamadas secuenciadores. Se basan en técnicas bioquímicas cuya finalidad es la determinación del orden de los nucleótidos en la secuencia de ADN. Hay distintos factores que influyen en la toma de lecturas del ADN, que pueden llevar a errores. Estos factores se expresan mediante una calidad de error que el secuenciador asigna a cada lectura, en el momento de tomarla, dependiendo de qué posibilidad hay de que sea errónea.\\
 
-La probabilidad de que una lectura sea errónea se mapea en un rango de enteros, denominado calidad \textit{Sanger} \cite{sanger}. Para ello se aplica la fórmula \begin{equation}
+La probabilidad de que una lectura sea errónea se encuentra en un intervalo de enteros, denominado calidad \textit{Sanger} \cite{sanger}. Para ello se aplica la fórmula \begin{equation}
 Q = -10 \times \log_{10} P
 \end{equation} 
-cuya entrada es un rango de números reales [0,1] y su salida en el rango de números naturales positivos [0,93] (acotado superiormente). La razón de utilizar esta calidad es que solo es necesario usar un byte para su expresión, aunque se pierda precisión en la probabilidad de error.\\
+cuya entrada es un rango de números reales [0,1] y su salida está en el rango de números naturales positivos [0,93] (acotado superiormente). La razón de utilizar esta calidad es que solo es necesario usar un byte para su expresión, aunque se pierda precisión en la probabilidad de error.\\
 
 Un recalibrador ajusta las calidades asignadas a cada lectura en un fichero \textit{BAM} para que sean más cercanas a la probabilidad de error real, teniendo en cuenta todas las lecturas del fichero y comparando si difieren del ADN de referencia.\\
 
-Por ejemplo, si tenemos un fichero, aún no recalibrado, donde todas sus bases tienen calidad 25 y nos encontramos al recalibrar que 1 de cada 100 lecturas difieren del ADN referencia, entonces su calidad sería 20 y se ajustarían las calidades teniendo esto en cuenta. Pero el recalibrador tiene en cuenta más cosas, como que las lecturas de los últimos ciclos del secuenciador presentan más errores que las primeras, o la probabilidad de que se den determinadas combinaciones de dos nucleótidos en las lecturas (contexto de dinucleótido).\\
+Por ejemplo, si tenemos un fichero, aún no recalibrado, donde todas sus bases tienen calidad 25 y nos encontramos al recalibrar que 1 de cada 100 lecturas difieren del ADN referencia, entonces su calidad sería 20 (aplicando la fórmula \ref{for:probsanger}) y se ajustarían las calidades teniendo esto en cuenta. Pero el recalibrador tiene en cuenta más cosas, como que las lecturas de los últimos ciclos del secuenciador presentan más errores que las primeras, o la probabilidad de que se den determinadas combinaciones de dos nucleótidos en las lecturas (contexto del dinucleótido).\\
 
 \subsection{Formato \textit{BAM/SAM}}
 \label{sec:bam}
@@ -36,19 +36,21 @@ Una de las decisiones a tomar al comenzar el trabajo consistía en elegir el leng
 
 Se desechó Java puesto que es interpretado por su máquina virtual (\textit{JVM} \textit{Java Virtual Machine}), lo cual produce una sobrecarga en la ejecución que no compensa su portabilidad. Además su gestión automática de memoria es también un inconveniente en sistemas donde el uso de la memoria es crítico para el rendimiento.\\
 
-Se optó finalmente por utilizar C, puesto que es un lenguaje que te permite hacer cualquier cosa, aunque no sea tan fácil como Java. La otra variante, C++, se desechó puesto que no necesitamos un enfoque orientado a objetos. C te permite un control total sobre la memoria y sus datos, lo cual permite optimizar el código para que se ajuste al sistema de memoria donde se alojará y utilizar estructuras de datos óptimas, con la consecuente ganancia en rendimiento. Además el código en C es compilado y optimizado por el propio compilador. Permite fácilmente la inclusión de código en ensamblador, lo cual puede ser un punto crítico en la ejecución de algunas operaciones básicas ejecutadas masivamente en el código. Como ventaja final, existe una amplia variedad de librerías para este lenguaje, depuradas y optimizadas durante años que facilitan bastante la programación sin sacrificar rendimiento.\\
+Se optó finalmente por utilizar C, puesto que es un lenguaje que te permite hacer cualquier cosa, aunque no sea tan fácil como Java. La otra variante, C++, se desechó puesto que no necesitamos un enfoque orientado a objetos. C permite un control total sobre la memoria y sus datos, lo cual permite optimizar el código para que se ajuste al sistema de memoria donde se alojará y utilizar estructuras de datos óptimas, con la consecuente ganancia en rendimiento. Además el código en C es compilado y optimizado por el propio compilador. Permite fácilmente la inclusión de código en ensamblador, lo cual puede ser un punto crítico en la ejecución de algunas operaciones básicas ejecutadas masivamente en el código. Como ventaja final, existe una amplia variedad de librerías para este lenguaje, depuradas y optimizadas durante años que facilitan bastante la programación, llegando incluso a ganar rendimiento.\\
 
-En cuanto a las librerías a utilizar para aprovechar el paralelismo y obtener mayor rendimiento se ha optado por MPI, OpenMP y SSE. Las instrucciones SSE permiten aprovechar las capacidades SIMD de los procesadores actuales, lo cual permitirá aumentar el rendimiento en determinadas operaciones que involucren datos almacenados en vectores de forma continua. OpenMP permitirá aprovechar los distintos cores de cada procesador, puesto que actualmente todos los procesadores son multicore. Finalmente MPI permitirá la ejecución en entornos de múltiples procesadores, como puede ser un \textit{cluster}. La combinación de estas tres tecnologías nos permitirá explotar los recursos de computo basados en microprocesador de forma eficiente.\\
+En cuanto a las librerías a utilizar para aprovechar el paralelismo y obtener mayor rendimiento se ha optado por MPI, OpenMP y SSE. Las instrucciones SSE permiten aprovechar las capacidades SIMD de los procesadores actuales, lo cual permitirá aumentar el rendimiento en determinadas operaciones que involucren datos almacenados en vectores de forma continua. OpenMP permitirá aprovechar los distintos \textit{cores} de cada procesador, puesto que actualmente todos los procesadores son \textit{multicore}. Finalmente MPI permitirá la ejecución en entornos de múltiples procesadores, como puede ser un \textit{cluster}. La combinación de estas tres tecnologías nos permitirá explotar los recursos de cómputo basados en microprocesador de forma eficiente.\\
+
+Otro recurso, presente actualmente en la mayoría de \textit{clusters}, son las GPU. Las GPU nos permitirían ganar mucho rendimiento en operaciones masivas sobre vectores o matrices, por lo que podríamos orientar las estructuras de datos para que utilicen este tipo de operaciones. Con ello podríamos utilizar GPU cuando estuvieran disponibles en el sistema en que se ejecuta la herramienta, con la consiguiente ganancia de rendimiento que se obtendría.\\
 
 Esta tarea ha sido completada.\\
 
 \subsection{Elección de estructuras de datos para el recalibrador}
 
-Esta tarea ha sido completada. Las estructuras de datos debían ser eficientes y almacenar información sobre diversos tipos de contadores. Se ha llegado a la conclusión de que la mejor estructura de datos a utilizar en este caso son las matrices, pues que esta forma de almacenamiento permite aprovechar la localidad espacial y temporal en memoria al estar todos los datos de forma continua. En la sección \ref{sec:estructuras} se describen detalladamente las estructuras de datos que se han utilizado, puesto que se entienden mejor una vez introducido el algoritmo de recalibrado (sección \ref{sec:algoritmo}).\\
+Las estructuras de datos debían ser eficientes y almacenar información sobre diversos tipos de contadores. Se ha llegado a la conclusión de que la mejor estructura de datos a utilizar en este caso son las matrices, pues que esta forma de almacenamiento permite aprovechar la localidad espacial y temporal en memoria al estar todos los datos de forma continua. En la sección \ref{sec:estructuras} se describen detalladamente las estructuras de datos que se han utilizado, puesto que se entienden mejor una vez introducido el algoritmo de recalibrado (sección \ref{sec:algoritmo}). Esta tarea ha sido completada.\\
 
 \subsection{Implementación del recalibrador}
 
-Esta tarea ha sido completada. Se ha desarrollado el código de un algoritmo recalibrador secuencial, que utiliza eficientemente las estructuras de datos que se han diseñado y por tanto la memoria. El algoritmo intenta utilizar el mínimo de operaciones necesarias para los cálculos, haciendo especial hincapié en las operaciones \textit{I/O}.\\
+Se ha desarrollado el código de un algoritmo recalibrador secuencial, que utiliza eficientemente las estructuras de datos que se han diseñado y por tanto la memoria. El algoritmo intenta utilizar el mínimo de operaciones necesarias para los cálculos, haciendo especial hincapié en las operaciones \textit{I/O}. Esta tarea ha sido completada.\\
 
 \subsection{Pruebas del recalibrador}
 
@@ -62,7 +64,7 @@ Esta tarea está en progreso pero ya se implementa en la parte de código que comp
 
 \subsection{Pruebas SSE en el recalibrador}
 
-Esta tarea se ha iniciado de forma parcial. Ya se ha realizado alguna prueba sobre las instrucciones SSE que se van incorporando. cuyos resultados se encuentran. En la sección \ref{sec:evaluacion} se verá el rendimiento obtenido al utilizar estas instrucciones.\\
+Esta tarea se ha iniciado de forma parcial. Ya se ha realizado alguna prueba sobre las instrucciones SSE que se van incorporando. En la sección \ref{sec:evaluacion} se verá el rendimiento obtenido al utilizar estas instrucciones.\\
 
 \section{Herramientas utilizadas}
 
@@ -76,26 +78,26 @@ Para compilar el código he utilizado \textit{Makefile}, el cual es ampliamente u
 
 \subsection{Control de versiones}
 
-Para el control de versiones del código se ha utilizado \textit{Git} \cite{gitweb}, esto me permite guardar el historial de cambios que ha sufrido el programa durante su desarrollo y permite revertir cambios para recuperar versiones anteriores. Ofrece un control de versiones distribuido, al contrario que otras herramientas como \textit{Subversion} \cite{subversionweb}, por lo que puedes trabajar en local, y cuando sea posible, combinar los cambios con el repositorio global. La razón de elegir \textit{Git} fue su facilidad de uso, por ejemplo a la hora de crear y combinar distintos flujos de trabajo.\\
+Para el control de versiones del código se ha utilizado \textit{Git} \cite{gitweb}, que permite guardar el historial de cambios que ha sufrido el programa durante su desarrollo y permite revertir cambios para recuperar versiones anteriores. Ofrece un control de versiones distribuido, al contrario que otras herramientas como \textit{Subversion} \cite{subversionweb}, por lo que se puede trabajar en local, y cuando sea posible, combinar los cambios con el repositorio global. La razón de elegir \textit{Git} fue su facilidad de uso, por ejemplo a la hora de crear y combinar distintos flujos de trabajo.\\
 
-La forma de trabajar que he seguido con \textit{Git} consiste en tener un flujo de trabajo llamado \textit{master} donde se recogen las características ya implementadas en el programa. A la hora de añadir una nueva funcionalidad al programa, creo un nuevo flujo de trabajo y realizo los cambios sobre el mismo. Cuando esa funcionalidad está añadida, combino ese flujo de trabajo con el \textit{master} obteniendo el programa con la característica implementada en ese flujo principal. Esto me permite trabajar en varías funcionalidades de forma separada, a la vez y sin interferir unas sobre otras, lo cual facilita el manejo del código.\\
+La forma de trabajar que se ha seguido con \textit{Git} consiste en tener un flujo de trabajo llamado \textit{master} donde se recogen las características ya implementadas en el programa. A la hora de añadir una nueva funcionalidad al programa se crea un nuevo flujo de trabajo y se llevan a cabo los cambios sobre el mismo. Cuando esa funcionalidad está añadida, se combina ese flujo de trabajo con el \textit{master} obteniendo el programa con la característica implementada en ese flujo principal. Esto permite trabajar en varías funcionalidades de forma separada, a la vez y sin interferir unas sobre otras, lo cual facilita el manejo del código.\\
 
 \subsection{Depuración}
 
-\textit{GDB} \cite{gdbweb} (\textit{GNU} debugger) es un depurador de código en línea de comandos. Entre otras cosas te permite comenzar la ejecución de un programa e incluir puntos de ruptura. En caso de que el programa termine su ejecución de forma anormal, te permite ver el estado de las variables y la pila de programa justo en el momento del error. Mayoritariamente he usado este programa para encontrar el origen de los fallos de segmentación que me he encontrado durante el desarrollo del recalibrador. Cuando ocurre un fallo de segmentación el propio sistema operativo vuelca el contenido de la memoria en ese momento en un fichero. \textit{GDB} permite restaurar la ejecución al momento del fallo usando ese fichero y ofreciendo una visión del estado del programa en ese momento.\\
+\textit{GDB} \cite{gdbweb} (\textit{GNU} debugger) es un depurador de código en línea de comandos. Entre otras cosas permite comenzar la ejecución de un programa e incluir puntos de ruptura. En caso de que el programa termine su ejecución de forma anormal, permite ver el estado de las variables y la pila de programa justo en el momento del error. Mayoritariamente se ha usado este programa para encontrar el origen de los fallos de segmentación que se han encontrado durante el desarrollo del recalibrador. Cuando ocurre un fallo de segmentación el propio sistema operativo vuelca el contenido de la memoria en ese momento en un fichero. \textit{GDB} permite restaurar la ejecución al momento del fallo usando ese fichero y ofreciendo una visión del estado del programa en ese momento.\\
 
-El otro programa que he utilizado para depuración es \textit{Valgrind} \cite{valgrindweb}. Es un conjunto de herramientas de depuración que permiten detectar automáticamente muchos fallos en el manejo de memoria e hilos, permitiendo analizar los programas en detalle.\\
+El otro programa que se ha utilizado para depuración es \textit{Valgrind} \cite{valgrindweb}. Es un conjunto de herramientas de depuración que permiten detectar automáticamente muchos fallos en el manejo de memoria e hilos, permitiendo analizar los programas en detalle.\\
 
-Durante el desarrollo del recalibrador he utilizado la herramienta \textit{memcheck} de \textit{Valgrind}. Esta herramienta permite detectar errores en la memoria, como accesos no válidos, uso de variables no inicializadas, liberación incorrecta de memoria reservada, fugas de memoria\ldots El principal uso que le he dado ha sido localizar puntos del código del recalibrador donde no se liberaba bien la memoria, provocando que la memoria libre se agote y disminuyendo el rendimiento de forma drástica.\\
+Durante el desarrollo del recalibrador se ha utilizado la herramienta \textit{memcheck} de \textit{Valgrind}. Esta herramienta permite detectar errores en la memoria, como accesos no válidos, uso de variables no inicializadas, liberación incorrecta de memoria reservada, fugas de memoria\ldots El principal uso que se le ha dado ha sido localizar puntos del código del recalibrador donde no se liberaba bien la memoria, provocando que la memoria libre se agote y disminuyendo el rendimiento de forma drástica.\\
 
 \section{Algoritmo de recalibrado}
 \label{sec:algoritmo}
 
-El algoritmo de recalibrado usado se compone de dos fases. La primera fase consiste en recopilar datos sobre los ficheros \textit{BAM}. La segunda fase es la recalibración en sí, se utilizan los datos obtenidos en la primera fase para ajustar las calidades de \textit{BAM} usando fórmulas estadísticas. A continuación se describe el proceso formal de recalibrado y cómo se realizan las dos fases en el algoritmo.\\
+El algoritmo de recalibrado usado se compone de dos fases. La primera fase consiste en recopilar datos sobre los ficheros \textit{BAM}. La segunda fase es la recalibración en sí, utilizándose los datos obtenidos en la primera fase para ajustar las calidades de \textit{BAM} usando fórmulas estadísticas. A continuación se describe el proceso formal de recalibrado y cómo se realizan las dos fases en el algoritmo.\\
 
 \subsection{Proceso formal de recalibrado}
 
-Las calidades de un fichero \textit{BAM} se expresan mediante un número entero en el rango $[0,93]$. Este rango indica una probabilidad de error obteniendose a partir de la fórmula \ref{for:calidadsanger}. Según esta fórmula, si tenemos que una lectura de una base tiene como probabilidad de error $0.01$ (1 de cada 100 será errónea), la calidad en el \textit{BAM} será 20. Esta forma de representar la probabilidad de error hace que se pierda precisión pero a cambio permite representar la calidad usando un único byte (un carácter).\\
+Las calidades de un fichero \textit{BAM} se expresan mediante un número entero en el rango $[0,93]$. Este rango indica una probabilidad de error que se obtiene a partir de la fórmula \ref{for:calidadsanger}. Según esta fórmula, si tenemos que una lectura de una base tiene como probabilidad de error $0.01$ (1 de cada 100 será errónea), la calidad en el \textit{BAM} será 20. Esta forma de representar la probabilidad de error hace que se pierda precisión pero a cambio permite representar la calidad usando un único byte (un carácter).\\
 
 \begin{equation}
 \label{for:calidadsanger}
@@ -116,7 +118,7 @@ La calidad recalibrada de una base se obtiene al aplicar la fórmula \ref{for:qua
 Q^*(r,c,d) = Q(r) + \Delta Q + \Delta Q(r) + \Delta Q(r,c) + \Delta Q(r,d)
 \end{equation}\\
 
-La nueva calidad se obtiene a partir de la calidad original de esa posición ($Q(r)$), sumándole las variaciones o \textit{deltas} que influyen en la misma. Estos deltas se calculan según las fórmulas \ref{for:deltag}, \ref{for:deltar}, \ref{for:deltarc} y \ref{for:deltard}. Puesto que para calcular cada delta es necesario contabilizar las lecturas y fallos del fichero que se recalibra, son necesarios dos procesamientos o pasadas sobre el fichero. La primera pasada o fase de recogida de datos contabiliza las bases que lee y si son fallos, datos que necesita para calcular finalmente los deltas. Una vez se calculan los deltas se hace una segunda pasada que aplica a cada calidad la fórmula que obtiene su calidad final recalibrada.\\
+La nueva calidad se obtiene a partir de la calidad original de esa posición ($Q(r)$), sumándole las variaciones o \textit{deltas} que influyen en la misma. Estos \textit{deltas} se calculan según las fórmulas \ref{for:deltag}, \ref{for:deltar}, \ref{for:deltarc} y \ref{for:deltard}.\\
 
 \begin{equation}
 \label{for:deltag}
@@ -138,6 +140,8 @@ La nueva calidad se obtiene a partir de la calidad original de esa posición ($Q(
 \Delta Q(r,d) = Q_{sanger}(T(r,d)) - Q(r) - (\Delta Q + \Delta Q(r))
 \end{equation}\\
 
+Puesto que para calcular cada \textit{delta} es necesario contabilizar las lecturas y fallos del fichero que se recalibra, son necesarios dos procesamientos o pasadas sobre el fichero. La primera pasada o fase de recogida de datos contabiliza las bases que lee y si son fallos, datos que necesita para calcular finalmente los \textit{deltas}. Una vez se calculan los \textit{deltas} se hace una segunda pasada que aplica a cada calidad la fórmula que obtiene su calidad final recalibrada.\\
+
 En la primera fase se recorre el fichero \textit{BAM} contabilizando las lecturas y sus errores, almacenándolos en las estructuras de datos. Con estos datos se puede obtener la tasa de fallos $T$ que se define en la fórmula \ref{for:tasafallo}, cuyo resultado es utilizado en el cálculo de los deltas. Una vez se ha recorrido el fichero y obtenidas las $T$, se calculan finalmente los deltas para cada combinación \textit{posición-ciclo-dinucleótido}.\\
 
 \begin{equation}
@@ -146,11 +150,11 @@ T = \frac{\textit{número de fallos}}{\textit{número de bases}}
 \end{equation}\\
 
 
-Tomando un ejemplo donde hay un rango de calidades $[0,49]$, 100 ciclos de secuenciador y 12 tipos de dinucleótido, el cálculo de los deltas se traduce en un delta global, 50 deltas (uno para cada posible calidad), $50 \times 100=5000$ deltas para cada par calidad-ciclo y $50 \times 12=600$ deltas para cada par calidad-dinucleótido. Esto se traduce en el cálculo de $5651$ deltas.\\
+Tomando un ejemplo donde hay un rango de calidades $[0,49]$, 100 ciclos de secuenciador y 12 tipos de dinucleótido, el cálculo de los \textit{deltas} se traduce en un \textit{delta} global, 50 deltas (uno para cada posible calidad), $50 \times 100=5000$ \textit{deltas} para cada par calidad-ciclo y $50 \times 12=600$ \textit{deltas} para cada par calidad-dinucleótido. Esto se traduce en el cálculo de $5651$ \textit{deltas}.\\
 
-En la segunda fase se vuelve a recorrer el fichero para aplicar la fórmula \ref{for:qualrecal} que devuelve la calidad recalibrada para cada base leída. Puesto que tenemos todos los deltas calculados en las estructuras de datos, sólo nos llevará 4 sumas el cálculo de cada calidad. \\
+En la segunda fase se vuelve a recorrer el fichero para aplicar la fórmula \ref{for:qualrecal} que devuelve la calidad recalibrada para cada base leída. Puesto que tenemos todos los \textit{deltas} calculados en las estructuras de datos, sólo nos llevará 4 sumas el cálculo de cada calidad. \\
 
-Por ejemplo un fichero de un secuenciador de 100 ciclos, con 35 millones de lecturas ($35 \times 10^6$) tendrá aproximadamente 3500 millones de bases ($3,5 \times 10^9$). Usando los deltas ya calculados sólo usaríamos 4 sumas por cada base, es decir, $4 \times 3,5 \times 10^9=14 \times 10^9$ sumas en total. En cambio, si calculásemos los deltas a la vez que cada calidad recalibrada necesitaríamos más operaciones que 4 sumas (varios ordenes de magnitud más). Esta es la razón de precalcular los deltas en la primera fase, aunque su almacenamiento signifique un coste en memoria adicional.\\
+Por ejemplo un fichero de un secuenciador de 100 ciclos, con 35 millones de lecturas ($35 \times 10^6$) tendrá aproximadamente 3500 millones de bases ($3,5 \times 10^9$). Usando los \textit{deltas} ya calculados sólo usaríamos 4 sumas por cada base, es decir, $4 \times 3,5 \times 10^9=14 \times 10^9$ sumas en total. En cambio, si calculásemos los \textit{deltas} a la vez que cada calidad recalibrada necesitaríamos más operaciones que 4 sumas (varios ordenes de magnitud más). Esta es la razón de precalcular los \textit{deltas} en la primera fase, aunque su almacenamiento signifique un coste en memoria adicional.\\
 
 
 \subsection{Fase 1: Recogida de datos}
@@ -177,9 +181,9 @@ el contador de fallos y de lecturas para el par calidad-dinucleótido ($T(r,d)$).
 
 En caso de que no sea fallo sólo se incrementarían los contadores de lecturas correspondientes.\\
 
-Una vez se han recorrido y contabilizado todas las lecturas del \textit{BAM} de entrada, se calculan las tasas de fallos en los diferentes niveles usando los contadores de fallos y lecturas correspondientes. Con estas tasas de fallos se calculan los deltas correspondientes. Finalmente tendremos en las estructuras de datos, el delta global ($\Delta Q$), el delta para cada valor de calidad ($\Delta Q(r)$), el delta para cada par calidad-ciclo ($\Delta Q(r,c)$) y el delta para cada par calidad-dinucleótido ($\Delta Q(r,d)$).\\
+Una vez se han recorrido y contabilizado todas las lecturas del \textit{BAM} de entrada, se calculan las tasas de fallos en los diferentes niveles usando los contadores de fallos y lecturas correspondientes. Con estas tasas de fallos se calculan los \textit{deltas} correspondientes. Finalmente tendremos en las estructuras de datos, el \textit{delta} global ($\Delta Q$), el \textit{delta} para cada valor de calidad ($\Delta Q(r)$), el \textit{delta} para cada par calidad-ciclo ($\Delta Q(r,c)$) y el \textit{delta} para cada par calidad-dinucleótido ($\Delta Q(r,d)$).\\
 
-Para incrementar el rendimiento de esta fase, se han utilizado instrucciones \textit{SSE/SEE2}, concretamente para realizar las comparaciones de bases entre la secuencia de la lectura y la secuencia de referencia. Estas dos secuencias se almacenan de forma continua en memoria (vector de tipos \textit{char} o enteros de un byte).\\
+Para incrementar el rendimiento de esta fase, se han utilizado instrucciones \textit{SSE/SEE2}, concretamente para realizar las comparaciones de bases entre la secuencia de la lectura y la secuencia de referencia. Estas dos secuencias se almacenan de forma contigua en memoria (vector de tipos \textit{char} o enteros de un byte).\\
 
 Lo que se hace pues, en cada iteración, es cargar en un registro \textit{XMM} de 128 bits (utilizados por las instrucciones SSE) 16 bases del vector de la secuencia leída, utilizando una sola lectura de memoria. En otro registro \textit{XMM} se cargan las 16 bases correspondientes al vector de referencia, mediante otra lectura de memoria. Acto seguido se usa la instrucción de comparación de \textit{SSE2} sobre las 16 bases, obteniendo en un registro \textit{XMM} los resultados de las comparaciones (\textit{0}x\textit{FF} si es igual o \textit{0}x\textit{00} si no). Finalmente se guardan en una variable vector los resultados de las 16 comparaciones con otra instrucción de memoria.\\
 
@@ -189,28 +193,28 @@ Como efecto resultante al usar \textit{SSE}, los vectores se recorren de 16 en 1
 
 En esta fase se lleva a cabo el proceso de recalibrado en sí. Al igual que en la fase anterior, el fichero \textit{BAM} de entrada se procesa por lotes. El fichero \textit{BAM} con las calidades recalibradas que se genera, se escribe por lotes conforme estos han sido procesados y en el mismo orden que se leyeron.\\
 
-El procesado de cada lectura consiste en aplicar únicamente la fórmula \ref{for:qualrecal} a cada una de las calidades de sus bases, sustituyendo las mismas por los nuevos valores. Puesto que los deltas ya han sido calculados en la fase anterior, se pueden utilizar directamente en los cálculos accediendo a sus valores en las estructuras de datos. Por tanto, el valor final de las calidades corresponde a las cuatro sumas de los deltas correspondientes. Finalmente se genera el fichero \textit{BAM} con las nuevas calidades.\\
+El procesado de cada lectura consiste en aplicar únicamente la fórmula \ref{for:qualrecal} a cada una de las calidades de sus bases, sustituyendo las mismas por los nuevos valores. Puesto que los \textit{deltas} ya han sido calculados en la fase anterior, se pueden utilizar directamente en los cálculos accediendo a sus valores en las estructuras de datos. Por tanto, el valor final de las calidades corresponde a las cuatro sumas de los \textit{deltas} correspondientes. Finalmente se genera el fichero \textit{BAM} con las nuevas calidades.\\
 
 \subsection{Estructura de datos utilizadas}
 \label{sec:estructuras}
 
-Las estructuras de datos utilizadas para el recalibrado consisten en matrices. Cada delta que se calcula necesita de 3 matrices. Una matriz acumula el número de bases que se leen, otra matriz acumula el número de fallos que se han detectado y la ultima matriz almacena los deltas calculados. Puesto que hay 4 tipos de delta (global, posición, posición-ciclo y posición-dinucleótido), son necesarias 12 matrices.\\
+Las estructuras de datos utilizadas para el recalibrado consisten en matrices. Cada \textit{delta} que se calcula necesita de 3 matrices. Una matriz acumula el número de bases que se leen, otra matriz acumula el número de fallos que se han detectado y la ultima matriz almacena los \textit{deltas} calculados. Puesto que hay 4 tipos de \textit{delta} (global, posición, posición-ciclo y posición-dinucleótido), son necesarias 12 matrices.\\
 
-Las matrices para el delta global tiene dimensión $1 \times 1$, puesto que sólo hay un caso. Las matrices para el delta de posición tiene dimensión $1xn$ siendo $n$ el número de posibles calidades que puede tener una posición. Para los delta de posición-ciclo y posición-dinucleótido la dimensión es $n \times c$ y $n \times d$ respectivamente, siendo $c$ el número de ciclos y $d$ el número de dinucleótidos (lo normal es que $d$ sea 12).\\
+Las matrices para el \textit{delta} global tiene dimensión $1 \times 1$, puesto que sólo hay un caso. Las matrices para el delta de posición tiene dimensión $1 \times n$ siendo $n$ el número de posibles calidades que puede tener una posición. Para los delta de posición-ciclo y posición-dinucleótido la dimensión es $n \times c$ y $n \times d$ respectivamente, siendo $c$ el número de ciclos y $d$ el número de dinucleótidos (lo normal es que $d$ sea 12).\\
 
 Por ejemplo, tenemos un fichero \textit{BAM} de un secuenciador de 100 ciclos, con 35 millones de lecturas ($35 \times 10^6$) tendrá aproximadamente 3500 millones de bases ($3,5 \times 10^9$), con calidades comprendidas en el rango $[0,50]$. Las estructuras de datos utilizadas en este caso serán:
 \begin{itemize}
 \item
-Para el delta global: tres matrices de dimensión $1 \times 1$ que contengan el número de bases leídas en total, el número de fallos y su delta. Hacen un total de 2 enteros y un número en coma flotante (\textit{double} en C).
+Para el \textit{delta} global: tres matrices de dimensión $1 \times 1$ que contengan el número de bases leídas en total, el número de fallos y su delta. Hacen un total de 2 enteros y un número en coma flotante (\textit{double} en C).
 \item
-Para el delta de cada calidad: tres matrices de dimensión $1 \times 50$ que contengan el número de bases leídas que tengan esa calidad, sus fallos y su delta. Hacen un total de 100 enteros y 50 \textit{double}.
+Para el \textit{delta} de cada calidad: tres matrices de dimensión $1 \times 50$ que contengan el número de bases leídas que tengan esa calidad, sus fallos y su \textit{delta}. Hacen un total de 100 enteros y 50 \textit{double}.
 \item
-Para el delta de cada calidad-ciclo: tres matrices de dimensión $50 \times 100$ que contengan el número de bases leídas que tengan esa calidad en ese ciclo, sus fallos y su delta. Hacen un total de 10000 enteros y 5000 \textit{double}.
+Para el \textit{delta} de cada calidad-ciclo: tres matrices de dimensión $50 \times 100$ que contengan el número de bases leídas que tengan esa calidad en ese ciclo, sus fallos y su \textit{delta}. Hacen un total de 10000 enteros y 5000 \textit{double}.
 \item
-Para el delta de cada calidad-dinucleótido: tres matrices de dimensión $50 \times 12$ que contengan el número de bases leídas que tengan esa dinucleótido, sus fallos y su delta. Hacen un total de 1200 enteros y 600 \textit{double}.
+Para el \textit{delta} de cada calidad-dinucleótido: tres matrices de dimensión $50 \times 12$ que contengan el número de bases leídas que tengan esa dinucleótido, sus fallos y su \textit{delta}. Hacen un total de 1200 enteros y 600 \textit{double}.
 \end{itemize}
 
-En el ejemplo anterior tenemos finalmente unos requisitos de memoria de 11302 enteros y 5651 \textit{double}. Teniendo en cuenta que el tamaño de un entero largo son 4 bytes y los tipo \textit{double} son 8 bytes, necesitaremos $90416$ bytes (90,5Kb aproximadamente). Actualmente 90 Kb es un tamaño muy pequeño para una memoria de un sistema de altas prestaciones, por lo que el sobrecoste de precalcular los deltas es despreciable. Con esto se ha conseguido un uso eficiente de la memoria.\\
+En el ejemplo anterior tenemos finalmente unos requisitos de memoria de 11302 enteros y 5651 \textit{double}. Teniendo en cuenta que el tamaño de un entero largo son 4 bytes y los tipo \textit{double} son 8 bytes, necesitaremos $90416$ bytes (90,5Kb aproximadamente). Actualmente 90 Kb es un tamaño muy pequeño para una memoria de un sistema de altas prestaciones, por lo que el sobrecoste de precalcular los \textit{deltas} es despreciable. Con esto se ha conseguido un uso eficiente de la memoria.\\
 
 \subsection{Parámetros de ejecución del recalibrador}
 
@@ -242,16 +246,16 @@ El recalibrador desarrollado cuenta con 2 fases de ejecución, pudiendo ejecutars
 
 La primera fase se ejecuta con el parámetro \verb+-F+ o \verb+-1+. Esta fase necesita obligatoriamente que los parámetros del número máximo de ciclos (\verb+-C+), la ruta del fichero de ADN de referencia (\verb+-R+) y la ruta del BAM de entrada (\verb+-I+) sean especificados. Opcionalmente se pueden especificar los parámetros \verb+-d+ y \verb+-i+. El parámetro \verb+-d+ genera un fichero que contiene las estructuras de datos generadas en la primera fase, por lo que se puede utilizar para realizar la segunda fase de recalibrado sin necesidad de repetir la primera. El parámetro \verb+-i+ genera un fichero de texto que muestra los resultados tabulados de la primera fase de recalibrado (el contenido del fichero de datos que se genera con \verb+-d+).\\
 
-La segunda fase se ejecuta con el parámetro \verb+-F+ o \verb+-2+. Esta fase tiene como parámetros obligatorios un fichero BAM de entrada obligatorio (\verb+-I+), el número máximo de ciclos (\verb+-C+), y un fichero de salida para el BAM recalibrado (\verb+-o+). Si se ejecuta esta fase sin haber ejecutado anteriormente la primera (sólo con el parámetro \verb+-2+), es necesario especificar el fichero de datos que se utilizará y que se generó en la primera fase (\verb+-d+).\\
+La segunda fase se ejecuta con el parámetro \verb+-F+ o \verb+-2+. Esta fase tiene como parámetros obligatorios un fichero BAM de entrada (\verb+-I+), el número máximo de ciclos (\verb+-C+), y un fichero de salida para el BAM recalibrado (\verb+-o+). Si se ejecuta esta fase sin haber ejecutado anteriormente la primera (sólo con el parámetro \verb+-2+), es necesario especificar el fichero de datos que se utilizará y que se generó en la primera fase (\verb+-d+).\\
 
 \section{Evaluación del recalibrador obtenido}
 \label{sec:evaluacion}
 
 Como ya se ha visto en la sección \ref{sec:tareascomp} de tareas completadas, ya se han realizado las pruebas sobre la implementación del recalibrador. En esta sección se describirán estas pruebas y sus resultados.\\
 
-Las primeras pruebas se realizaron una vez implementada la versión secuencial del nuevo recalibrador, usando las estructuras de datos optimizadas y las optimizaciones automáticas que el compilador ofrece, a excepción de SSE2. El objetivo era obtener el rendimiento que se obtiene con la nueva herramienta comparándolo con el obtenido en las mismas condiciones para la herramienta recalibrador que incorpora GATK.\\
+Las primeras pruebas se realizaron una vez implementada la versión secuencial del nuevo recalibrador, usando las estructuras de datos optimizadas y las optimizaciones automáticas que el compilador ofrece, a excepción de SSE2. El objetivo era conocer el rendimiento que se obtiene con la nueva herramienta comparándolo con el obtenido en las mismas condiciones para la herramienta recalibrador que incorpora GATK.\\
 
-El entorno de prueba se detalla en la Tabla \ref{tab:specprueba}. Consistía en un sistema de un solo procesador de 4 núcleos de procesamiento con 4 GB de memoria principal. Las pruebas se han realizado utilizando un BAM de entrada con $35 \times 10^6$ lecturas, que con 100 ciclos por entrada hacen un total de $3.5 \times 10^9$ bases a recalibrar. Además sólo se ha utilizado un núcleo del procesador.\\
+El entorno de prueba se detalla en la Tabla \ref{tab:specprueba}. Consiste en un sistema de un solo procesador de 4 núcleos de procesamiento con 4 GB de memoria principal. Las pruebas se han realizado utilizando un BAM de entrada con $35 \times 10^6$ lecturas, que con 100 ciclos por entrada hacen un total de $3.5 \times 10^9$ bases a recalibrar. Además sólo se ha utilizado un núcleo del procesador.\\
 
 \begin{table}
 \centering
@@ -262,7 +266,7 @@ Procesador						& Intel Core 2 Quad 2.66GHz, 4 núcleos \\\hline
 Memoria	principal				& 4 GB \\\hline
 Fichero BAM entrada 			& $35 \times 10^6$ lecturas\\\hline
 Número ciclos por lectura 		& 100 ciclos\\\hline
-Número total de bases			& $35 \times 10^6 \times 100 \textbf{ciclos} = 3.5 \times 10^9$ bases\\\hline
+Número total de bases			& $35 \times 10^6 \times 100$ ciclos $= 3.5 \times 10^9$ bases\\\hline
 Calidad máxima de las lecturas 	& 50 \\\hline
 \end{tabular}
 }
@@ -289,7 +293,7 @@ Para estas pruebas se activaron las optimizaciones que el compilador GCC impleme
 
 Esta prueba pretende comparar el rendimiento del recalibrador cuando implementa instrucciones SSE2 de forma manual en la primera fase de recalibrado (concretamente en la función que procesa las comparaciones de cada lectura). Se compara respecto a la versión anterior con SSE2 automáticas. Puesto que sólo las implementa actualmente para la primera fase de recalibrado, solo se tendrán en cuenta los tiempos en esta fase, concretamente en lo que tarda en procesar una lectura (de media). Para procesar una lectura sobre el fichero BAM de prueba se necesitaron de media 3.42 microsegundos usando SSE2 de forma manual. En la versión con SSE2 automáticas, el procesado de cada lectura tardó de media 3.64 microsegundos, lo que indica que hubo una mejora de rendimiento menor, es decir, con SSE es un 6\% más rápido. \\
 
-Aún siendo una pequeña mejora de rendimiento, sólo se ha utilizado SSE2 de forma manual en una pequeña parte del código total, por lo que esperamos sacar más rendimiento cuando lo implementemos en el resto.\\
+Aún siendo una pequeña mejora de rendimiento (sólo se ha utilizado SSE2 de forma manual en una pequeña parte del código total) podemos deducir que es factible sacar más rendimiento cuando lo implementemos en el resto.\\
 
 
 
