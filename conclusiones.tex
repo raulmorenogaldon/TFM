@@ -1,4 +1,16 @@
-\chapter{Conclusiones}
+\chapter{Conclusiones generales}
 
-En este capítulo se presentarán las conclusiones a las que se ha llegado durante la realización de este trabajo.\\
+En este capítulo se presentará un resumen de las conclusiones a las que se ha llegado durante la realización de este trabajo.\\
+
+Se han estudiado las principales tecnologías de computación paralela y su programación, ofreciendo una forma de acelerar el rendimiento de un software mediante su ejecución en un entorno \textit{cluster}. Además, podemos utilizar GPUs para acelerar aún más los procesos que utilicen operaciones vectoriales masivas o que encajen bien con procesadores SIMD. Esto nos permitirá desarrollar herramientas eficientes que sean más rápidas cuantos más procesadores tengan disponibles en un \textit{cluster}.\\
+
+El tratamiento de datos cuando se manejan de forma masiva es crítico para el rendimiento. Un \textit{dataset} más grande que la memoria principal disponible supondría no poder cargarlo completamente en memoria y por tanto acceder continuamente a disco. Esto supone un decremento importante en las prestaciones. Por tanto se hace necesario un modo de tratar estos datos que permita obtener un acceso por partes, parecido al paradigma \textit{MapReduce}. Una de las soluciones, en un entorno \textit{cluster}, es usar las memorias de todos los nodos disponibles ya que se incrementa la probabilidad de que los datos se carguen en memoria completamente, y por tanto aumente el rendimiento.\\
+
+También se han visto herramientas utilizadas actualmente en bioinformática para el análisis de ADN. La mayoría de ellas son secuenciales o permiten un mínimo paralelismo de grano grueso utilizando hilos. Otras permiten su ejecución en entornos \textit{cluster} pero son para aplicaciones muy específicas, lo que obliga a ejecutarlas a modo tubería. Se ve por tanto una necesidad de tener un grupo de herramientas, que permitan realizar análisis completos sin necesidad de herramientas extra. Además estas herramientas ganarían en prestaciones y permitirían explotar el paralelismo en un sistema \textit{cluster}, permitiendo su uso cotidiano en diversos ámbitos de aplicación.\\
+
+La creación de un conjunto de herramientas que cumplan los requisitos anteriores es factible. Para ello se utilizarán tecnologías de paralelismo que exploten los recursos de cómputo actuales. Se pretende crear este conjunto dentro de la comunidad científica, ofreciendo a la misma la posibilidad de participar y realizar sus análisis sin restricciones.\\
+
+Durante el primer año ya se han producido avances significativos. Se ha implementado una de las herramientas necesarias en el inicio del proceso de descubrimiento de variantes en C, utilizando estructuras de datos optimizadas para memoria. El rendimiento respecto a la herramienta que se ha tomado como referencia (GATK) es mucho mayor, incluso con esta utilizando hilos, lo cual nos indica el bajo grado de rendimiento que tienen actualmente estas herramientas.\\
+
+Se han dado los primeros pasos y ya se han obtenido resultados espe\-ranzadores, si todo sale bien dentro de unos años podrían utilizarse estas herramientas de forma cotidiana. Cada vez que un paciente fuese a la consulta del médico no tendría que preguntarle qué le pasa, realizarle un análisis de su ADN sería suficiente para determinar qué le ha pasado, qué le pasa y qué le va a pasar, del mismo modo que te hacen un análisis de sangre. Teniendo en cuenta además que las aplicaciones de este tipo de herramientas no se limitan a la medicina, las posibilidades son muy amplias.\\
 
