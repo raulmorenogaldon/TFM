@@ -33,7 +33,7 @@ Por otro lado, \textit{OpenMP} \cite{openmpquinn,openmpchandra,openmpreview} es 
 \begin{figure}
 \centering
 \includegraphics[width=1.0\textwidth]{forkjoin.png}
-\caption{Modelo paralelo \textit{Fork-Join} usado por \textit{OpenMP}\cite{openmpwiki}.\label{fig:forkjoin}}
+\caption{Modelo paralelo \textit{Fork-Join} usado por \textit{OpenMP}\cite{openmpchandra}.\label{fig:forkjoin}}
 \end{figure}
 
 Otro API de programación utilizado para plataformas de memoria compartida basadas en GPU es \textit{CUDA}\cite{progparmachines}. Las GPUs son máquinas SIMD según la taxonomía de Flynn (véase Sección \ref{sec:flynn}) que utilizan el modelo de memoria compartida. Una diferencia con los procesadores con varios núcleos de procesamiento o \textit{multicores}, que también utilizan este modelo, es que las GPUs pueden tener miles de hilos ejecutandose simultáneamente. Un programa en CUDA tiene dos partes: el código que se ejecuta en el \textit{host} o procesador central (CPU), y el código, llamado \textit{kernel}, que se ejecuta en el \textit{device} (GPU). Debido a esto es necesaria una CPU que trabaje en conjunto con la GPU. Cualquier aplicación que pueda explotar el modelo SIMD, donde se apliquen las mismas instrucciones a un conjunto de datos, se verá muy beneficiada en el uso de una GPU. Cualquier otro tipo de aplicación no es factible en estas plataformas.\\
